@@ -4,6 +4,8 @@ import { ListExamComponent } from './list-exam/list-exam.component';
 import { CreateExamComponent } from './create-exam/create-exam.component';
 import { DetailExamComponent } from './detail-exam/detail-exam.component';
 import { UpdateExamComponent } from './update-exam/update-exam.component';
+import { UpdateCommonComponent } from './update-common/update-common.component';
+import { UpdateContentComponent } from './update-content/update-content.component';
 
 const routes: Routes = [
   {
@@ -25,6 +27,14 @@ const routes: Routes = [
       {
         path: ':id/update',
         component: UpdateExamComponent
+      },
+      {
+        path: ':id/update/update-common',
+        component: UpdateCommonComponent
+      },
+      {
+        path: ':id/update/update-content',
+        component: UpdateContentComponent
       }
     ]
   }
@@ -34,4 +44,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class ExamRoutingModule { }
+export class ExamRoutingModule {}

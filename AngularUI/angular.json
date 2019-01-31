@@ -39,6 +39,8 @@
               "src/scss/bower_components/fastclick/lib/fastclick.js",
               "src/scss/bower_components/jquery-slimscroll/jquery.slimscroll.min.js",
               "src/scss/dist/js/adminlte.min.js",
+              "src/scss/bower_components/datatables.net/js/jquery.dataTables.min.js",
+              "src/scss/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js",
               "src/scss/dist/js/demo.js"
             ]
           },
