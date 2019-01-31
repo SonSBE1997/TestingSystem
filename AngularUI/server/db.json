@@ -1,9 +1,82 @@
 {
-  "posts": [
-    { "id": 1, "title": "json-server", "author": "typicode" }
-  ],
-  "comments": [
-    { "id": 1, "body": "some comment", "postId": 1 }
-  ],
-  "profile": { "name": "typicode" }
+  "exams": [
+    {
+      "id": "Java01",
+      "title": "Java basic",
+      "duration": 50,
+      "category_id": "Java",
+      "note": "No note",
+      "number_of_question": 20,
+      "created_at": "01/31/2019",
+      "create_by": "VVDONG",
+      "questions": [
+        {
+          "id": "1",
+          "content": "What is the range of short data type in Java?",
+          "answers": [
+            {
+              "content": "-128 to 127",
+              "is_true": 0
+            },
+            {
+              "content": "-32768 to 32767",
+              "is_true": 1
+            },
+            {
+              "content": "-2147483648 to 2147483647",
+              "is_true": 0
+            },
+            {
+              "content": "None of the mentioned",
+              "is_true": 0
+            }
+          ]
+        },
+        {
+          "id": "2",
+          "content": "An expression involving byte, int, and literal numbers is promoted to which of these?",
+          "answers": [
+            {
+              "content": "int",
+              "is_true": 1
+            },
+            {
+              "content": "long",
+              "is_true": 0
+            },
+            {
+              "content": "byte",
+              "is_true": 0
+            },
+            {
+              "content": "float",
+              "is_true": 0
+            }
+          ]
+        },
+        {
+          "id": "3",
+          "content": "Which of these literals can be contained in float data type variable?",
+          "answers": [
+            {
+              "content": "-1.7e+308",
+              "is_true": 0
+            },
+            {
+              "content": "-3.4e+038",
+              "is_true": 1
+            },
+            {
+              "content": "+1.7e+308",
+              "is_true": 0
+            },
+            {
+              "content": "-3.4e+050",
+              "is_true": 0
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }
