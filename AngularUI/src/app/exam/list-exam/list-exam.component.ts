@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { ListExams } from './listExam.interface';
 
 @Component({
   selector: 'app-list-exam',
@@ -6,10 +8,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./list-exam.component.css']
 })
 export class ListExamComponent implements OnInit {
-
-  constructor() { }
+  listExam: ListExams[] = [];
+  constructor(private http: HttpClient) { }
 
   ngOnInit() {
+    this.http.get<ListExams[]>('http://localhost:3000/listExams')
+    .subscribe(listExam => {
+      this.listExam = listExam;
+    });
   }
 
 }
