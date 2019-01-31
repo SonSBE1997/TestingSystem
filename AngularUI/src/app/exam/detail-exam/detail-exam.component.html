@@ -10,7 +10,7 @@
 </section>
 <!-- Main content -->
 <section class="content">
-  <button class="btn btn-warning" style="width: 100px;margin-bottom: 10px">Update</button>
+  <button class="btn btn-warning" style="width: 100px;margin-bottom: 10px" [routerLink]="['/exam',detailExam.id,'update']">Update</button>
   <button class="btn btn-primary" style="width: 100px;margin-bottom: 10px">Export</button>
   <div class="box box-warning" *ngIf="detailExam">
     <div class="box-header with-border">
@@ -42,10 +42,10 @@
             </div>
           </div>
           <ng-template #template>
-              <div class="checkbox">
-                <label style="color: red"><input type="checkbox" value="" disabled checked>{{answer.content}}</label>
-              </div>
-            </ng-template>
+            <div class="checkbox">
+              <label style="color: red"><input type="checkbox" value="" disabled checked>{{answer.content}}</label>
+            </div>
+          </ng-template>
         </div>
       </div>
     </div>
