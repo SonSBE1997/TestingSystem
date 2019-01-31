@@ -17,7 +17,11 @@
       <div class="box">
         <div class="box-header">
           <div>
-            <button type="button" class="btn">Import file</button>
+
+          </div>
+          <div class="left">
+
+
           </div>
         </div>
         <div>
@@ -63,23 +67,33 @@
             <thead>
               <tr>
                 <th></th>
-                <th>Exam Title</th>
-                <th>Category</th>
-                <th>Duration</th>
-                <th>Number of question(s)</th>
-                <th>Created by</th>
-                <th>Status</th>
-                <th>Created date</th>
+                <th class="text-center">Exam Title</th>
+                <th class="text-center">Category</th>
+                <th class="text-center">Duration</th>
+                <th class="text-center">Number of question(s)</th>
+                <th class="text-center">Created by</th>
+                <th class="text-center">Status</th>
+                <th class="text-center">Created date</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-
+              <tr *ngFor="let listExam of listExam">
+                <td><input type="checkbox"></td>
+                <td class="text-center">
+                  <a [routerLink]="['/exam', listExam.id]">{{listExam.title}}</a>
+                </td>
+                <td class="text-center">{{listExam.category_name}} </td>
+                <td class="text-center">{{listExam.duration}}</td>
+                <td class="text-center">{{listExam.number_of_question}}</td>
+                <td class="text-center">{{listExam.created_by}}</td>
+                <td class="text-center">{{listExam.status}}</td>
+                <td class="text-center">{{listExam.created_at}}</td>
               </tr>
+
             </tbody>
           </table>
           <div>
-            <button type="Add new" class="btn btn-primary">Add new</button>
+            <a style="margin-right: 10px" class="btn btn-primary" [routerLink]="['/exam', 'create']">Create Exam</a>
             <button type="Delete" class="btn btn-danger">Delete</button>
           </div>
         </div>
