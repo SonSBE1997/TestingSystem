@@ -10,7 +10,7 @@ import { NavModule } from './nav/nav.module';
 import { FooterModule } from './footer/footer.module';
 import { QuestionModule } from './question/question.module';
 import { ExamModule } from './exam/exam.module';
-import { CategoryQuestionModule } from './category-question/category-question.module';
+import { CategoryModule } from './category/category.module';
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -23,7 +23,7 @@ import { CategoryQuestionModule } from './category-question/category-question.mo
     FooterModule,
     QuestionModule,
     ExamModule,
-    CategoryQuestionModule,
+    CategoryModule,
     AppRoutingModule
   ],
   providers: [],

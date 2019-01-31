@@ -7,4 +7,4 @@ import { ListCategoryComponent } from './list-category/list-category.component';
   imports: [CommonModule],
   exports: [ListCategoryComponent]
 })
-export class CategoryQuestionModule {}
+export class CategoryModule {}
