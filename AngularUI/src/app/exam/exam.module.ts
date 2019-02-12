@@ -21,4 +21,4 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
   ],
   imports: [CommonModule, ExamRoutingModule, CKEditorModule]
 })
-export class ExamModule {}
+export class ExamModule { }
