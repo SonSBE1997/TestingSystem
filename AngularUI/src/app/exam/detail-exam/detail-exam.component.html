@@ -11,12 +11,13 @@
 <!-- Main content -->
 <section class="content">
   <button
-    class="btn btn-warning"
+    class="btn btn-warning btnUpdate"
     style="width: 100px;margin-bottom: 10px"
-    [routerLink]="['/exam', detailExam.id, 'update']"
+    [routerLink]="['/exam', detailExam?.id, 'update']"
   >
     Update
   </button>
+
   <button class="btn btn-primary" style="width: 100px;margin-bottom: 10px">
     Export
   </button>
@@ -66,5 +67,6 @@
         </div>
       </div>
     </div>
+    <br>
   </div>
 </section>
