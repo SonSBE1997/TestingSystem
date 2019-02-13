@@ -40,7 +40,7 @@ public class ExportPDF extends AbstractPdfView {
     
     String title = exam.getTitle();
     String number = String.valueOf(exam.getNumberOfQuestion());
-    String cate = exam.getCaterogyName();
+    String cate = exam.getCategoryName();
     String duration = "60 phút";
     String note = "No note";
     

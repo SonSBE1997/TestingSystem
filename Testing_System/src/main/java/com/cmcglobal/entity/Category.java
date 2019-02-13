@@ -22,7 +22,7 @@ public class Category implements Serializable {
 	@Column(name = "category_id")
 	private int categoryId;
 	@Column(name = "category_name")
-	private String caterogyName;
+	private String categoryName;
 	@Column(name = "date_created")
 	private Date dateCreated;
 	private int status;
@@ -38,12 +38,12 @@ public class Category implements Serializable {
 		this.categoryId = categoryId;
 	}
 
-	public String getCaterogyName() {
-		return caterogyName;
+	public String getCategoryName() {
+		return categoryName;
 	}
 
-	public void setCaterogyName(String caterogyName) {
-		this.caterogyName = caterogyName;
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
 	}
 
 	public Date getDateCreated() {
