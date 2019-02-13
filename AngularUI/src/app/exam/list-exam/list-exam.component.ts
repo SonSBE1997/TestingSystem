@@ -9,7 +9,7 @@ import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
   styleUrls: ['./list-exam.component.css']
 })
 export class ListExamComponent implements OnInit, AfterViewInit {
-  displayedColumns = ['title', 'category_name', 'duration', 'number_of_question', 'created_by', 'status', 'created_at'];
+  displayedColumns = ['id', 'title', 'category_name', 'duration', 'number_of_question', 'created_by', 'status', 'created_at'];
   public dataSource = new MatTableDataSource<ListExams>();
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -17,13 +17,13 @@ export class ListExamComponent implements OnInit, AfterViewInit {
   listExam: ListExams[] = [];
   constructor(private http: HttpClient) { }
   ngOnInit() {
-    this.getAllOwners();
+    this.getAll();
   }
   ngAfterViewInit(): void {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
   }
-  public getAllOwners = () => {
+  public getAll = () => {
     this.http.get<ListExams[]>('http://localhost:3000/listExams')
     .subscribe(listExam => {
       this.listExam = listExam;

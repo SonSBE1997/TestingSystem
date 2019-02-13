@@ -92,6 +92,13 @@
             </tbody>
           </table > -->
             <table class="table table-bordered table-striped" mat-table [dataSource]="dataSource" matSort>
+                <ng-container matColumnDef="id">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+                    <td mat-cell *matCellDef="let element">
+                        <input type="checkbox">
+                       </td>
+                  </ng-container>
+
             <ng-container matColumnDef="title">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Title </th>
               <td mat-cell *matCellDef="let element">
