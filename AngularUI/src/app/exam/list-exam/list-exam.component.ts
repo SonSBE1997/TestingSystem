@@ -21,12 +21,13 @@ export class ListExamComponent implements OnInit, AfterViewInit {
   }
   ngAfterViewInit(): void {
     this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
   }
   public getAllOwners = () => {
     this.http.get<ListExams[]>('http://localhost:3000/listExams')
     .subscribe(listExam => {
       this.listExam = listExam;
-      this.dataSource.data = listExam as ListExams[];
+      this.dataSource.data = listExam;
     });
   }
   public doFilter = (value: string) => {
