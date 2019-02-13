@@ -4,9 +4,11 @@
     <small>show all the fields of exams</small>
   </h1>
   <ol class="breadcrumb">
-    <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-    <li><a href="#">Tables</a></li>
-    <li class="active">Data tables</li>
+    <li>
+      <a href="#"><i class="fa fa-dashboard"></i> Home</a>
+    </li>
+    <li><a href="#">Exam</a></li>
+    <li class="active">View list exam</li>
   </ol>
 </section>
 
@@ -16,45 +18,56 @@
     <div class="col-xs-12">
       <div class="box">
         <div class="box-header">
-          <div>
-
-          </div>
-          <div class="left">
-
-
-          </div>
+          <div></div>
+          <div class="left"></div>
         </div>
         <div>
           <div class="box-body">
             <div class="row-3">
               <select class=" select2" style="width: 25%;height: 30px">
-                <option selected="selected" disabled="disabled">Type Exam</option>
+                <option selected="selected" disabled="disabled"
+                  >Type Exam</option
+                >
                 <option>Java</option>
                 <option>English</option>
                 <option>Sql</option>
                 <option>C##</option>
-
               </select>
-              <select class=" select2" style="width: 25%;height: 30px;margin-left: 25px">
-                <option selected="selected" disabled="disabled">Time Test</option>
+              <select
+                class=" select2"
+                style="width: 25%;height: 30px;margin-left: 25px"
+              >
+                <option selected="selected" disabled="disabled"
+                  >Time Test</option
+                >
                 <option>30</option>
                 <option>60</option>
               </select>
 
-              <select class=" select2" style="width: 25%;height: 30px;margin-left: 25px">
-                <option selected="selected" disabled="disabled">Count Question</option>
+              <select
+                class=" select2"
+                style="width: 25%;height: 30px;margin-left: 25px"
+              >
+                <option selected="selected" disabled="disabled"
+                  >Count Question</option
+                >
                 <option>10</option>
                 <option>20</option>
                 <option>30</option>
               </select>
-
             </div>
-            <select class=" select2" style="width: 25%;height: 30px;margin-top: 15px">
+            <select
+              class=" select2"
+              style="width: 25%;height: 30px;margin-top: 15px"
+            >
               <option disabled="disabled">Creator</option>
               <option>Manager</option>
               <option>Admin</option>
             </select>
-            <select class=" select2" style="width: 25%;height: 30px;margin-left: 25px">
+            <select
+              class=" select2"
+              style="width: 25%;height: 30px;margin-left: 25px"
+            >
               <option selected="selected" disabled="disabled">Status</option>
               <option>Public</option>
               <option>Darft</option>
@@ -63,6 +76,7 @@
         </div>
         <!-- /.box-header -->
         <div class="box-body">
+          <app-search></app-search>
           <table id="example1" class="table table-bordered table-striped">
             <thead>
               <tr>
@@ -77,7 +91,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let listExam of listExam">
+               <tr *ngFor="let listExam of listExam">
                 <td><input type="checkbox"></td>
                 <td class="text-center">
                   <a [routerLink]="['/exam', listExam.id]">{{listExam.title}}</a>
@@ -89,11 +103,31 @@
                 <td class="text-center">{{listExam.status}}</td>
                 <td class="text-center">{{listExam.created_at}}</td>
               </tr>
-
             </tbody>
           </table>
+          <mat-table #table [dataSource]="dataSource" class="example-table" matSort  matSortActive="title" matSortDisableClear matSortDirection="asc">
+          <!--- Note that these columns can be defined in any order.
+     The actual rendered columns are set as a property on the row definition" -->
+
+          <!-- Number Column -->
+          <ng-container matColumnDef="title">
+            <mat-header-cell *matHeaderCellDef>#</mat-header-cell>
+            <mat-cell *matCellDef="let listExam">{{ listExam.id }}</mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let listExam; columns: displayedColumns"></mat-row>
+        </mat-table>
+
+        <mat-paginator [length]="resultsLength" [pageSize]="30">
+        </mat-paginator>
           <div>
-            <a style="margin-right: 10px" class="btn btn-primary" [routerLink]="['/exam', 'create']">Create Exam</a>
+            <a
+              style="margin-right: 10px"
+              class="btn btn-primary"
+              [routerLink]="['/exam', 'create']"
+              >Create Exam</a
+            >
             <button type="Delete" class="btn btn-danger">Delete</button>
           </div>
         </div>

@@ -1,6 +1,7 @@
 {
-  "listExams": [
-    {
+  "listExamsApi": {
+    "listExams" : [
+      {
       "id": "Java01",
       "title": "Java basic",
       "category_name": "Java",
@@ -31,6 +32,9 @@
       "created_at": "01/31/2019"
     }
   ],
+    "total_count":3
+},
+
   "exams": [
     {
       "id": "Java01",

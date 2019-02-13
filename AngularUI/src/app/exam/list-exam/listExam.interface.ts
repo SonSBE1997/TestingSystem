@@ -8,3 +8,7 @@ export interface ListExams {
   status: string;
   created_at: Date;
 }
+export interface ListExamsApi {
+  items: ListExams[];
+  total_count: number;
+}
