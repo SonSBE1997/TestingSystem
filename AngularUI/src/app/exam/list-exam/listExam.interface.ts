@@ -1,12 +1,12 @@
 export interface ListExams {
-  id: string;
+  exam_id: string;
   title: string;
-  category_name: string;
+  categoryName: string;
   duration: number;
-  number_of_question: number;
-  created_by: string;
+  numberOfQuestion: number;
+  create_by: string;
   status: string;
-  created_at: Date;
+  create_at: Date;
 }
 export interface ListExamsApi {
   items: ListExams[];

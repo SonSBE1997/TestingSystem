@@ -9,7 +9,7 @@ import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
   styleUrls: ['./list-exam.component.css']
 })
 export class ListExamComponent implements OnInit, AfterViewInit {
-  displayedColumns = ['id', 'title', 'category_name', 'duration', 'number_of_question', 'created_by', 'status', 'created_at'];
+  displayedColumns = ['exam_id', 'title', 'categoryName', 'duration', 'numberOfQuestion', 'create_by', 'status', 'create_at'];
   public dataSource = new MatTableDataSource<ListExams>();
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;

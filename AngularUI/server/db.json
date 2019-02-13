@@ -1,44 +1,44 @@
 {
     "listExams" : [
       {
-      "id": "Java01",
+      "exam_id": "Java01",
       "title": "Java basic",
-      "category_name": "Java",
+      "categoryName": "Java",
       "duration": 20,
       "number_of_question": 20,
-      "created_by": "NTMDUYEN",
+      "create_by": "NTMDUYEN",
       "status": "DRAFT",
       "created_at": "01/30/2019"
     },
     {
-      "id": "NET04",
+      "exam_id": "NET04",
       "title": ".NET basic",
-      "category_name": ".NET",
+      "categoryName": ".NET",
       "duration": 30,
-      "number_of_question": 20,
-      "created_by": "NTMDUYEN",
+      "numberOfQuestion": 20,
+      "create_by": "NTMDUYEN",
       "status": "DRAFT",
-      "created_at": "01/30/2019"
+      "create_at": "01/30/2019"
     },
     {
-      "id": "Java02",
+      "exam_id": "Java02",
       "title": "Java OOP",
-      "category_name": "Java",
+      "categoryName": "Java",
       "duration": 50,
-      "number_of_question": 20,
-      "created_by": "NTMDUYEN",
+      "numberOfQuestion": 20,
+      "create_by": "NTMDUYEN",
       "status": "PUBLIC",
-      "created_at": "01/31/2019"
+      "create_at": "01/31/2019"
     },
     {
-      "id": "Java03",
+      "exam_id": "Java03",
       "title": "Java advanced",
-      "category_name": "Java",
+      "categoryName": "Java",
       "duration": 50,
-      "number_of_question": 20,
-      "created_by": "NTMDUYEN",
+      "numberOfQuestion": 20,
+      "create_by": "NTMDUYEN",
       "status": "PUBLIC",
-      "created_at": "01/31/2019"
+      "create_at": "01/31/2019"
     }
   ],
 
