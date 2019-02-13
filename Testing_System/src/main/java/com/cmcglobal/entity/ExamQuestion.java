@@ -2,6 +2,7 @@ package com.cmcglobal.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,9 +19,9 @@ public class ExamQuestion implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
-	@ManyToOne
-	@JoinColumn(name = "exam_id")
-	private Exam exam;
+	@Column(name = "exam_id")
+	private String examId;
+
 	@ManyToOne
 	@JoinColumn(name = "question_id")
 	private Question question;
@@ -32,14 +33,6 @@ public class ExamQuestion implements Serializable {
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public Exam getExam() {
-		return exam;
-	}
-
-	public void setExam(Exam exam) {
-		this.exam = exam;
 	}
 
 	public Question getQuestion() {
@@ -57,5 +50,4 @@ public class ExamQuestion implements Serializable {
 	public void setChoice_order(String choice_order) {
 		this.choice_order = choice_order;
 	}
-
 }

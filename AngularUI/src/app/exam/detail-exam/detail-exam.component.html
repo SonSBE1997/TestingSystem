@@ -10,15 +10,12 @@
 </section>
 <!-- Main content -->
 <section class="content">
-  <button
-    class="btn btn-warning btnUpdate"
-    style="width: 100px;margin-bottom: 10px"
-    [routerLink]="['/exam', detailExam?.id, 'update']"
-  >
+  <button class="btn btn-warning btnUpdate" style="width: 100px;margin-bottom: 10px"
+    [routerLink]="['/exam', detailExam?.id, 'update']">
     Update
   </button>
 
-  <button class="btn btn-primary btnUpdate" style="width: 100px;margin-bottom: 10px">
+  <button class="btn btn-primary btnUpdate" (click)="export()" style="width: 100px;margin-bottom: 10px">
     Export
   </button>
 
@@ -52,20 +49,16 @@
         <div *ngFor="let answer of question.answers">
           <div *ngIf="answer.is_true == 0; else template">
             <div class="checkbox">
-              <label
-                ><input type="checkbox" value="" disabled />{{
+              <label><input type="checkbox" value="" disabled />{{
                   answer.content
-                }}</label
-              >
+                }}</label>
             </div>
           </div>
           <ng-template #template>
             <div class="checkbox">
-              <label style="color: red"
-                ><input type="checkbox" value="" disabled checked />{{
+              <label style="color: red"><input type="checkbox" value="" disabled checked />{{
                   answer.content
-                }}</label
-              >
+                }}</label>
             </div>
           </ng-template>
         </div>

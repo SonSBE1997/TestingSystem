@@ -1,7 +1,19 @@
-.exam-title{
+.exam-tit{
   margin-top: 0px !important;
   margin-bottom: 30px !important;
 }
 .mr-3 {
   margin-right: 15px !important;
+}
+
+.btn-random{
+  margin-bottom: 5px;
+}
+
+.pd-3{
+  padding-left: 10% !important;
+}
+
+.pd-5{
+  padding-left: 25% !important;
 }
