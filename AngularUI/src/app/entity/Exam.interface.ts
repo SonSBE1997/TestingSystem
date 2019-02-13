@@ -1,6 +1,6 @@
 import { Category } from './Category.interface';
 import { User } from './User.interface';
-import { Question } from '../exam/update-content/update-content.interface';
+import { ExamQuestion } from './ExamQuestion.interface';
 
 export interface Exam {
   examId: string;
@@ -10,17 +10,11 @@ export interface Exam {
   status: string;
   categoryName: string;
   createAt: Date;
-  modifiedAt: DataCue;
+  modifiedAt: Date;
   numberOfQuestion: number;
   category: Category;
   userCreated: User;
   modifiedBy: User;
-  examQuestions: [
-    {
-      id: number;
-      question: Question;
-      choiceOrder: string;
-    }
-  ];
+  examQuestions: ExamQuestion[];
   enable: boolean;
 }
