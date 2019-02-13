@@ -19,7 +19,7 @@ public class Question implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@Column(name = "question_id")
-	private int questionId;
+	private String questionId;
 	@ManyToOne
 	@JoinColumn(name = "category_id")
 	private Category category;
@@ -36,16 +36,15 @@ public class Question implements Serializable {
 	private int userIdCreated;
 	@Column(name = "date_created")
 	private Date dateCreated;
-	@OneToMany(mappedBy = "question")
+	@OneToMany(fetch=FetchType.EAGER,cascade=CascadeType.ALL)
+	@JoinColumn(name="question_id")
 	private List<Answer> answers;
-	@OneToMany(mappedBy="exam",cascade=CascadeType.ALL,fetch=FetchType.LAZY)
-    private List<ExamQuestion> examQuestions;
 
-	public int getQuestionId() {
+	public String getQuestionId() {
 		return questionId;
 	}
 
-	public void setQuestionId(int questionId) {
+	public void setQuestionId(String questionId) {
 		this.questionId = questionId;
 	}
 
@@ -128,14 +127,4 @@ public class Question implements Serializable {
 	public void setAnswers(List<Answer> answers) {
 		this.answers = answers;
 	}
-
-	public List<ExamQuestion> getExamQuestions() {
-		return examQuestions;
-	}
-
-	public void setExamQuestions(List<ExamQuestion> examQuestions) {
-		this.examQuestions = examQuestions;
-	}
-	
-
 }

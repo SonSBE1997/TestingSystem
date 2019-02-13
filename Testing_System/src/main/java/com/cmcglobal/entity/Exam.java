@@ -2,12 +2,16 @@ package com.cmcglobal.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
 @Entity
@@ -33,6 +37,7 @@ public class Exam implements Serializable {
 	private int numberOfQuestion;
 	@ManyToOne
 	@JoinColumn(name = "category_id")
+	
 	private Category category;
 	@ManyToOne
 	@JoinColumn(name = "create_by")
@@ -40,9 +45,19 @@ public class Exam implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "modified_by")
 	private User modifiedBy;
-	
+	@OneToMany(fetch=FetchType.EAGER,cascade=CascadeType.ALL)
+	@JoinColumn(name="exam_id")
+	private Set<ExamQuestion> examQuestions;
 	public String getExamId() {
 		return examId;
+	}
+
+	public Set<ExamQuestion> getExamQuestions() {
+		return examQuestions;
+	}
+
+	public void setExamQuestions(Set<ExamQuestion> examQuestions) {
+		this.examQuestions = examQuestions;
 	}
 
 	public void setExamId(String examId) {
