@@ -9,7 +9,7 @@ import { DetailExamComponent } from './detail-exam/detail-exam.component';
 import { UpdateCommonComponent } from './update-common/update-common.component';
 import { UpdateContentComponent } from './update-content/update-content.component';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
-import { SearchComponent } from './list-exam/search/search.component';
+import {MatFormFieldModule, MatInputModule } from '@angular/material';
 
 import {
   MatAutocompleteModule,
@@ -23,7 +23,6 @@ import {
   MatExpansionModule,
   MatGridListModule,
   MatIconModule,
-  MatInputModule,
   MatListModule,
   MatMenuModule,
   MatNativeDateModule,
@@ -51,8 +50,7 @@ import {
     UpdateExamComponent,
     DetailExamComponent,
     UpdateCommonComponent,
-    UpdateContentComponent,
-    SearchComponent
+    UpdateContentComponent
   ],
   imports: [
     ListExamModule,
@@ -89,7 +87,8 @@ import {
     MatTableModule,
     MatTabsModule,
     MatToolbarModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatFormFieldModule
   ]
 })
 export class ExamModule {}

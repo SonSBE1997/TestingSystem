@@ -1,15 +1,24 @@
 {
-  "listExamsApi": {
     "listExams" : [
       {
       "id": "Java01",
       "title": "Java basic",
       "category_name": "Java",
-      "duration": 50,
+      "duration": 20,
       "number_of_question": 20,
       "created_by": "NTMDUYEN",
-      "status": "PUBLIC",
-      "created_at": "01/31/2019"
+      "status": "DRAFT",
+      "created_at": "01/30/2019"
+    },
+    {
+      "id": "NET04",
+      "title": ".NET basic",
+      "category_name": ".NET",
+      "duration": 30,
+      "number_of_question": 20,
+      "created_by": "NTMDUYEN",
+      "status": "DRAFT",
+      "created_at": "01/30/2019"
     },
     {
       "id": "Java02",
@@ -32,8 +41,6 @@
       "created_at": "01/31/2019"
     }
   ],
-    "total_count":3
-},
 
   "exams": [
     {

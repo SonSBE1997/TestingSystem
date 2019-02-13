@@ -3,13 +3,13 @@ import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 
 import { MatPaginatorModule } from '@angular/material/paginator';
-
 import { MatSortModule } from '@angular/material/sort';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { MatNativeDateModule } from '@angular/material';
+import { MatNativeDateModule, MatFormFieldModule, MatInputModule } from '@angular/material';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
   declarations: [],
@@ -24,11 +24,16 @@ import { MatNativeDateModule } from '@angular/material';
     HttpClientModule,
     MatNativeDateModule,
     ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    FlexLayoutModule
   ],
   exports: [
     MatTableModule,
     MatPaginatorModule,
-    MatSortModule
+    MatSortModule,
+    MatFormFieldModule,
+    MatInputModule
   ]
 })
 export class ListExamModule { }
