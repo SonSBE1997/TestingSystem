@@ -13,5 +13,5 @@ export interface Question {
   status: number;
   userIdCreated: number;
   dateCreated: Date;
-  answers: [Answer];
+  answers: Answer[];
 }
