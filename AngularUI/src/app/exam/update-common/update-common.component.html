@@ -26,7 +26,8 @@
       <!-- /.box-header -->
       <div class="box-body">
         <div class="row">
-          <form class="form-horizontal col-xs-10" novalidate method="POST">
+          <form novalidate (ngSubmit)="onSubmit()" [formGroup]="examFrm"
+                  class="form-horizontal col-xs-10">
             <div class="box-body">
               <div class="form-group">
                 <label for="inputEmail3" class="col-sm-2 control-label"
@@ -40,6 +41,7 @@
                     id="inputEmail3"
                     placeholder="Email"
                     value="SQL Exam Final"
+                    formControlName="title"
                   />
                 </div>
               </div>
@@ -49,10 +51,12 @@
                 >
                 <div class="col-sm-10">
                   <select
+                    id = "Category"
                     class="form-control select2 select2-hidden-accessible"
                     style="width: 100%;"
                     tabindex="-1"
                     aria-hidden="true"
+                    formControlName="CatergoryName"
                   >
                     <option selected="selected">SQL</option>
                     <option>Java Basic</option>
@@ -75,6 +79,7 @@
                     id="iNumQues"
                     placeholder="Number question"
                     value="30"
+                    formControlName="numberOfQuestion"
                   />
                 </div>
               </div>
@@ -91,6 +96,7 @@
                     id="iDuration"
                     placeholder="Duration"
                     value="30"
+                    formControlName="duration"
                   />
                 </div>
               </div>
@@ -105,6 +111,7 @@
                     style="width: 100%;"
                     tabindex="-1"
                     aria-hidden="true"
+                    formControlName="status"
                   >
                     <option selected="selected">Draft</option>
                     <option>Public</option>
@@ -118,6 +125,7 @@
                   <!-- <textarea id="editor1" name="editor1" rows="10" cols="130"></textarea> -->
                   <ckeditor
                     [editor]="Editor"
+                    formControlName="note"
                     data="<p>Hello, world!</p>"
                   ></ckeditor>
                 </div>

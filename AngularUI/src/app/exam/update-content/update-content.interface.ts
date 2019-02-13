@@ -1,5 +1,5 @@
 export interface Exam {
-  id: string;
+  examId: string;
   title: string;
   duration: number;
   category: [

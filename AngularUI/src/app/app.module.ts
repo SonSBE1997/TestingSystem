@@ -12,6 +12,7 @@ import { QuestionModule } from './question/question.module';
 import { ExamModule } from './exam/exam.module';
 import { CategoryModule } from './category/category.module';
 import { HttpClientModule } from '@angular/common/http';
+
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -26,7 +27,8 @@ import { HttpClientModule } from '@angular/common/http';
     ExamModule,
     CategoryModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+
   ],
   providers: [],
   bootstrap: [AppComponent]
