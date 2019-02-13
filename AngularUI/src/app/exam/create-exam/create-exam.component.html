@@ -20,20 +20,24 @@
         <!-- /.box-header -->
         <div class="box-body">
           <div class="row">
-            <form class="form-horizontal col-xs-10" novalidate method="POST">
+            <form [formGroup]="examFrm" class="form-horizontal col-xs-10"  novalidate method="POST">
               <div class="box-body">
                 <div class="form-group">
-                  <label for="inputEmail3" class="col-sm-2 control-label"
-                    >Title</label
-                  >
-
+                  <label for="inputTitle" class="col-sm-2 control-label"
+                    >Title</label>
                   <div class="col-sm-10">
                     <input
-                      type="email"
+                      type="text"
                       class="form-control"
-                      id="inputEmail3"
-                      placeholder="Email"
-                    />
+                      id="inputTitle"
+                      placeholder="Enter title of test"
+                      formControlName="title"
+                    >
+                    <div class="col alert alert-light" style="color: blue" role="alert"
+                        *ngIf="examFrm.get('title').hasError('required')
+                            && examFrm.get('title')?.touched">
+                        Title is required!
+                   </div>
                   </div>
                 </div>
                 <div class="form-group">
@@ -41,7 +45,7 @@
                     >Exam Category</label
                   >
                   <div class="col-sm-10">
-                    <select
+                    <select formControlName="examcategory"
                       class="form-control select2 select2-hidden-accessible"
                       style="width: 100%;"
                       tabindex="-1"
@@ -53,6 +57,11 @@
                       <option>Front End Advanced</option>
                       <option>Automation Test</option>
                     </select>
+                    <div class="col alert alert-light" role="alert" style="color: blue"
+                        *ngIf="examFrm.get('examcategory').hasError('required')
+                            && examFrm.get('examcategory')?.touched">
+                        Exam category is required!
+                   </div>
                   </div>
                 </div>
 
@@ -62,7 +71,7 @@
                   >
 
                   <div class="col-sm-10">
-                    <input
+                    <input formControlName="numberquestion"
                       type="number"
                       class="form-control"
                       id="iNumQues"
@@ -73,25 +82,29 @@
 
                 <div class="form-group">
                   <label for="iDuration" class="col-sm-2 control-label"
-                    >Duration</label
-                  >
+                    >Duration</label>
 
                   <div class="col-sm-10">
-                    <input
+                    <input formControlName="duration"
                       type="number"
                       class="form-control"
                       id="iDuration"
                       placeholder="Duration"
                     />
+                    <div class="col-10 alert alert-light" role="alert" style="color: blue"
+                    *ngIf="examFrm.get('duration').hasError('required')
+                        && examFrm.get('duration')?.touched">
+                    Duration is required!
+                    </div>
                   </div>
-                </div>
+               </div>
 
                 <div class="form-group">
                   <label for="inputPassword3" class="col-sm-2 control-label"
                     >Status</label
                   >
                   <div class="col-sm-10">
-                    <select
+                    <select formControlName="status"
                       class="form-control select2 select2-hidden-accessible"
                       style="width: 100%;"
                       tabindex="-1"
@@ -116,8 +129,8 @@
                 <div class="form-group">
                   <div class="col-sm-2"></div>
                   <div class="col-sm-10">
-                    <button class="btn btn-primary mr-3">Update</button>
-                    <button class="btn btn-primary">Reset</button>
+                    <button class="btn btn-primary mr-3"  [disabled]="!examFrm.valid" (click)="onCreate()">Update</button>
+                    <button class="btn btn-primary" (click)="onReset()">Reset</button>
                   </div>
                 </div>
               </div>
