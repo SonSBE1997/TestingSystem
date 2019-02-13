@@ -9,6 +9,7 @@ import { DetailExamComponent } from './detail-exam/detail-exam.component';
 import { UpdateCommonComponent } from './update-common/update-common.component';
 import { UpdateContentComponent } from './update-content/update-content.component';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,6 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
     UpdateCommonComponent,
     UpdateContentComponent
   ],
-  imports: [CommonModule, ExamRoutingModule, CKEditorModule]
+  imports: [CommonModule, ExamRoutingModule, CKEditorModule, FormsModule, ReactiveFormsModule]
 })
 export class ExamModule {}
