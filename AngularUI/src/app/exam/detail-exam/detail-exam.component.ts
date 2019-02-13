@@ -28,7 +28,7 @@ export class DetailExamComponent implements OnInit {
     });
   }
 
-  export(){
+  export() {
     window.location.href = "http://localhost:8080/report/java001";
   }
 }
