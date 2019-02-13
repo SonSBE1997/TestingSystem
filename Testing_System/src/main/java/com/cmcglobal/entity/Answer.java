@@ -1,3 +1,4 @@
+
 package com.cmcglobal.entity;
 
 import java.io.Serializable;
@@ -17,6 +18,10 @@ public class Answer implements Serializable {
 	@Column(name = "is_true")
 	private boolean isTrue;
 	private int status;
+	
+	public String getAnswerId() {
+		return answerId;
+	}
 
 	public void setAnswerId(String answerId) {
 		this.answerId = answerId;

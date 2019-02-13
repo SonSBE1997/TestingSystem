@@ -21,6 +21,7 @@ public class ExamQuestion implements Serializable {
 	private int id;
 	@Column(name = "exam_id")
 	private String examId;
+
 	@ManyToOne
 	@JoinColumn(name = "question_id")
 	private Question question;
@@ -49,5 +50,4 @@ public class ExamQuestion implements Serializable {
 	public void setChoice_order(String choice_order) {
 		this.choice_order = choice_order;
 	}
-
 }

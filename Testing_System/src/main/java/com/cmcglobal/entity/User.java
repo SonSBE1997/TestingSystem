@@ -28,6 +28,7 @@ public class User implements Serializable {
 	private int status;
 	@OneToMany(mappedBy="userCreated",fetch=FetchType.LAZY,cascade=CascadeType.ALL)
     private List<Exam> exams;
+	
 	public int getUserId() {
 		return userId;
 	}
@@ -75,5 +76,4 @@ public class User implements Serializable {
 	public void setStatus(int status) {
 		this.status = status;
 	}
-
 }

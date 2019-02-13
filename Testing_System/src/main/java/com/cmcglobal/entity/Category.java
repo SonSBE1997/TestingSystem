@@ -26,8 +26,10 @@ public class Category implements Serializable {
 	@Column(name = "date_created")
 	private Date dateCreated;
 	private int status;
+
 	@OneToMany(mappedBy="category",fetch=FetchType.LAZY,cascade=CascadeType.ALL)
     private List<Exam> exams;
+
 	public int getCategoryId() {
 		return categoryId;
 	}
@@ -59,5 +61,4 @@ public class Category implements Serializable {
 	public void setStatus(int status) {
 		this.status = status;
 	}
-
 }

@@ -20,6 +20,7 @@ public class Question implements Serializable {
 	@Id
 	@Column(name = "question_id")
 	private String questionId;
+
 	@ManyToOne
 	@JoinColumn(name = "category_id")
 	private Category category;
