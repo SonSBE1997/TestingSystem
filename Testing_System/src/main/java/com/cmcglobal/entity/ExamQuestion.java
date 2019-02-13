@@ -25,7 +25,8 @@ public class ExamQuestion implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "question_id")
 	private Question question;
-	private String choice_order;
+	@Column(name = "choice_order")
+	private String choiceOrder;
 
 	public int getId() {
 		return id;
@@ -43,11 +44,12 @@ public class ExamQuestion implements Serializable {
 		this.question = question;
 	}
 
-	public String getChoice_order() {
-		return choice_order;
-	}
+  public String getChoiceOrder() {
+    return choiceOrder;
+  }
 
-	public void setChoice_order(String choice_order) {
-		this.choice_order = choice_order;
-	}
+  public void setChoiceOrder(String choiceOrder) {
+    this.choiceOrder = choiceOrder;
+  }
+
 }

@@ -17,7 +17,7 @@ public class ExamServiceImpl implements ExamService {
 	ExamRepository examRepository;
 
   @Override
-  public List<Exam> fillAll() {
+  public List<Exam> findAll() {
     return examRepository.findAll();
   }
 

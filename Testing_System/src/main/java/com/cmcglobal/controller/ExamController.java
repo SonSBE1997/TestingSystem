@@ -31,7 +31,7 @@ public class ExamController {
      * cate.delete(cate.getOne(1)); cate.deleteAll();
      */
 
-    return examService.fillAll();
+    return examService.findAll();
   }
 
   @GetMapping(value = "/report/{id}")
