@@ -17,7 +17,7 @@ public class ExamQuestion implements Serializable {
 
   private static final long serialVersionUID = 1L;
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
   @Column(name = "exam_id")
   private String examId;
@@ -50,5 +50,13 @@ public class ExamQuestion implements Serializable {
 
   public void setChoiceOrder(String choiceOrder) {
     this.choiceOrder = choiceOrder;
+  }
+
+  public String getExamId() {
+    return examId;
+  }
+
+  public void setExamId(String examId) {
+    this.examId = examId;
   }
 }

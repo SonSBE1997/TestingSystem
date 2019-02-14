@@ -9,6 +9,8 @@
 
 package com.cmcglobal.service;
 
+import com.cmcglobal.entity.ExamQuestion;
+
 /*
  * @author Sanero.
  * Created date: Feb 13, 2019
@@ -19,4 +21,6 @@ public interface ExamQuestionService {
   public void delete(int examQuestionId);
 
   public long countAll();
+  
+  public void insert(ExamQuestion examQuestion);
 }

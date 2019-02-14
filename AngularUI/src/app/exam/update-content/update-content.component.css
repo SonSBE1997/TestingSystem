@@ -17,3 +17,7 @@
 .pd-5 {
   padding-left: 25% !important;
 }
+
+.scale {
+  transform: scale(1.5);
+}

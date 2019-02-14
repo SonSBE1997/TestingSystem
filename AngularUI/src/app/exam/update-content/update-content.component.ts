@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Event } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { mergeMap } from 'rxjs/operators';
 import {
@@ -25,9 +25,12 @@ export class UpdateContentComponent implements OnInit {
   tabAllQuestion: TabInfo;
   inTabOne = true;
   isRemove = false;
+  isAdd = false;
+  examId: string;
 
   constructor(
     private activatedRoute: ActivatedRoute,
+    private router: Router,
     private http: HttpClient
   ) {}
 
@@ -36,6 +39,7 @@ export class UpdateContentComponent implements OnInit {
       .pipe(
         mergeMap(params => {
           const id = params.get('id');
+          this.examId = id;
           return this.http.get<Exam>(`http://localhost:8080/exam/${id}`);
         })
       )
@@ -86,14 +90,24 @@ export class UpdateContentComponent implements OnInit {
   // click checkbox question
   selectQuestion(questionId) {
     console.log(questionId);
+    let count = 0;
     this.selection.forEach(item => {
       if (item.id === questionId) {
         item.checked = !item.checked;
       }
+
+      if (item.checked) {
+        count++;
+      }
     });
 
-    const isAll = this.selection.filter(v => v.checked);
-    if (isAll.length === this.selection.length) {
+    if (count > 0) {
+      this.isAdd = true;
+    } else if (count === 0) {
+      this.isAdd = false;
+    }
+
+    if (count === this.selection.length) {
       this.isCheckAll = true;
     } else {
       this.isCheckAll = false;
@@ -104,6 +118,7 @@ export class UpdateContentComponent implements OnInit {
   // click checkbox all
   selectAll() {
     this.isCheckAll = !this.isCheckAll;
+    this.isAdd = this.isCheckAll;
     this.selection.forEach(item => {
       item.checked = this.isCheckAll;
     });
@@ -122,9 +137,47 @@ export class UpdateContentComponent implements OnInit {
       );
   }
 
+  clickSubmitTab2() {
+    if (!this.isAdd) {
+      return;
+    }
+    const selectedQuestion = this.selection.filter(v => v.checked);
+    const arr = [];
+    selectedQuestion.forEach(v => {
+      arr.push({ question: { questionId: v.id } });
+    });
+
+    const data = {
+      examId: this.detailExam.examId,
+      examQuestions: arr
+    };
+
+    this.http.post('http://localhost:8080/exam/add-question', data).subscribe(
+      success => {},
+      error => {
+        console.log(error.error.text);
+        window.location.reload();
+      }
+    );
+  }
+
   // click button random
-  clickRandom(event) {
-    console.log('random');
+  clickRandom() {
+    if (
+      this.detailExam.numberOfQuestion > this.detailExam.examQuestions.length
+    ) {
+      this.http
+        .post('http://localhost:8080/exam/random-question', {
+          examId: this.detailExam.examId
+        })
+        .subscribe(
+          success => {},
+          error => {
+            console.log(error.error.text);
+            window.location.reload();
+          }
+        );
+    }
   }
 
   // change to tab one

@@ -14,4 +14,13 @@ public interface ExamService {
   public boolean randomQuestion(String examId);
 
   public boolean removeQuestion(Exam exam);
+
+  /**
+   * Author: Sanero.
+   * Created date: Feb 14, 2019
+   * Created time: 8:35:49 AM
+   * Description: TODO - .
+   * @param exam
+   */
+  public void addListQuestion(Exam exam);
 }

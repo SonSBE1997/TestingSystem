@@ -149,7 +149,7 @@
                                   type="button"
                                   class="btn btn-outline"
                                   data-dismiss="modal"
-                                  (click)="clickRandom($event)"
+                                  (click)="clickRandom()"
                                 >
                                   OK
                                 </button>
@@ -303,27 +303,27 @@
                         </div>
                       </div>
                     </div>
-                    <ng-template [ngIf]="isRemove===true">
-                        <div class="row text-center">
-                            <div class="col-xs-2"></div>
-                            <div class="col-xs-2"></div>
-                            <div class="col-xs-1"></div>
-                            <button
-                              class="btn btn-primary col-xs-1 mr-3"
-                              (click)="clickUpdate()"
-                            >
-                              Submit
-                            </button>
-                            <button
-                              class="btn btn-default col-xs-1"
-                              (click)="clickResetRemoveQuestion()"
-                            >
-                              Reset
-                            </button>
-                            <div class="col-xs-1"></div>
-                            <div class="col-xs-2"></div>
-                            <div class="col-xs-2"></div>
-                          </div>
+                    <ng-template [ngIf]="isRemove === true">
+                      <div class="row text-center">
+                        <div class="col-xs-2"></div>
+                        <div class="col-xs-2"></div>
+                        <div class="col-xs-1"></div>
+                        <button
+                          class="btn btn-primary col-xs-1 mr-3"
+                          (click)="clickUpdate()"
+                        >
+                          Submit
+                        </button>
+                        <button
+                          class="btn btn-default col-xs-1"
+                          (click)="clickResetRemoveQuestion()"
+                        >
+                          Reset
+                        </button>
+                        <div class="col-xs-1"></div>
+                        <div class="col-xs-2"></div>
+                        <div class="col-xs-2"></div>
+                      </div>
                     </ng-template>
                   </div>
                 </div>
@@ -387,6 +387,7 @@
                             <tr role="row" class="text-center">
                               <th style="width: 30px;">
                                 <input
+                                  class="scale"
                                   type="checkbox"
                                   [checked]="isCheckAll"
                                   (change)="selectAll()"
@@ -405,6 +406,7 @@
                               <td>
                                 <input
                                   type="checkbox"
+                                  class="scale"
                                   [checked]="selection[i].checked"
                                   (change)="selectQuestion(question.questionId)"
                                 />
@@ -488,7 +490,11 @@
                         </div>
                       </div>
                       <div class="row text-center">
-                        <button class="btn btn-primary" (click)="clickUpdate()">
+                        <button
+                          class="btn btn-primary"
+                          (click)="clickSubmitTab2()"
+                          [ngClass]="{'disabled': isAdd===false}"
+                        >
                           Submit
                         </button>
                       </div>

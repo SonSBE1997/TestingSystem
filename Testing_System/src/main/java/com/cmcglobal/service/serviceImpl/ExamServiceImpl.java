@@ -1,15 +1,20 @@
 package com.cmcglobal.service.serviceImpl;
 
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.cmcglobal.entity.Exam;
+import com.cmcglobal.entity.ExamQuestion;
+import com.cmcglobal.entity.Question;
 import com.cmcglobal.repository.ExamRepository;
 import com.cmcglobal.service.ExamQuestionService;
 import com.cmcglobal.service.ExamService;
+import com.cmcglobal.service.QuestionServices;
+import com.cmcglobal.utils.Helper;
 
 @Service
 @Transactional
@@ -19,6 +24,9 @@ public class ExamServiceImpl implements ExamService {
 
   @Autowired
   ExamQuestionService examQuestionService;
+
+  @Autowired
+  QuestionServices questionService;
 
   @Override
   public List<Exam> findAll() {
@@ -55,8 +63,20 @@ public class ExamServiceImpl implements ExamService {
    */
   @Override
   public boolean randomQuestion(String examId) {
-    // TODO Auto-generated method stub
-    return false;
+    Exam exam = examRepository.findById(examId).get();
+    Random random = new Random();
+    List<Question> questions = questionService.getAllQuestion();
+    int numberRandom = exam.getNumberOfQuestion()
+        - exam.getExamQuestions().size();
+    List<ExamQuestion> examQuestions = Helper.randomQuestion(random, questions,
+        numberRandom, examId);
+    for (ExamQuestion examQuestion : examQuestions) {
+      examQuestion.setExamId(examId);
+      String choiceOrder = Helper.randomChoiceOrder(random);
+      examQuestion.setChoiceOrder(choiceOrder);
+      examQuestionService.insert(examQuestion);
+    }
+    return true;
   }
 
   /* (non-Javadoc)
@@ -71,6 +91,24 @@ public class ExamServiceImpl implements ExamService {
     updateExam.setExamQuestions(exam.getExamQuestions());
     updateExam = examRepository.save(updateExam);
     return true;
+  }
+
+  /* (non-Javadoc)
+   * @see com.cmcglobal.service.ExamService#addListQuestion(com.cmcglobal.entity.Exam)
+   * Author: Sanero.
+   * Created date: Feb 14, 2019
+   * Created time: 8:36:00 AM
+   */
+  @Override
+  public void addListQuestion(Exam exam) {
+    String examId = exam.getExamId();
+    Random random = new Random();
+    for (ExamQuestion examQuestion : exam.getExamQuestions()) {
+      examQuestion.setExamId(examId);
+      String choiceOrder = Helper.randomChoiceOrder(random);
+      examQuestion.setChoiceOrder(choiceOrder);
+      examQuestionService.insert(examQuestion);
+    }
   }
 
 }

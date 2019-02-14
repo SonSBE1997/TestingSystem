@@ -14,6 +14,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.cmcglobal.entity.ExamQuestion;
 import com.cmcglobal.repository.ExamQuestionRepository;
 import com.cmcglobal.service.ExamQuestionService;
 
@@ -31,7 +32,7 @@ public class ExamQuestionServiceImpl implements ExamQuestionService {
   ExamQuestionRepository repository;
 
   /* (non-Javadoc)
-
+  
   /* (non-Javadoc)
    * @see com.cmcglobal.service.ExamQuestionService#countAll()
    * Author: Sanero.
@@ -54,4 +55,14 @@ public class ExamQuestionServiceImpl implements ExamQuestionService {
     repository.deleteById(examQuestionId);
   }
 
+  /* (non-Javadoc)
+   * @see com.cmcglobal.service.ExamQuestionService#insert(com.cmcglobal.entity.ExamQuestion)
+   * Author: Sanero.
+   * Created date: Feb 14, 2019
+   * Created time: 8:33:24 AM
+   */
+  @Override
+  public void insert(ExamQuestion examQuestion) {
+    repository.save(examQuestion);
+  }
 }
