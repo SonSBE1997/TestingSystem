@@ -38,6 +38,7 @@ public class ExportExamPDF extends AbstractPdfView {
     Exam exam = (Exam) model.get("exam");
     String title = exam.getTitle();
     String number = String.valueOf(exam.getNumberOfQuestion());
+
     String cate = exam.getCategory().getCategoryName();
     int duration = Math.round(exam.getDuration());
 

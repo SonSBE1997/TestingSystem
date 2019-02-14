@@ -42,8 +42,8 @@ public class Category implements Serializable {
 		return categoryName;
 	}
 
-	public void setCategoryName(String caterogyName) {
-		this.categoryName = caterogyName;
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
 	}
 
 	public Date getDateCreated() {
