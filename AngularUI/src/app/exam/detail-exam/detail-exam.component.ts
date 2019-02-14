@@ -11,7 +11,6 @@ import { DetailExam } from './detailExam.interface';
 })
 export class DetailExamComponent implements OnInit {
   detailExam: DetailExam;
-
   constructor(private activatedRoute: ActivatedRoute, private http: HttpClient) { }
 
   ngOnInit() {
@@ -29,6 +28,12 @@ export class DetailExamComponent implements OnInit {
   }
 
   export(){
-    window.location.href = "http://localhost:8080/report/java001";
+    this.activatedRoute.paramMap.subscribe(
+        params => {
+          const id = params.get('id');
+          return  window.location.href = `http://localhost:80/exam/export/${id}`;
+        }
+    );
   }
+
 }
