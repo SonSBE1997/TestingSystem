@@ -24,20 +24,11 @@ public class ExamQuestion implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "question_id")
 	private Question question;
-	private String choice_order;
-  /*	 @OneToMany(fetch=FetchType.EAGER,cascade=CascadeType.ALL)
-  	  @JoinColumn(name="question_id")
-  	  private List<Question> questions;
-  
-  	public List<Question> getQuestions() {
-    return questions;
-  }
-  
-  public void setQuestions(List<Question> questions) {
-    this.questions = questions;
-  }*/
 
-  public int getId() {
+	@Column(name = "choice_order")
+	private String choiceOrder;
+
+	public int getId() {
 		return id;
 	}
 
@@ -53,11 +44,12 @@ public class ExamQuestion implements Serializable {
 		this.question = question;
 	}
 
-	public String getChoice_order() {
-		return choice_order;
-	}
+  public String getChoiceOrder() {
+    return choiceOrder;
+  }
 
-	public void setChoice_order(String choice_order) {
-		this.choice_order = choice_order;
-	}
+  public void setChoiceOrder(String choiceOrder) {
+    this.choiceOrder = choiceOrder;
+  }
+
 }

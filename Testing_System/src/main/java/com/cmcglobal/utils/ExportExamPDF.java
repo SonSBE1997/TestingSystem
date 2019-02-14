@@ -43,6 +43,7 @@ public class ExportExamPDF extends AbstractPdfView {
 
     document.setPageSize(PageSize.A4);
     Date date = new Date();
+
     response.setHeader("Content-Disposition", "attachment; filename=\"" + title
         + "_export_" + date.getTime() + ".pdf\"");
 
@@ -81,7 +82,7 @@ public class ExportExamPDF extends AbstractPdfView {
       document.add(title1);
       com.lowagie.text.List l = new com.lowagie.text.List(
           com.lowagie.text.List.ALPHABETICAL);
-      String[] choiceOrder = ex.getChoice_order().split("\\s");
+      String[] choiceOrder = ex.getChoiceOrder().split("\\s");
       for (int k = 0; k < choiceOrder.length; k++) {
         int j = Integer.valueOf(choiceOrder[k]);
         String s = ex.getQuestion().getAnswers().get(j - 1).getContent()
