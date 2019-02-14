@@ -5,10 +5,10 @@
       "title": "Java basic",
       "categoryName": "Java",
       "duration": 20,
-      "number_of_question": 20,
+      "numberOfQuestion": 20,
       "create_by": "NTMDUYEN",
       "status": "DRAFT",
-      "created_at": "01/30/2019"
+      "create_at": "01/30/2019"
     },
     {
       "exam_id": "NET04",
