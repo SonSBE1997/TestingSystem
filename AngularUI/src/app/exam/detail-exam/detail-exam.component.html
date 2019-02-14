@@ -22,6 +22,12 @@
   <button class="btn btn-success" style="width: 100px;margin-bottom: 10px">
     Approve
   </button>
+
+  <div class="alert alert-danger alert-dismissible" *ngIf="flag == false; " >
+      <i class="icon fa fa-ban"></i> This exam has not question!
+  </div>
+
+
   <div class="box box-warning" *ngIf="exam">
     <div class="box-header with-border">
       <b>

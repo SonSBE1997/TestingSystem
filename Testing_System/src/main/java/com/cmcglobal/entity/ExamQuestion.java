@@ -1,7 +1,6 @@
 package com.cmcglobal.entity;
 
 import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -25,6 +24,7 @@ public class ExamQuestion implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "question_id")
 	private Question question;
+
 	@Column(name = "choice_order")
 	private String choiceOrder;
 

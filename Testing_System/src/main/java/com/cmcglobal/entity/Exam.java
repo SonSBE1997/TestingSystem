@@ -158,7 +158,9 @@ public class Exam implements Serializable {
     return categoryName;
   }
 
+
   public void setCategoryName(String categoryName) {
     this.categoryName = categoryName;
+
   }
 }
