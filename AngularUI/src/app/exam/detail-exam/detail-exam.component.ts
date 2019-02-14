@@ -30,6 +30,7 @@ export class DetailExamComponent implements OnInit {
       });
   }
 
+
   export() {
     if (this.exam.examQuestions.length > 0) {
       this.activatedRoute.paramMap.subscribe(params => {
