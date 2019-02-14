@@ -78,7 +78,8 @@ public class ExportExamPDF extends AbstractPdfView {
     int i = 1;
     for (ExamQuestion ex : exam.getExamQuestions()) {
       String content = ex.getQuestion().getContent();
-      Paragraph title1 = new Paragraph("Question " + i + ": " + content, font);
+      Paragraph title1 = new Paragraph(
+          "\nQuestion " + i + ": " + content + "\n", font);
       document.add(title1);
       com.lowagie.text.List l = new com.lowagie.text.List(
           com.lowagie.text.List.ALPHABETICAL);
@@ -87,8 +88,9 @@ public class ExportExamPDF extends AbstractPdfView {
         int j = Integer.valueOf(choiceOrder[k]);
         String s = ex.getQuestion().getAnswers().get(j - 1).getContent()
             .toString();
-        l.add(new ListItem(s));
+        l.add(new ListItem(" "+s));
       }
+      l.setIndentationLeft(10);
       i++;
       document.add(l);
     }
@@ -126,7 +128,7 @@ public class ExportExamPDF extends AbstractPdfView {
   public PdfPCell getHeaderRight(int duration) {
     Chunk chunkDurationLabal = new Chunk("\nDuration: ", normal);
     Phrase phDurationLabal = new Phrase(chunkDurationLabal);
-    Chunk chunkDuration = new Chunk(duration + "p", bold);
+    Chunk chunkDuration = new Chunk(duration + " minute", bold);
     Phrase phDuration = new Phrase(chunkDuration);
     Chunk chunkDateLabal = new Chunk("\nDate: ........................",
         normal);

@@ -20,7 +20,7 @@ export class DetailExamComponent implements OnInit {
       mergeMap(
         params => {
           const id = params.get('id');
-          return this.http.get<Exam>(`http://localhost:80/exam/${id}`);
+          return this.http.get<Exam>(`http://localhost:8080/exam/${id}`);
         }
       )
     ).subscribe(exam => {
@@ -33,7 +33,7 @@ export class DetailExamComponent implements OnInit {
       this.activatedRoute.paramMap.subscribe(
         params => {
           const id = params.get('id');
-          return  window.location.href = `http://localhost:80/exam/export/${id}`;
+          return  window.location.href = `http://localhost:8080/exam/export/${id}`;
         }
       );
     }else{
