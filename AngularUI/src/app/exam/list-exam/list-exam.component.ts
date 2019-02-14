@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ListExams } from './listExam.interface';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
+import { Exam } from 'src/app/entity/Exam.interface';
 
 @Component({
   selector: 'app-list-exam',
@@ -9,12 +9,12 @@ import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
   styleUrls: ['./list-exam.component.css']
 })
 export class ListExamComponent implements OnInit, AfterViewInit {
-  displayedColumns = ['exam_id', 'title', 'categoryName', 'duration', 'numberOfQuestion', 'create_by', 'status', 'create_at'];
-  public dataSource = new MatTableDataSource<ListExams>();
+  displayedColumns = ['examId', 'title', 'category', 'duration', 'numberOfQuestion', 'userCreated', 'status', 'createAt'];
+  public dataSource = new MatTableDataSource<Exam>();
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  listExam: ListExams[] = [];
+  listExam: Exam[] = [];
   constructor(private http: HttpClient) { }
   ngOnInit() {
     this.getAll();
@@ -24,7 +24,7 @@ export class ListExamComponent implements OnInit, AfterViewInit {
     this.dataSource.paginator = this.paginator;
   }
   public getAll = () => {
-    this.http.get<ListExams[]>('http://localhost:3000/listExams')
+    this.http.get<Exam[]>('http://localhost:80/exam/listExams')
     .subscribe(listExam => {
       this.listExam = listExam;
       this.dataSource.data = listExam;

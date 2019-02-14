@@ -27,7 +27,7 @@ public class Exam implements Serializable {
   private String note;
   private String status;
   @Transient
-  private String caterogyName;
+  private String categoryName;
   @Column(name = "is_enable")
   private boolean isEnable;
   @Column(name = "create_at")
@@ -154,11 +154,13 @@ public class Exam implements Serializable {
     this.category = category;
   }
 
-  public String getCaterogyName() {
-    return caterogyName;
+  public String getCategoryName() {
+    return categoryName;
   }
 
-  public void setCaterogyName(String caterogyName) {
-    this.caterogyName = caterogyName;
+
+  public void setCategoryName(String categoryName) {
+    this.categoryName = categoryName;
+
   }
 }

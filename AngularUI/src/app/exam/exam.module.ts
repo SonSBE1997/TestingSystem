@@ -10,6 +10,7 @@ import { UpdateCommonComponent } from './update-common/update-common.component';
 import { UpdateContentComponent } from './update-content/update-content.component';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import {MatFormFieldModule, MatInputModule } from '@angular/material';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import {
   MatAutocompleteModule,
@@ -41,7 +42,7 @@ import {
   MatTabsModule,
   MatToolbarModule,
   MatTooltipModule,
-  MatStepperModule
+  MatStepperModule,
 } from '@angular/material';
 @NgModule({
   declarations: [
@@ -88,7 +89,9 @@ import {
     MatTabsModule,
     MatToolbarModule,
     MatTooltipModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    FormsModule,
+    ReactiveFormsModule
   ]
 })
 export class ExamModule {}
