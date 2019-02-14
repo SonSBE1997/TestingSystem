@@ -80,6 +80,8 @@ export class UpdateContentComponent implements OnInit {
   }
 
   clickResetRemoveQuestion() {
+    const test = this.backupExamQuestions.filter(v => !this.detailExam.examQuestions.includes(v));
+    console.log(test);
     this.detailExam.examQuestions = this.backupExamQuestions;
     this.isRemove = false;
   }
