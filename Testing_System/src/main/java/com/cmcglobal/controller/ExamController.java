@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,7 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.cmcglobal.entity.Exam;
 import com.cmcglobal.repository.CategoryRepository;
 import com.cmcglobal.service.ExamService;
-import com.cmcglobal.utils.ExportPDF;
+import com.cmcglobal.utils.ExportExamPDF;
 
 @RestController
 @RequestMapping("/exam")
@@ -39,12 +38,11 @@ public class ExamController {
     return examService.findAll();
   }
 
-  @GetMapping(value = "/report/{id}")
-  public ModelAndView handlereport(@PathVariable("id") String id,
-      ModelMap map) {
+  @GetMapping(value = "/export/{id}")
+  public ModelAndView handlereport(@PathVariable("id") String id) {
     try {
       Exam exam = examService.findByID(id);
-      return new ModelAndView(new ExportPDF(), "exam", exam);
+      return new ModelAndView(new ExportExamPDF(), "exam", exam);
     } catch (Exception e) {
       return null;
     }

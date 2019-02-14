@@ -2,13 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { mergeMap } from 'rxjs/operators';
-import {
-  Exam,
-  Question,
-  Selection,
-  TabInfo,
-  ExamQuestion
-} from './update-content.interface';
+import { Selection, TabInfo } from './update-content.interface';
+import { Exam } from 'src/app/entity/Exam.interface';
+import { ExamQuestion } from 'src/app/entity/ExamQuestion.interface';
+import { Question } from 'src/app/entity/Question.interface';
 
 @Component({
   selector: 'app-update-content',

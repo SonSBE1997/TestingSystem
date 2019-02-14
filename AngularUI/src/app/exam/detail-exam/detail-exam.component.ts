@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { mergeMap } from 'rxjs/operators';
-import { DetailExam } from './detailExam.interface';
+import { Exam } from 'src/app/entity/Exam.interface';
 
 @Component({
   selector: 'app-detail-exam',
@@ -10,25 +10,34 @@ import { DetailExam } from './detailExam.interface';
   styleUrls: ['./detail-exam.component.css']
 })
 export class DetailExamComponent implements OnInit {
-  detailExam: DetailExam;
-
-  constructor(private activatedRoute: ActivatedRoute, private http: HttpClient) { }
+  exam: Exam;
+  flag = true;
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private http: HttpClient
+  ) {}
 
   ngOnInit() {
-    this.activatedRoute.paramMap.pipe(
-      mergeMap(
-        params => {
+    this.activatedRoute.paramMap
+      .pipe(
+        mergeMap(params => {
           const id = params.get('id');
-          return this.http.get<DetailExam>(`http://localhost:3000/exams/${id}`);
-        }
+          return this.http.get<Exam>(`http://localhost:8080/exam/${id}`);
+        })
       )
-    ).subscribe(detailExam => {
-      this.detailExam = detailExam;
-      console.log(this.detailExam);
-    });
+      .subscribe(exam => {
+        this.exam = exam;
+      });
   }
 
   export() {
-    window.location.href = "http://localhost:8080/report/java001";
+    if (this.exam.examQuestions.length > 0) {
+      this.activatedRoute.paramMap.subscribe(params => {
+        const id = params.get('id');
+        return (window.location.href = `http://localhost:8080/exam/export/${id}`);
+      });
+    } else {
+      this.flag = false;
+    }
   }
 }
