@@ -2,11 +2,14 @@ package com.cmcglobal.controller;
 
 import java.util.List;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -52,5 +55,33 @@ public class ExamController {
      */
 
     return examService.findByID(id);
+  }
+
+  @PutMapping(value = "/approve")
+  public ResponseEntity<String> approveExam(@RequestBody Exam exam) {
+    boolean success = examService.approveExam(exam.getExamId());
+    if (success)
+      return ResponseEntity.ok("Ok");
+    return ResponseEntity.ok("Not ok");
+  }
+
+  @PutMapping(value = "/remove-question")
+  public ResponseEntity<String> removeQuestion(@RequestBody Exam exam) {
+    boolean success = examService.removeQuestion(exam);
+    if (success)
+      return ResponseEntity.ok("Ok");
+    return ResponseEntity.ok("Not ok");
+  }
+
+  @PostMapping(value = "/add-question")
+  public ResponseEntity<String> addQuestion(@RequestBody Exam exam) {
+    examService.addListQuestion(exam);
+    return ResponseEntity.ok("Ok");
+  }
+
+  @PostMapping(value = "/random-question")
+  public ResponseEntity<String> randomQuestion(@RequestBody Exam exam) {
+    examService.randomQuestion(exam.getExamId());
+    return ResponseEntity.ok("Ok");
   }
 }
