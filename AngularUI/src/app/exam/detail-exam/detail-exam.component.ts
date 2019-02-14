@@ -41,4 +41,23 @@ export class DetailExamComponent implements OnInit {
       this.flag = false;
     }
   }
+
+  approve() {
+    if (this.exam.status === 'Draft') {
+      // console.log('Draft');
+      this.http
+        .put('http://localhost:8080/exam/approve', {
+          examId: this.exam.examId
+        })
+        .subscribe(
+          success => {},
+          error => {
+            // console.log(error.error.text);
+            if (error.error.text === 'Ok') {
+              this.exam.status = 'Public';
+            }
+          }
+        );
+    }
+  }
 }
