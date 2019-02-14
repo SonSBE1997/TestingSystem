@@ -39,9 +39,6 @@ public class ExamController {
   public ModelAndView handlereport(@PathVariable("id") String id) {
     try {
       Exam exam = examService.findByID(id);
-      if (exam.getExamQuestions().size() <1) {
-        return  null;
-      }
       return new ModelAndView(new ExportExamPDF(), "exam", exam);
     } catch (Exception e) {
       return null;

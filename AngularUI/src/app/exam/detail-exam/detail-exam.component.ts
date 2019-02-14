@@ -12,6 +12,7 @@ import { Exam } from 'src/app/entity/Exam.interface';
 })
 export class DetailExamComponent implements OnInit {
   exam: Exam;
+  flag = true;
   constructor(private activatedRoute: ActivatedRoute, private http: HttpClient) { }
 
   ngOnInit() {
@@ -19,22 +20,26 @@ export class DetailExamComponent implements OnInit {
       mergeMap(
         params => {
           const id = params.get('id');
-          return this.http.get<Exam>(`http://localhost:8080/exam/${id}`);
+          return this.http.get<Exam>(`http://localhost:80/exam/${id}`);
         }
       )
     ).subscribe(exam => {
       this.exam = exam;
-      console.log(this.exam);
     });
   }
 
   export(){
-    this.activatedRoute.paramMap.subscribe(
+    if(this.exam.examQuestions.length > 0){
+      this.activatedRoute.paramMap.subscribe(
         params => {
           const id = params.get('id');
           return  window.location.href = `http://localhost:80/exam/export/${id}`;
         }
-    );
+      );
+    }else{
+      this.flag = false;
+    }
+  }
 
 
 }
