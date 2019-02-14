@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +25,7 @@ public class examController {
 		return examService.getOne(examId);
 	}
 	
-	@GetMapping("/update/update-common/{examId}")
+	@PutMapping("/update/update-common/{examId}")
 	public Exam updateCommon(@RequestBody Exam exam, @PathVariable String examId) {
 		Exam ex = examService.getOne(examId);
 		if(ex != null) {
@@ -37,6 +36,7 @@ public class examController {
 			ex.setNote(exam.getNote());
 			ex.setStatus(exam.getStatus());
 			examService.update(ex);
+			System.out.println(exam.getCategory().getCategoryName());
 		}
 		return ex;
 	}

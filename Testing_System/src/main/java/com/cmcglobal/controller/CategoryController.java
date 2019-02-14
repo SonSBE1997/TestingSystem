@@ -1,5 +1,7 @@
 package com.cmcglobal.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,5 +23,10 @@ public class CategoryController {
 	@GetMapping("/{categoryName}")
 	public Category getOne(@PathVariable String categoryName) {
 		return categoryService.getOne(categoryName);
+	}
+	
+	@GetMapping("/list-category")
+	public List<Category> getAll() {
+		return categoryService.getAll();
 	}
 }

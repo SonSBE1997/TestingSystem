@@ -37,12 +37,28 @@
                 <div class="col-sm-10">
                   <input
                     type="email"
-                    class="form-control"
+                    class="form-control row-1"
                     id="inputEmail3"
+                    name="title"
                     placeholder="Email"
                     value="SQL Exam Final"
                     formControlName="title"
+                    [ngClass]="{
+                      'is-valid': examFrm.get('title').valid,
+                      'is-invalid': examFrm.get('title').invalid && examFrm.get('title').touched
+                    }"
+                    pattern="^[A-Za-z-_]{3,}$"
                   />
+                  <!-- validator Title -->
+                  <ng-container *ngIf="examFrm.get('title').hasError('required')">
+                      <p style="color: red; margin-bottom: -10px; font-family: unset">
+                        *Title is required!*</p>
+                  </ng-container>
+                  <ng-container *ngIf="examFrm.get('title').hasError('pattern')">
+                      <p style="color: red; margin-bottom: -10px; font-family: unset">
+                        *Title is invalid!*</p>
+                  </ng-container>
+                  <!-- end of validator Title -->
                 </div>
               </div>
               <div class="form-group">
@@ -51,18 +67,18 @@
                 >
                 <div class="col-sm-10">
                   <select
-                    id = "Category"
+                    id="CategoryName"
                     class="form-control select2 select2-hidden-accessible"
                     style="width: 100%;"
                     tabindex="-1"
                     aria-hidden="true"
                     formControlName="CatergoryName"
+                    (change)="onChange($event.target.value)"
                   >
-                    <option selected="selected">SQL</option>
-                    <option>Java Basic</option>
-                    <option>Java Advanced</option>
-                    <option>Front End Advanced</option>
-                    <option>Automation Test</option>
+
+                    <option *ngFor="let category of categories">
+                      {{category.categoryName}}
+                    </option>
                   </select>
                 </div>
               </div>
@@ -78,9 +94,23 @@
                     class="form-control"
                     id="iNumQues"
                     placeholder="Number question"
-                    value="30"
                     formControlName="numberOfQuestion"
+                    [ngClass]="{
+                      'is-valid': examFrm.get('numberOfQuestion').valid,
+                      'is-invalid': examFrm.get('numberOfQuestion').invalid && examFrm.get('numberOfQuestion').touched
+                    }"
+                    pattern="^\d+$"
                   />
+                  <!-- validator numberOfQuestion -->
+                  <ng-container *ngIf="examFrm.get('numberOfQuestion').hasError('required')">
+                      <p style="color: red; margin-bottom: -10px; font-family: unset">
+                        *NumberOfQuestion is required!*</p>
+                  </ng-container>
+                  <ng-container *ngIf="examFrm.get('numberOfQuestion').hasError('pattern')">
+                      <p style="color: red; margin-bottom: -10px; font-family: unset">
+                        *NumberOfQuestion must be positive number!*</p>
+                  </ng-container>
+                  <!-- end of validator numberOfQuestion -->
                 </div>
               </div>
 
@@ -95,9 +125,23 @@
                     class="form-control"
                     id="iDuration"
                     placeholder="Duration"
-                    value="30"
                     formControlName="duration"
+                    [ngClass]="{
+                      'is-valid': examFrm.get('duration').valid,
+                      'is-invalid': examFrm.get('duration').invalid && examFrm.get('duration').touched
+                    }"
+                    pattern="^\d+$"
                   />
+                  <!-- validator duration -->
+                  <ng-container *ngIf="examFrm.get('duration').hasError('required')">
+                      <p style="color: red; margin-bottom: -10px; font-family: unset">
+                        *Duration is required!*</p>
+                  </ng-container>
+                  <ng-container *ngIf="examFrm.get('duration').hasError('pattern')">
+                      <p style="color: red; margin-bottom: -10px; font-family: unset">
+                        *Duration must be positive number!*</p>
+                  </ng-container>
+                  <!-- end of validator duration -->
                 </div>
               </div>
 
@@ -126,7 +170,6 @@
                   <ckeditor
                     [editor]="Editor"
                     formControlName="note"
-                    data="<p>Hello, world!</p>"
                   ></ckeditor>
                 </div>
               </div>
