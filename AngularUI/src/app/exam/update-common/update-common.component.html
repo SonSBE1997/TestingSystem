@@ -47,7 +47,7 @@
                       'is-valid': examFrm.get('title').valid,
                       'is-invalid': examFrm.get('title').invalid && examFrm.get('title').touched
                     }"
-                    pattern="^[A-Za-z-_]{3,}$"
+                    pattern="^[A-Za-z-_0123456789]{1,}$"
                   />
                   <!-- validator Title -->
                   <ng-container *ngIf="examFrm.get('title').hasError('required')">
@@ -67,16 +67,16 @@
                 >
                 <div class="col-sm-10">
                   <select
-                    id="CategoryName"
+                    id="category"
                     class="form-control select2 select2-hidden-accessible"
                     style="width: 100%;"
                     tabindex="-1"
                     aria-hidden="true"
-                    formControlName="CatergoryName"
-                    (change)="onChange($event.target.value)"
-                  >
+                    formControlName="category"
 
-                    <option *ngFor="let category of categories">
+                  >
+                    <option *ngFor="let category of categories" [selected]="category.categoryId === exam?.category.categoryId"
+                     [value]="category.categoryId">
                       {{category.categoryName}}
                     </option>
                   </select>
@@ -178,7 +178,7 @@
                 <div class="col-sm-2"></div>
                 <div class="col-sm-10">
                   <button class="btn btn-primary mr-3">Update</button>
-                  <button class="btn btn-primary">Reset</button>
+                  <button class="btn btn-default" (click)="reset($event)">Reset</button>
                 </div>
               </div>
             </div>
