@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -43,9 +44,17 @@ public class ExamController {
   }
   @RequestMapping(value="listExams/pagination", method = RequestMethod.GET)
  	private List<Exam> getPageExam(
- 			@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
- 			@RequestParam(name = "size", required = false, defaultValue = "10") Integer size) {    
- 	    Pageable pageable = PageRequest.of(page, size);	    
+ 			@RequestParam(name = "pageNumber", required = false, defaultValue = "0") Integer page,
+ 			@RequestParam(name = "pageSize", required = false, defaultValue = "5") Integer size, 
+ 			@RequestParam(name = "sortOrder", required = false, defaultValue = "ASC") String sort) {
+ 	    Sort sortable = null;
+ 	    if (sort.equals("ASC") || sort.equals("asc")) {
+ 	      sortable = Sort.by("id").ascending();
+ 	    }
+ 	    if (sort.equals("DESC") || sort.equals("desc")) {
+ 	      sortable = Sort.by("id").descending();
+ 	    }
+ 	    Pageable pageable = PageRequest.of(page, size, sortable);
  		return examService.pageExam(pageable);
  	}
   
