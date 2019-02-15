@@ -1,5 +1,6 @@
 package com.cmcglobal.service.serviceImpl;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -30,6 +31,7 @@ public class ExamServiceImpl implements ExamService {
 
   @Override
   public void createExam(Exam ex) {
+        ex.setCreateAt(new Date());
 	examRepository.save(ex);	
   }
   
