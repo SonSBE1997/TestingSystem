@@ -28,6 +28,11 @@ public class ExamController {
 
   @Autowired
   CategoryRepository cate;
+  
+  @PostMapping(value = "/create")
+  public void postExam(@RequestBody Exam exam) {
+  examService.createExam(exam);
+  }
 
   @GetMapping(value = "/listExams")
   public List<Exam> listExam() {
@@ -81,8 +86,8 @@ public class ExamController {
 
   @PostMapping(value = "/random-question")
   public ResponseEntity<String> randomQuestion(@RequestBody Exam exam) {
-    System.out.println(exam.getExamId());
-//    examService.randomQuestion(exam.getExamId());
+    examService.randomQuestion(exam.getExamId());
     return ResponseEntity.ok("Ok");
   }
 }
+

@@ -93,7 +93,7 @@ import { TabQuestionComponent } from './update-content/tab-question/tab-question
     MatTooltipModule,
     MatFormFieldModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ]
 })
 export class ExamModule {}

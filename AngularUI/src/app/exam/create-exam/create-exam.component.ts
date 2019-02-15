@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-import { Title } from '@angular/platform-browser';
-
+import { FormBuilder, FormGroup, Validators, FormControl, FormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { Exam } from 'src/app/entity/Exam.interface';
+import { v4 as uuid } from 'uuid';
 
 @Component({
   selector: 'app-create-exam',
@@ -13,20 +15,31 @@ import { Title } from '@angular/platform-browser';
 export class CreateExamComponent implements OnInit {
   public Editor = ClassicEditor;
   examFrm: FormGroup;
-  constructor() {
-  }
-  ngOnInit() {
-    this.examFrm = new FormGroup({
-      title: new FormControl('', Validators.required),
-      examcategory: new FormControl( '', Validators.required),
-      numberquestion: new FormControl(),
-      duration: new FormControl('', Validators.required),
-      status: new FormControl(),
-      note: new FormControl()
+  constructor(
+    private fb: FormBuilder,
+    private http: HttpClient,
+    private router: Router
+  ) {}
+    ngOnInit() {
+      this.examFrm = this.fb.group({
+      title: ['', Validators.required],
+      categoryName: ['', Validators.required],
+      numberquestion: ['', Validators.required],
+      duration: ['', Validators.required],
+      status: ['', Validators.required],
+      note: ['', Validators.required],
     });
   }
   onCreate() {
-    this.examFrm.reset();
+    const data = this.examFrm.value;
+      const exam: Exam = {
+        examId: uuid(),
+        ...data
+      };
+      console.log(data);
+      this.http
+      .post('http://localhost:8080/exam/create', exam)
+      .subscribe(success => this.router.navigateByUrl('/exam'));
     }
   onReset() {
     this.examFrm.reset();
