@@ -31,6 +31,11 @@ public class ExamController {
   ExamService examService;
   @Autowired
   CategoryRepository cate;
+  
+  @PostMapping(value = "/create")
+  public void postExam(@RequestBody Exam exam) {
+  examService.createExam(exam);
+  }
 
   @GetMapping(value = "/listExams")
   public List<Exam> listExam() {
@@ -90,3 +95,4 @@ public class ExamController {
     return ResponseEntity.ok("Ok");
   }
 }
+

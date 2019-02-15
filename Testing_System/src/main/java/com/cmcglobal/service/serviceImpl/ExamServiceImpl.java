@@ -30,10 +30,14 @@ public class ExamServiceImpl implements ExamService {
 	QuestionServices questionService;
 
 	@Override
+	public void createExam(Exam ex) {
+		examRepository.save(ex);
+	}
+
+	@Override
 	public List<Exam> findAll() {
 		return examRepository.findAll();
 	}
-
 
 	@Override
 	public Exam findByID(String id) {
@@ -87,9 +91,12 @@ public class ExamServiceImpl implements ExamService {
 	 */
 	@Override
 	public boolean removeQuestion(Exam exam) {
-		Exam updateExam = examRepository.findById(exam.getExamId()).get();
-		updateExam.setExamQuestions(exam.getExamQuestions());
-		updateExam = examRepository.save(updateExam);
+		//    Exam updateExam = examRepository.findById(exam.getExamId()).get();
+		//    updateExam.setExamQuestions(exam.getExamQuestions());
+		//    updateExam = examRepository.save(updateExam);
+		for (ExamQuestion examQuestion : exam.getExamQuestions()) {
+			examQuestionService.deleteById(examQuestion.getId());
+		}
 		return true;
 	}
 

@@ -50,5 +50,12 @@ public interface ExamService {
 	 */
 	public void addListQuestion(Exam exam);
 
-	
+	 /**
+	   * Author: ptphuong.
+	   * Created date: Feb 15, 2019
+	   * Created time: 5:22:39 AM
+	   * Description: TODO - .
+	   * @param ex
+	   */
+	  public void createExam(Exam ex);
 }

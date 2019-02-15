@@ -1,6 +1,6 @@
 export interface Category {
   categoryId: number;
-  caterogyName: string;
+  categoryName: string;
   dateCreated: Date;
   status: number;
 }
