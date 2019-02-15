@@ -20,7 +20,7 @@
         <!-- /.box-header -->
         <div class="box-body">
           <div class="row">
-            <form [formGroup]="examFrm" class="form-horizontal col-xs-10"  novalidate method="POST">
+            <form [formGroup]="examFrm" class="form-horizontal col-xs-10" (ngSubmit)="onCreate()"  novalidate method="POST">
               <div class="box-body">
                 <div class="form-group">
                   <label for="inputTitle" class="col-sm-2 control-label"
@@ -32,20 +32,31 @@
                       id="inputTitle"
                       placeholder="Enter title of test"
                       formControlName="title"
-                    >
+                      [ngClass]="{
+                        'is-valid': examFrm.get('title').valid,
+                        'is-invalid':
+                          examFrm.get('title').invalid && examFrm.get('title').touched
+                      }"
+                    />
+                    <ng-template
+                    [ngIf]="examFrm.get('title').invalid && examFrm.get('title').touched"
+                  >
+                    <br />
                     <div class="col alert alert-light" style="color: blue" role="alert"
                         *ngIf="examFrm.get('title').hasError('required')
                             && examFrm.get('title')?.touched">
                         Title is required!
                    </div>
+                   </ng-template>
                   </div>
                 </div>
+
                 <div class="form-group">
                   <label for="inputPassword3" class="col-sm-2 control-label"
                     >Exam Category</label
                   >
                   <div class="col-sm-10">
-                    <select formControlName="examcategory"
+                    <select formControlName="categoryName"
                       class="form-control select2 select2-hidden-accessible"
                       style="width: 100%;"
                       tabindex="-1"
@@ -58,8 +69,8 @@
                       <option>Automation Test</option>
                     </select>
                     <div class="col alert alert-light" role="alert" style="color: blue"
-                        *ngIf="examFrm.get('examcategory').hasError('required')
-                            && examFrm.get('examcategory')?.touched">
+                        *ngIf="examFrm.get('categoryName').hasError('required')
+                            && examFrm.get('categoryName')?.touched">
                         Exam category is required!
                    </div>
                   </div>
@@ -98,24 +109,6 @@
                     </div>
                   </div>
                </div>
-
-                <div class="form-group">
-                  <label for="inputPassword3" class="col-sm-2 control-label"
-                    >Status</label
-                  >
-                  <div class="col-sm-10">
-                    <select formControlName="status"
-                      class="form-control select2 select2-hidden-accessible"
-                      style="width: 100%;"
-                      tabindex="-1"
-                      aria-hidden="true"
-                    >
-                      <option selected="selected">Draft</option>
-                      <option>Public</option>
-                    </select>
-                  </div>
-                </div>
-
                 <div class="form-group">
                   <label for="iNote" class="col-sm-2 control-label">Note</label>
                   <div class="col-sm-10">
@@ -129,7 +122,7 @@
                 <div class="form-group">
                   <div class="col-sm-2"></div>
                   <div class="col-sm-10">
-                    <button class="btn btn-primary mr-3"  [disabled]="!examFrm.valid" (click)="onCreate()">Update</button>
+                    <button class="btn btn-primary mr-3" (click)="onCreate()">Create</button>
                     <button class="btn btn-primary" (click)="onReset()">Reset</button>
                   </div>
                 </div>

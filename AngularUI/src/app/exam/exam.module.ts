@@ -91,7 +91,7 @@ import {
     MatTooltipModule,
     MatFormFieldModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ]
 })
 export class ExamModule {}

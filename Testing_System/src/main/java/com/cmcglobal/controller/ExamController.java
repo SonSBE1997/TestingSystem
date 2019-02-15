@@ -28,6 +28,11 @@ public class ExamController {
 
   @Autowired
   CategoryRepository cate;
+  
+  @PostMapping(value = "/create")
+  public void postExam(@RequestBody Exam exam) {
+	examService.createExam(exam);
+  }
 
   @GetMapping(value = "/listExams")
   public List<Exam> listExam() {

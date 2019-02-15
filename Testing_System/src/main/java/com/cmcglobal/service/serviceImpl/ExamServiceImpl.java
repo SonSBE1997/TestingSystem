@@ -29,6 +29,11 @@ public class ExamServiceImpl implements ExamService {
   QuestionServices questionService;
 
   @Override
+  public void createExam(Exam ex) {
+	examRepository.save(ex);	
+  }
+  
+  @Override
   public List<Exam> findAll() {
     return examRepository.findAll();
   }
