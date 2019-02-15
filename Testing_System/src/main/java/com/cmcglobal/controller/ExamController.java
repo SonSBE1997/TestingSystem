@@ -3,6 +3,8 @@ package com.cmcglobal.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -25,19 +29,21 @@ import com.cmcglobal.utils.ExportExamPDF;
 public class ExamController {
   @Autowired
   ExamService examService;
-
   @Autowired
   CategoryRepository cate;
 
   @GetMapping(value = "/listExams")
   public List<Exam> listExam() {
-    /*
-     * cate.delete(cate.getOne(1)); cate.deleteAll();
-     */
-
     return examService.findAll();
   }
-
+  @RequestMapping(value="listExams/pagination", method = RequestMethod.GET)
+ 	private List<Exam> getPageExam(
+ 			@RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
+ 			@RequestParam(name = "size", required = false, defaultValue = "10") Integer size) {    
+ 	    Pageable pageable = PageRequest.of(page, size);	    
+ 		return examService.pageExam(pageable);
+ 	}
+  
   @GetMapping(value = "/export/{id}")
   public ModelAndView handlereport(@PathVariable("id") String id) {
     try {
@@ -53,10 +59,9 @@ public class ExamController {
     /*
      * cate.delete(cate.getOne(1)); cate.deleteAll();
      */
-
     return examService.findByID(id);
   }
-
+ 
   @PutMapping(value = "/approve")
   public ResponseEntity<String> approveExam(@RequestBody Exam exam) {
     boolean success = examService.approveExam(exam.getExamId());
