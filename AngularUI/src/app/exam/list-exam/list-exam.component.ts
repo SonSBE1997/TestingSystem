@@ -24,7 +24,7 @@ export class ListExamComponent implements OnInit, AfterViewInit {
     this.dataSource.paginator = this.paginator;
   }
   public getAll = () => {
-    this.http.get<Exam[]>('http://localhost:80/exam/listExams')
+    this.http.get<Exam[]>('http://localhost:8080/exam/listExams')
     .subscribe(listExam => {
       this.listExam = listExam;
       this.dataSource.data = listExam;

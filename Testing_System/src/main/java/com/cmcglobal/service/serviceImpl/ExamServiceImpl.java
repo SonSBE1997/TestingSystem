@@ -87,9 +87,12 @@ public class ExamServiceImpl implements ExamService {
    */
   @Override
   public boolean removeQuestion(Exam exam) {
-    Exam updateExam = examRepository.findById(exam.getExamId()).get();
-    updateExam.setExamQuestions(exam.getExamQuestions());
-    updateExam = examRepository.save(updateExam);
+//    Exam updateExam = examRepository.findById(exam.getExamId()).get();
+//    updateExam.setExamQuestions(exam.getExamQuestions());
+//    updateExam = examRepository.save(updateExam);
+    for (ExamQuestion examQuestion : exam.getExamQuestions()) {
+      examQuestionService.deleteById(examQuestion.getId());
+    }
     return true;
   }
 

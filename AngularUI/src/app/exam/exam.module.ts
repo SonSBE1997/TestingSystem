@@ -44,6 +44,7 @@ import {
   MatTooltipModule,
   MatStepperModule,
 } from '@angular/material';
+import { TabQuestionComponent } from './update-content/tab-question/tab-question.component';
 @NgModule({
   declarations: [
     ListExamComponent,
@@ -51,7 +52,8 @@ import {
     UpdateExamComponent,
     DetailExamComponent,
     UpdateCommonComponent,
-    UpdateContentComponent
+    UpdateContentComponent,
+    TabQuestionComponent
   ],
   imports: [
     ListExamModule,

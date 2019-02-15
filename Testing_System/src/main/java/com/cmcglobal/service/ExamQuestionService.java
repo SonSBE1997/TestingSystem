@@ -18,7 +18,7 @@ import com.cmcglobal.entity.ExamQuestion;
  * Description: TODO - 
  */
 public interface ExamQuestionService {
-  public void delete(int examQuestionId);
+  public void deleteById(int examQuestionId);
 
   public long countAll();
   

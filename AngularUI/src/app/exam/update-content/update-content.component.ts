@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { mergeMap } from 'rxjs/operators';
-import { Selection, TabInfo } from './update-content.interface';
+import { TabInfo } from './update-content.interface';
 import { Exam } from 'src/app/entity/Exam.interface';
 import { ExamQuestion } from 'src/app/entity/ExamQuestion.interface';
-import { Question } from 'src/app/entity/Question.interface';
 
 @Component({
   selector: 'app-update-content',
@@ -15,19 +14,15 @@ import { Question } from 'src/app/entity/Question.interface';
 export class UpdateContentComponent implements OnInit {
   detailExam: Exam;
   backupExamQuestions: ExamQuestion[] = [];
-  questions: Question[] = [];
-  selection: Selection[] = [];
-  isCheckAll = false;
+
   tabListQuestionInExam: TabInfo;
-  tabAllQuestion: TabInfo;
+
   inTabOne = true;
   isRemove = false;
-  isAdd = false;
   examId: string;
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private router: Router,
     private http: HttpClient
   ) {}
 
@@ -49,6 +44,7 @@ export class UpdateContentComponent implements OnInit {
         });
         this.detailExam = detailExam;
         this.backupExamQuestions = detailExam.examQuestions;
+        // this.examQuestions = detailExam.examQuestions.filter((v, i) => i < 5);
         // console.log(this.backupExamQuestions);
         this.tabListQuestionInExam = {
           currentPage: 0,
@@ -56,15 +52,6 @@ export class UpdateContentComponent implements OnInit {
           entities: detailExam.examQuestions.length
         };
         // console.log(this.tabListQuestionInExam);
-      });
-
-    this.http
-      .get<Question[]>(`http://localhost:8080/question/all`)
-      .subscribe(questions => {
-        this.questions = questions;
-        questions.forEach(question => {
-          this.selection.push({ id: question.questionId, checked: false });
-        });
       });
   }
 
@@ -80,85 +67,45 @@ export class UpdateContentComponent implements OnInit {
   }
 
   clickResetRemoveQuestion() {
-    const test = this.backupExamQuestions.filter(v => !this.detailExam.examQuestions.includes(v));
-    console.log(test);
     this.detailExam.examQuestions = this.backupExamQuestions;
     this.isRemove = false;
   }
 
-  // click checkbox question
-  selectQuestion(questionId) {
-    console.log(questionId);
-    let count = 0;
-    this.selection.forEach(item => {
-      if (item.id === questionId) {
-        item.checked = !item.checked;
-      }
 
-      if (item.checked) {
-        count++;
-      }
-    });
-
-    if (count > 0) {
-      this.isAdd = true;
-    } else if (count === 0) {
-      this.isAdd = false;
-    }
-
-    if (count === this.selection.length) {
-      this.isCheckAll = true;
-    } else {
-      this.isCheckAll = false;
-    }
-    // console.log(JSON.stringify(this.selection));
-  }
-
-  // click checkbox all
-  selectAll() {
-    this.isCheckAll = !this.isCheckAll;
-    this.isAdd = this.isCheckAll;
-    this.selection.forEach(item => {
-      item.checked = this.isCheckAll;
-    });
-  }
 
   // click button submit
   clickUpdate() {
     this.isRemove = false;
-    this.http
-      .put('http://localhost:8080/exam/remove-question', this.detailExam)
-      .subscribe(
-        success => {},
-        error => {
-          console.log(error.error.text);
-        }
-      );
-  }
-
-  clickSubmitTab2() {
-    if (!this.isAdd) {
-      return;
-    }
-    const selectedQuestion = this.selection.filter(v => v.checked);
-    const arr = [];
-    selectedQuestion.forEach(v => {
-      arr.push({ question: { questionId: v.id } });
-    });
-
-    const data = {
+    const data = this.backupExamQuestions.filter(
+      v => !this.detailExam.examQuestions.includes(v)
+    );
+    const exam = {
       examId: this.detailExam.examId,
-      examQuestions: arr
+      examQuestions: data
     };
+    console.log(exam);
 
-    this.http.post('http://localhost:8080/exam/add-question', data).subscribe(
+    this.http.put('http://localhost:8080/exam/remove-question', exam).subscribe(
       success => {},
       error => {
         console.log(error.error.text);
-        window.location.reload();
+        this.backupExamQuestions = this.backupExamQuestions.filter(
+          v => !data.includes(v)
+        );
+        const entities = this.backupExamQuestions.length;
+        this.tabListQuestionInExam.entities = entities;
+        if (
+          this.tabListQuestionInExam.currentPage *
+            this.tabListQuestionInExam.sizeOfPage ===
+          entities
+        ) {
+          this.tabListQuestionInExam.currentPage--;
+        }
       }
     );
   }
+
+
 
   // click button random
   clickRandom() {
@@ -192,6 +139,14 @@ export class UpdateContentComponent implements OnInit {
   // change page size tab one
   changePageSizeTabOne(e) {
     this.tabListQuestionInExam.sizeOfPage = e.value;
-    console.log(this.tabListQuestionInExam);
+    this.tabListQuestionInExam.currentPage = 0;
+  }
+
+  priviousPageTabOne() {
+    this.tabListQuestionInExam.currentPage--;
+  }
+
+  nextPageTabOne() {
+    this.tabListQuestionInExam.currentPage++;
   }
 }
