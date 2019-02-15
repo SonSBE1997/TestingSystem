@@ -49,10 +49,10 @@ public class ExamController {
  			@RequestParam(name = "sortOrder", required = false, defaultValue = "ASC") String sort) {
  	    Sort sortable = null;
  	    if (sort.equals("ASC") || sort.equals("asc")) {
- 	      sortable = Sort.by("id").ascending();
+ 	      sortable = Sort.by("title").ascending();
  	    }
  	    if (sort.equals("DESC") || sort.equals("desc")) {
- 	      sortable = Sort.by("id").descending();
+ 	      sortable = Sort.by("title").descending();
  	    }
  	    Pageable pageable = PageRequest.of(page, size, sortable);
  		return examService.pageExam(pageable);
