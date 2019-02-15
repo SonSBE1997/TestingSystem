@@ -21,3 +21,11 @@
 .scale {
   transform: scale(1.5);
 }
+
+.br-5 {
+  border-radius: 5% !important;
+}
+
+.random-question {
+  width: 100% !important;
+}

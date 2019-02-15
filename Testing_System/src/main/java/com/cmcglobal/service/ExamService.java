@@ -11,7 +11,7 @@ public interface ExamService {
 
   public boolean approveExam(String examId);
 
-  public boolean randomQuestion(String examId);
+  public boolean randomQuestion(String examId,int numberRandom);
 
   public boolean removeQuestion(Exam exam);
 

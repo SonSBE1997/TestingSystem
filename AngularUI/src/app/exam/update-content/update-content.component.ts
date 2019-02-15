@@ -5,6 +5,7 @@ import { mergeMap } from 'rxjs/operators';
 import { TabInfo } from './update-content.interface';
 import { Exam } from 'src/app/entity/Exam.interface';
 import { ExamQuestion } from 'src/app/entity/ExamQuestion.interface';
+import { ExamService } from 'src/app/service/examService.service';
 
 @Component({
   selector: 'app-update-content',
@@ -14,45 +15,24 @@ import { ExamQuestion } from 'src/app/entity/ExamQuestion.interface';
 export class UpdateContentComponent implements OnInit {
   detailExam: Exam;
   backupExamQuestions: ExamQuestion[] = [];
-
   tabListQuestionInExam: TabInfo;
-
   inTabOne = true;
   isRemove = false;
   examId: string;
+  numberOfRandom = 0;
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private http: HttpClient
+    private http: HttpClient,
+    private examService: ExamService
   ) {}
 
   ngOnInit() {
-    this.activatedRoute.paramMap
-      .pipe(
-        mergeMap(params => {
-          const id = params.get('id');
-          this.examId = id;
-          return this.http.get<Exam>(`http://localhost:8080/exam/${id}`);
-        })
-      )
-      .subscribe(detailExam => {
-        detailExam.examQuestions = detailExam.examQuestions.sort(function(
-          a,
-          b
-        ) {
-          return a.id - b.id;
-        });
-        this.detailExam = detailExam;
-        this.backupExamQuestions = detailExam.examQuestions;
-        // this.examQuestions = detailExam.examQuestions.filter((v, i) => i < 5);
-        // console.log(this.backupExamQuestions);
-        this.tabListQuestionInExam = {
-          currentPage: 0,
-          sizeOfPage: 5,
-          entities: detailExam.examQuestions.length
-        };
-        // console.log(this.tabListQuestionInExam);
-      });
+    this.activatedRoute.paramMap.subscribe(pm => {
+      this.examId = pm.get('id');
+    });
+
+    this.loadData(5);
   }
 
   // click remove question
@@ -71,8 +51,6 @@ export class UpdateContentComponent implements OnInit {
     this.isRemove = false;
   }
 
-
-
   // click button submit
   clickUpdate() {
     this.isRemove = false;
@@ -86,9 +64,12 @@ export class UpdateContentComponent implements OnInit {
     console.log(exam);
 
     this.http.put('http://localhost:8080/exam/remove-question', exam).subscribe(
-      success => {},
+      success => {
+        console.log(success);
+      },
       error => {
         console.log(error.error.text);
+        console.log(error);
         this.backupExamQuestions = this.backupExamQuestions.filter(
           v => !data.includes(v)
         );
@@ -105,7 +86,18 @@ export class UpdateContentComponent implements OnInit {
     );
   }
 
-
+  changeNumberRandom(e) {
+    const value = +e.target.value;
+    const maxRandom =
+      this.detailExam.numberOfQuestion - this.tabListQuestionInExam.entities;
+    if (value > maxRandom) {
+      this.numberOfRandom = maxRandom;
+    } else if (value < 0) {
+      this.numberOfRandom = 0;
+    } else {
+      this.numberOfRandom = value;
+    }
+  }
 
   // click button random
   clickRandom() {
@@ -114,13 +106,14 @@ export class UpdateContentComponent implements OnInit {
     ) {
       this.http
         .post('http://localhost:8080/exam/random-question', {
-          examId: this.detailExam.examId
+          examId: this.detailExam.examId,
+          numberOfQuestion: this.numberOfRandom
         })
         .subscribe(
           success => {},
           error => {
             console.log(error.error.text);
-            window.location.reload();
+            this.loadData(this.tabListQuestionInExam.sizeOfPage);
           }
         );
     }
@@ -142,11 +135,56 @@ export class UpdateContentComponent implements OnInit {
     this.tabListQuestionInExam.currentPage = 0;
   }
 
-  priviousPageTabOne() {
+  previousPageTabOne() {
     this.tabListQuestionInExam.currentPage--;
   }
 
   nextPageTabOne() {
     this.tabListQuestionInExam.currentPage++;
+  }
+
+  // reloadData() {
+  //   this.http
+  //     .get<Exam>(`http://localhost:8080/exam/${this.detailExam.examId}`)
+  //     .subscribe(detailExam => {
+  //       detailExam.examQuestions = detailExam.examQuestions.sort(function(
+  //         a,
+  //         b
+  //       ) {
+  //         return a.id - b.id;
+  //       });
+  //       this.detailExam = detailExam;
+  //       this.backupExamQuestions = detailExam.examQuestions;
+  //       // this.examQuestions = detailExam.examQuestions.filter((v, i) => i < 5);
+  //       // console.log(this.backupExamQuestions);
+  //       this.tabListQuestionInExam = {
+  //         currentPage: 0,
+  //         sizeOfPage: this.tabListQuestionInExam.sizeOfPage,
+  //         entities: detailExam.examQuestions.length
+  //       };
+  //       // console.log(this.tabListQuestionInExam);
+  //     });
+  // }
+
+  loadData(sizeOfPage: number) {
+    this.examService.getExamById(this.examId).subscribe(detailExam => {
+      detailExam.examQuestions = detailExam.examQuestions.sort(function(a, b) {
+        return a.id - b.id;
+      });
+      this.detailExam = detailExam;
+      this.backupExamQuestions = detailExam.examQuestions;
+      this.tabListQuestionInExam = {
+        currentPage: 0,
+        sizeOfPage: sizeOfPage,
+        entities: detailExam.examQuestions.length
+      };
+    });
+  }
+
+  onTabTwoApply(e) {
+    if (e) {
+      this.loadData(this.tabListQuestionInExam.sizeOfPage);
+      this.inTabOne = true;
+    }
   }
 }

@@ -54,7 +54,7 @@
           </div>
         </div>
         <br />
-        <div class="text-center"><h4 class="text-aqua">Exam Content</h4></div>
+
         <div class="row">
           <div class="nav-tabs-custom">
             <ul class="nav nav-tabs">
@@ -108,14 +108,14 @@
                       </div>
                       <div class="col-sm-8 mb-3 ">
                         <button
-                          class="btn btn-success btn-random pull-right"
+                          class="btn btn-success btn-random pull-right input-sm"
                           data-toggle="modal"
                           data-target="#modal-approve"
                         >
                           Random
                         </button>
                         <div
-                          class="modal modal-info fade in"
+                          class="modal fade in"
                           id="modal-approve"
                           style="display: none;"
                         >
@@ -134,20 +134,35 @@
                               </div>
                               <div class="modal-body">
                                 <p>
-                                  Do you sure Random questions for this exam?
+                                  Input number random (0 -
+                                  {{
+                                    detailExam?.numberOfQuestion -
+                                      tabListQuestionInExam?.entities
+                                  }}):
                                 </p>
+                                <input
+                                  class="form-control random-question"
+                                  type="number"
+                                  [value]="numberOfRandom"
+                                  (change)="changeNumberRandom($event)"
+                                  min="0"
+                                  [max]="
+                                    detailExam?.numberOfQuestion -
+                                    tabListQuestionInExam?.entities
+                                  "
+                                />
                               </div>
-                              <div class="modal-footer text-black">
+                              <div class="modal-footer">
                                 <button
                                   type="button"
-                                  class="btn btn-outline pull-left"
+                                  class="btn btn-default pull-left"
                                   data-dismiss="modal"
                                 >
                                   Cancel
                                 </button>
                                 <button
                                   type="button"
-                                  class="btn btn-outline"
+                                  class="btn btn-primary"
                                   data-dismiss="modal"
                                   (click)="clickRandom()"
                                 >
@@ -162,13 +177,11 @@
                       </div>
                     </div>
                     <div class="clearfix"></div>
-                    <br/>
-                    <br/>
+                    <br />
+                    <br />
                     <div class="row">
                       <div class="col-sm-12">
-                        <table
-                          class="table table-bordered table-striped"
-                        >
+                        <table class="table table-bordered table-striped">
                           <thead>
                             <tr role="row" class="text-center">
                               <th style="width: 10px;">No</th>
@@ -282,7 +295,7 @@
                                   tabListQuestionInExam?.entities > 0
                                 "
                               >
-                                <a (click)="priviousPageTabOne()">Previous</a>
+                                <a (click)="previousPageTabOne()">Previous</a>
                               </ng-template>
                               <ng-template
                                 [ngIf]="
@@ -362,7 +375,11 @@
                 id="tab_2"
                 [ngClass]="{ active: inTabOne === false }"
               >
-                <app-tab-question></app-tab-question>
+                <app-tab-question
+                  [numberOfQuestion]="detailExam?.numberOfQuestion"
+                  [entities]="tabListQuestionInExam?.entities"
+                  (apply)="onTabTwoApply($event)"
+                ></app-tab-question>
               </div>
             </div>
             <!-- /.tab-content -->

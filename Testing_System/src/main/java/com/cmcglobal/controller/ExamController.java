@@ -86,7 +86,7 @@ public class ExamController {
 
   @PostMapping(value = "/random-question")
   public ResponseEntity<String> randomQuestion(@RequestBody Exam exam) {
-    examService.randomQuestion(exam.getExamId());
+    examService.randomQuestion(exam.getExamId(), exam.getNumberOfQuestion());
     return ResponseEntity.ok("Ok");
   }
 }

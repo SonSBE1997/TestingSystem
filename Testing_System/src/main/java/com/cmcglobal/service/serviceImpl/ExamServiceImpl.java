@@ -67,12 +67,10 @@ public class ExamServiceImpl implements ExamService {
    * Created time: 4:17:07 PM
    */
   @Override
-  public boolean randomQuestion(String examId) {
-    Exam exam = examRepository.findById(examId).get();
+  public boolean randomQuestion(String examId, int numberRandom) {
+//    Exam exam = examRepository.findById(examId).get();
     Random random = new Random();
     List<Question> questions = questionService.getAllQuestion();
-    int numberRandom = exam.getNumberOfQuestion()
-        - exam.getExamQuestions().size();
     List<ExamQuestion> examQuestions = Helper.randomQuestion(random, questions,
         numberRandom, examId);
     for (ExamQuestion examQuestion : examQuestions) {
