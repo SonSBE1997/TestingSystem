@@ -56,21 +56,17 @@
                     >Exam Category</label
                   >
                   <div class="col-sm-10">
-                    <select formControlName="categoryName"
+                    <select formControlName="category"
                       class="form-control select2 select2-hidden-accessible"
                       style="width: 100%;"
                       tabindex="-1"
                       aria-hidden="true"
                     >
-                      <option selected="selected">SQL</option>
-                      <option>Java Basic</option>
-                      <option>Java Advanced</option>
-                      <option>Front End Advanced</option>
-                      <option>Automation Test</option>
+                      <option *ngFor="let category of categories" [ngValue]= "category">{{category.categoryName}}</option>
                     </select>
                     <div class="col alert alert-light" role="alert" style="color: blue"
-                        *ngIf="examFrm.get('categoryName').hasError('required')
-                            && examFrm.get('categoryName')?.touched">
+                        *ngIf="examFrm.get('category').hasError('required')
+                            && examFrm.get('category')?.touched">
                         Exam category is required!
                    </div>
                   </div>
@@ -110,10 +106,10 @@
                   </div>
                </div>
                 <div class="form-group">
-                  <label for="iNote" class="col-sm-2 control-label">Note</label>
+                  <label for="iNote" class="col-sm-2 control-label" >Note</label>
                   <div class="col-sm-10">
                     <!-- <textarea id="editor1" name="editor1" rows="10" cols="130"></textarea> -->
-                    <ckeditor
+                    <ckeditor formControlName="note"
                       [editor]="Editor"
                     ></ckeditor>
                   </div>
