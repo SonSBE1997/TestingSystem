@@ -59,7 +59,7 @@ export class ListExamComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit() {
-    this.findExams('ASC', 0, 5);
+    this.findExams( 0, 5, 'userCreated', 'ASC');
   }
 
   ngAfterViewInit() {
@@ -69,21 +69,27 @@ export class ListExamComponent implements OnInit, AfterViewInit {
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
 
-      console.log(this.dataSource.paginator.hasNextPage);
+      console.log(this.dataSource.sort.key);
+            console.log(this.dataSource.sort.key.id);
+
 
   }
 
   public findExams = (
-    sortOrder = 'ASC',
+
     pageNumber = 0,
-    pageSize = 5
+    pageSize = 5,
+    sortTerm = 'title',
+    sortOrder = 'ASC'
   ) => {
      this.http
       .get<Exam[]>('http://localhost:8080/exam/listExams/pagination', {
         params: new HttpParams()
-        .set('sortOrder', sortOrder)
+
           .set('pageNumber', pageNumber.toString())
           .set('pageSize', pageSize.toString())
+          .set('sortTerm', sortTerm)
+        .set('sortOrder', sortOrder)
       }).subscribe(listExam => {
         this.listExam = listExam;
         this.dataSource.data = listExam;
@@ -92,10 +98,12 @@ export class ListExamComponent implements OnInit, AfterViewInit {
 
   public loadExamsPage() {
     this.findExams(
-      this.sort.direction,
       this.paginator.pageIndex,
       this.paginator.pageSize,
+      this.sort.key,
+      this.sort.direction,
     );
+
 
   }
   public doFilter = (value: string) => {

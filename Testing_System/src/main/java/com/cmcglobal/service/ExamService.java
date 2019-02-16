@@ -32,7 +32,8 @@ public interface ExamService {
 	 * @param contentSearch
 	 * @return
 	 */
-	
+	public List<Exam> pageExamSortByUserCreatedByAsc(Pageable pageable);
+	public List<Exam> pageExamSortByUserCreatedByDesc(Pageable pageable);
 	public Exam findByID(String id);
 
 	public boolean approveExam(String examId);
