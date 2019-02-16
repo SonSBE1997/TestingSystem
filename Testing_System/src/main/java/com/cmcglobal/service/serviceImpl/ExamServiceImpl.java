@@ -31,8 +31,24 @@ public class ExamServiceImpl implements ExamService {
 
   @Override
   public void createExam(Exam ex) {
+      ex.setExamId(this.createId());
+      ex.setNote(ex.getNote().substring(3, ex.getNote().length()-4));
         ex.setCreateAt(new Date());
 	examRepository.save(ex);	
+  }
+  
+  @Override
+  public String createId() {
+      String id;
+      List<Exam> exam= examRepository.findAll();
+      int ids=exam.size()-1;
+      String tmp=exam.get(ids).getExamId();
+      tmp=tmp.substring(tmp.length()-3, tmp.length());
+      int id1=Integer.parseInt(tmp)+1;
+      if(id1<10) id=("Exam00")+id1;
+      else if(id1>9 && id1<100) id=("Exam0")+id1;
+      else id=("Exam")+id1;
+      return id;
   }
   
   @Override

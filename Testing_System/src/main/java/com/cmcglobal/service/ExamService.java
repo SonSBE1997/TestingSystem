@@ -32,4 +32,13 @@ public interface ExamService {
  * @param ex
  */
 public void createExam(Exam ex);
+
+/**
+ * Author: ptphuong.
+ * Created date: Feb 15, 2019
+ * Created time: 7:55:39 PM
+ * Description: TODO - .
+ * @return
+ */
+public String createId();
 }
