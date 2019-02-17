@@ -1,13 +1,22 @@
 package com.cmcglobal.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.cmcglobal.entity.Exam;
 import com.cmcglobal.service.ExamService;
@@ -39,5 +48,28 @@ public class examController {
 			System.out.println(exam.getCategory().getCategoryName());
 		}
 		return ex;
+	}
+	
+	@PostMapping("/upload-excel-file")
+	public ResponseEntity<String> readExcelFile(@RequestParam MultipartFile multipartFile) {
+
+		File file = new File("files");
+		String pathToSave = file.getAbsolutePath();
+		System.out.println(pathToSave);
+
+		File fileTranfer = new File(pathToSave + "/" + multipartFile.getOriginalFilename());
+		try {
+			multipartFile.transferTo(fileTranfer);
+		} catch (IllegalStateException e) {
+		} catch (IOException e) {
+		}
+		System.out.println(multipartFile.getOriginalFilename());
+
+		List<Exam> listExam = examService.readExcel(fileTranfer.toString());
+		for (Exam exam : listExam) {
+			examService.insert(exam);
+		}
+		String mess = "import successfully";
+		return new ResponseEntity<String>(mess, HttpStatus.OK);
 	}
 }

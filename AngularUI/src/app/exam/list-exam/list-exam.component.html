@@ -96,6 +96,29 @@
             <a style="margin-right: 10px" class="btn btn-primary" [routerLink]="['/exam', 'create']">Create Exam</a>
             <button type="Delete" class="btn btn-danger">Delete</button>
           </div>
+
+          <div class="row">
+            <div class="form-group col-md-6">
+              <div>
+                <label> Media:</label>
+                <input
+                  type="file"
+                  class="form-control"
+                  formControlName="media"
+                  (change)="onChangeFile($event)"
+                />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <img
+                *ngIf="!showMedia"
+                style="width: 120px;height: 80px;"
+                [src]="imageSrc || 'http://placehold.it/180'"
+                alt="your image"
+              />
+            </div>
+
+        </div>
         </div>
         <!-- /.box-body -->
       </div>

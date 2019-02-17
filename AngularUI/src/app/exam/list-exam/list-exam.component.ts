@@ -9,6 +9,10 @@ import { ListExams } from './listExam.interface';
 })
 export class ListExamComponent implements OnInit {
   listExam: ListExams[] = [];
+  showMedia: boolean;
+  imageSrc: any;
+  file: any;
+
   constructor(private http: HttpClient) { }
 
   ngOnInit() {
@@ -16,6 +20,18 @@ export class ListExamComponent implements OnInit {
     .subscribe(listExam => {
       this.listExam = listExam;
     });
+  }
+
+  onChangeFile(event) {
+    if (event.target.files && event.target.files[0]) {
+      this.showMedia = false;
+      this.file = event.target.files[0];
+      const reader = new FileReader();
+      reader.onload = e => (this.imageSrc = reader.result);
+      reader.readAsDataURL(this.file);
+    } else {
+      this.imageSrc = '';
+    }
   }
 
 }

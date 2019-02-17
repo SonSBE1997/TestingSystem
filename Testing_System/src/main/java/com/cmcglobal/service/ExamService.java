@@ -1,29 +1,15 @@
 package com.cmcglobal.service;
 
-import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
+import java.util.List;
 import com.cmcglobal.entity.Exam;
-import com.cmcglobal.repository.ExamRepository;
 
-@Service
-@Transactional
-public class ExamService {
+public interface ExamService {
 	
-	@Autowired
-	EntityManager entityManager;
+Exam getOne(String examId);
 	
-	@Autowired
-	ExamRepository examRepository;
+	Exam insert(Exam exam);
 	
-	public Exam getOne(String examId) {
-		return entityManager.find(Exam.class, examId);
-	}
+	Exam update(Exam exam);
 	
-	public Exam update(Exam exam) {
-		return entityManager.merge(exam);
-	}
+	List<Exam> readExcel(String exelFilePath);
 }
