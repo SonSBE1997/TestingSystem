@@ -43,86 +43,85 @@ public class ExamController {
     return examService.findAll();
   }
 
-  @RequestMapping(value = "listExams/pagination", method = RequestMethod.GET)
-  private List<Exam> getPageExam(
-      @RequestParam(name = "pageNumber", required = false, defaultValue = "0") Integer page,
-      @RequestParam(name = "pageSize", required = false, defaultValue = "5") Integer size,
-      @RequestParam(name = "sortOrder", required = false, defaultValue = "ASC") String sortOrder,
-      @RequestParam(name = "sortTerm", required = false, defaultValue = "title") String sortTerm) {
-    Pageable sortedBy = null;
-    Sort sortable = null;
-    switch (sortTerm) {
-    case ("title"):
-      if (("asc").equals(sortOrder.toLowerCase())) {
-        sortable = Sort.by("title").ascending();
-      }
-      if (("desc").equals(sortOrder.toLowerCase())) {
-        sortable = Sort.by("title").descending();
-      }
-      break;
-    case ("category"):
-      if (("asc").equals(sortOrder.toLowerCase())) {
-        sortable = Sort.by("category").ascending();
-      }
-      if (("desc").equals(sortOrder.toLowerCase())) {
-        sortable = Sort.by("category").descending();
-      }
-      break;
-    case ("id"):
-      if (("asc").equals(sortOrder.toLowerCase())) {
-        sortable = Sort.by("id").ascending();
-      }
-      if (("desc").equals(sortOrder.toLowerCase())) {
-        sortable = Sort.by("id").descending();
-      }
-      break;
-    case ("duration"):
-      if (("asc").equals(sortOrder.toLowerCase())) {
-        sortable = Sort.by("duration").ascending();
-      }
-      if (("desc").equals(sortOrder.toLowerCase())) {
-        sortable = Sort.by("duration").descending();
-      }
-      break;
-    case ("numberOfQuestion"):
-      if (("asc").equals(sortOrder.toLowerCase())) {
-        sortable = Sort.by("numberOfQuestion").ascending();
-      }
-      if (("desc").equals(sortOrder.toLowerCase())) {
-        sortable = Sort.by("numberOfQuestion").descending();
-      }
-      break;
-    case ("status"):
-      if (("asc").equals(sortOrder.toLowerCase())) {
-        sortable = Sort.by("status").ascending();
-      }
-      if (("desc").equals(sortOrder.toLowerCase())) {
-        sortable = Sort.by("status").descending();
-      }
-      break;
-    case ("createAt"):
-      if (("asc").equals(sortOrder.toLowerCase())) {
-        sortable = Sort.by("createAt").ascending();
-      }
-      if (("desc").equals(sortOrder.toLowerCase())) {
-        sortable = Sort.by("createAt").descending();
-      }
-      break;
-    // sort theo trường fullname của user create_by
-    case ("userCreated"):
-      if (("asc").equals(sortOrder.toLowerCase())) {
-        sortedBy = PageRequest.of(page, size);
-        return examService.pageExamSortByUserCreatedByAsc(sortedBy);
-      }
-      if (("desc").equals(sortOrder.toLowerCase())) {
-        sortedBy = PageRequest.of(page, size);
-        return examService.pageExamSortByUserCreatedByDesc(sortedBy);
-      }
-      break;
-    }
-    sortedBy = PageRequest.of(page, size, sortable);
-    return examService.pageExam(sortedBy);
-
+	@RequestMapping(value = "listExams/pagination", method = RequestMethod.GET)
+	private List<Exam> getPageExam(
+			@RequestParam(name = "pageNumber", required = false, defaultValue = "0") Integer page,
+			@RequestParam(name = "pageSize", required = false, defaultValue = "5") Integer size,
+			@RequestParam(name = "sortOrder", required = false, defaultValue = "ASC") String sortOrder,
+			@RequestParam(name = "sortTerm", required = false, defaultValue = "title") String sortTerm) {
+		Pageable sortedBy = null;
+		Sort sortable = null;
+		switch (sortTerm) {
+		case ("title"):
+			if (("asc").equals(sortOrder.toLowerCase())) {
+				sortable = Sort.by("title").ascending();
+			}
+			if (("desc").equals(sortOrder.toLowerCase())) {
+				sortable = Sort.by("title").descending();
+			}
+			break;
+		case ("category"):
+			if (("asc").equals(sortOrder.toLowerCase())) {
+				sortable = Sort.by("category").ascending();
+			}
+			if (("desc").equals(sortOrder.toLowerCase())) {
+				sortable = Sort.by("category").descending();
+			}
+			break;
+		case ("examId"):
+			if (("asc").equals(sortOrder.toLowerCase())) {
+				sortable = Sort.by("examId").ascending();
+			}
+			if (("desc").equals(sortOrder.toLowerCase())) {
+				sortable = Sort.by("examId").descending();
+			}
+			break;
+		case ("duration"):
+			if (("asc").equals(sortOrder.toLowerCase())) {
+				sortable = Sort.by("duration").ascending();
+			}
+			if (("desc").equals(sortOrder.toLowerCase())) {
+				sortable = Sort.by("duration").descending();
+			}
+			break;
+		case ("numberOfQuestion"):
+			if (("asc").equals(sortOrder.toLowerCase())) {
+				sortable = Sort.by("numberOfQuestion").ascending();
+			}
+			if (("desc").equals(sortOrder.toLowerCase())) {
+				sortable = Sort.by("numberOfQuestion").descending();
+			}
+			break;
+		case ("status"):
+			if (("asc").equals(sortOrder.toLowerCase())) {
+				sortable = Sort.by("status").ascending();
+			}
+			if (("desc").equals(sortOrder.toLowerCase())) {
+				sortable = Sort.by("status").descending();
+			}
+			break;
+		case ("createAt"):
+			if (("asc").equals(sortOrder.toLowerCase())) {
+				sortable = Sort.by("createAt").ascending();
+			}
+			if (("desc").equals(sortOrder.toLowerCase())) {
+				sortable = Sort.by("createAt").descending();
+			}
+			break;
+			//sort theo trường fullname của user create_by
+		case ("userCreated"):
+			if (("asc").equals(sortOrder.toLowerCase())) {
+				sortedBy = PageRequest.of(page, size);
+				return examService.pageExamSortByUserCreatedByAsc(sortedBy);
+			}
+			if (("desc").equals(sortOrder.toLowerCase())) {
+				sortedBy = PageRequest.of(page, size);
+				return examService.pageExamSortByUserCreatedByDesc(sortedBy);
+			}
+			break;
+		}
+		sortedBy = PageRequest.of(page, size, sortable);
+		return examService.pageExam(sortedBy);
   }
 
   @GetMapping(value = "/export/{id}")
