@@ -6,8 +6,16 @@ import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { Exam } from 'src/app/entity/Exam.interface';
 import { merge } from 'rxjs/observable/merge';
 import {
-  tap
+  distinctUntilChanged,
+  startWith,
+  tap,
+  delay,
+  map
 } from 'rxjs/operators';
+import { fromEvent } from 'rxjs/observable/fromEvent';
+import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
+import { MatSortModule } from '@angular/material/sort';
 
 
 @Component({
@@ -43,35 +51,34 @@ export class ListExamComponent implements OnInit, AfterViewInit {
 
   }
   ngOnInit() {
-    this.findExams(0, 5, 'ASC');
+    this.findExams( 0, 5, 'title', 'ASC');
   }
 
   ngAfterViewInit() {
     merge(this.sort.sortChange, this.paginator.page)
       .pipe(tap(() => this.loadExamsPage()))
       .subscribe();
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.paginator._length=this.paginator._length;
 
-    console.log(this.dataSource.sort);
-    console.log(this.dataSource.sort);
-
-
+      console.log(this.paginator._length);
+      console.log(this.dataSource.paginator.getNumberOfPages());
+      console.log(this.dataSource.paginator.page);
   }
-
+  // This function is to find Exams from the API backend
   public findExams = (
-
     pageNumber = 0,
     pageSize = 5,
+    sortTerm = 'title',
     sortOrder = 'ASC'
   ) => {
     this.http
       .get<Exam[]>('http://localhost:8080/exam/listExams/pagination', {
         params: new HttpParams()
-
           .set('pageNumber', pageNumber.toString())
           .set('pageSize', pageSize.toString())
-
+          .set('sortTerm', sortTerm)
           .set('sortOrder', sortOrder)
       }).subscribe(listExam => {
         this.listExam = listExam;
@@ -83,10 +90,9 @@ export class ListExamComponent implements OnInit, AfterViewInit {
     this.findExams(
       this.paginator.pageIndex,
       this.paginator.pageSize,
+      this.sort.active,
       this.sort.direction,
     );
-
-
   }
   public doFilter = (value: string) => {
     this.dataSource.filter = value.trim().toLocaleLowerCase();
