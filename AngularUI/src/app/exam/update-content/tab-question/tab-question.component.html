@@ -1,0 +1,217 @@
+<div class="box-body">
+  <div
+    id="example1_wrapper"
+    class="dataTables_wrapper form-inline dt-bootstrap"
+  >
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="dataTables_length" id="example1_length">
+          <label
+            >Show
+            <select
+              class="form-control br-5 input-sm"
+              (change)="changePageSizeTabAllQuestion($event.target)"
+            >
+              <option value="10">10</option>
+              <option value="15">15</option>
+              <option value="20">20</option>
+              <option value="30">30</option>
+              <option value="50">50</option>
+            </select>
+            entries
+          </label>
+        </div>
+      </div>
+      <div class="col-sm-4 form-group">
+        <label for="fType">Type </label>
+        <select class="form-control br-5 input-sm" id="fType">
+          <option value="Easy">Easy</option>
+          <option value="Medium">Medium</option>
+          <option value="Difficult">Difficult</option>
+        </select>
+      </div>
+      <div class="col-sm-4 form-group">
+        <div class="pull-right">
+          <!-- <label
+            >Search
+            <input
+              type="search"
+              class="form-control br-5 font-search input-sm"
+              placeholder="Question Content"
+          /></label> -->
+          <div class="input-group input-group-sm">
+            <input
+              type="text"
+              class="form-control "
+              placeholder="Question content..."
+            />
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-info btn-flat">
+                Search
+              </button>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+    <br />
+    <br />
+    <div class="row">
+      <div class="col-sm-12">
+        <table id="example1" class="table table-bordered table-striped">
+          <thead>
+            <tr role="row" class="text-center">
+              <th style="width: 30px;">
+                <span class="custom-checkbox">
+                  <input
+                    if="selectAll"
+                    class="scale"
+                    type="checkbox"
+                    [checked]="isCheckAll"
+                    (change)="selectAll()"
+                  />
+                  <label for="selectAll"></label>
+                </span>
+              </th>
+              <th style="width: 10px;">No</th>
+              <th style="width: 210.6px;">Question content</th>
+              <th style="width: 268.2px;">Option one</th>
+              <th style="width: 245.8px;">Option two</th>
+              <th style="width: 183.4px;">Option three</th>
+              <th style="width: 135.6px;">Option four</th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let question of questions; index as i">
+            <tr role="row" class="odd">
+              <td>
+                <span class="custom-checkbox">
+                  <input
+                    [id]="'chk-' + i"
+                    type="checkbox"
+                    class="scale"
+                    [checked]="selection[i].checked"
+                    (change)="selectQuestion(question.questionId)"
+                  />
+                  <label [attr.for]="'chk-' + i"></label>
+                </span>
+              </td>
+              <td>
+                {{
+                  tabAllQuestion.currentPage * tabAllQuestion.sizeOfPage + i + 1
+                }}
+              </td>
+              <td>
+                {{ question.content }}
+              </td>
+              <ng-template ngFor let-answer [ngForOf]="question.answers">
+                <td
+                  [ngClass]="{
+                    'text-red': answer.true === true
+                  }"
+                >
+                  {{ answer.content }}
+                </td>
+              </ng-template>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-5">
+        <div
+          class="dataTables_info"
+          id="example1_info"
+          role="status"
+          aria-live="polite"
+        >
+          Showing
+          {{ tabAllQuestion?.currentPage * tabAllQuestion?.sizeOfPage + 1 }}
+          to
+          {{
+            (tabAllQuestion?.currentPage + 1) * tabAllQuestion?.sizeOfPage <
+            tabAllQuestion?.entities
+              ? (tabAllQuestion?.currentPage + 1) * tabAllQuestion?.sizeOfPage
+              : tabAllQuestion?.entities
+          }}
+          of {{ tabAllQuestion?.entities }} entries
+        </div>
+      </div>
+      <div class="col-sm-7">
+        <div
+          class="dataTables_paginate paging_simple_numbers"
+          id="example1_paginate"
+        >
+          <ul class="pagination">
+            <li
+              class="paginate_button previous"
+              id="example1_previous"
+              [ngClass]="{
+                disabled: tabAllQuestion?.currentPage === 0
+              }"
+            >
+              <ng-template
+                [ngIf]="
+                  tabAllQuestion?.currentPage > 0 &&
+                  tabAllQuestion?.entities > 0
+                "
+              >
+                <a (click)="previousPage()">Previous</a>
+              </ng-template>
+              <ng-template
+                [ngIf]="
+                  tabAllQuestion?.currentPage === 0 &&
+                  tabAllQuestion?.entities > 0
+                "
+              >
+                <a>Previous</a>
+              </ng-template>
+            </li>
+            <li class="paginate_button active">
+              <a href="#">{{ tabAllQuestion?.currentPage + 1 }}</a>
+            </li>
+            <li
+              class="paginate_button next"
+              id="example1_next"
+              [ngClass]="{
+                disabled:
+                  (tabAllQuestion?.currentPage + 1) *
+                  tabAllQuestion?.sizeOfPage >=
+                  tabAllQuestion?.entities
+              }"
+            >
+              <ng-template
+                [ngIf]="
+                  (tabAllQuestion?.currentPage + 1) *
+                    tabAllQuestion?.sizeOfPage >=
+                  tabAllQuestion?.entities
+                "
+              >
+                <a>Next</a>
+              </ng-template>
+              <ng-template
+                [ngIf]="
+                  (tabAllQuestion?.currentPage + 1) *
+                    tabAllQuestion?.sizeOfPage <
+                  tabAllQuestion?.entities
+                "
+              >
+                <a (click)="nextPage()">Next</a>
+              </ng-template>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="row text-center">
+        <button
+          class="btn btn-primary"
+          (click)="clickSubmitTab2()"
+          [ngClass]="{ disabled: isAdd === false }"
+        >
+          Apply
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

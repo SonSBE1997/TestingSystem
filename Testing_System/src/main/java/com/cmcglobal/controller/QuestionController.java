@@ -2,6 +2,8 @@ package com.cmcglobal.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -29,6 +31,11 @@ public class QuestionController {
   private List<Question> getAllQuestion() {
     return questionService.getAllQuestion();
   }
+  
+  @RequestMapping(value = "question/sum", method = RequestMethod.GET)
+  private void sumQuestion(HttpServletResponse responseHeaders) {
+    responseHeaders.addHeader("SumQuestion", questionService.countQuestion());
+  }
 
   @RequestMapping(value = "question/pagination", method = RequestMethod.GET)
   private List<Question> getPageQuestion(
@@ -47,7 +54,6 @@ public class QuestionController {
   private List<Question> searchByContent(
       @PathVariable("contentSearch") String contentSearch) {
     return questionService.searchByContent(contentSearch);
-
   }
 
   @RequestMapping(value = "question/add", method = RequestMethod.POST)
