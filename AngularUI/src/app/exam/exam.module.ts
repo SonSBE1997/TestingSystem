@@ -165,4 +165,4 @@ import { TabQuestionComponent } from './update-content/tab-question/tab-question
     })
   ]
 })
-export class ExamModule {}
+export class ExamModule { }

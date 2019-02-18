@@ -11,7 +11,14 @@ import { tap } from 'rxjs/operators';
 export class ExamService {
   private url = 'http://localhost:8080/';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
+
+  // export
+
+  exportUrl(examId) {
+    return this.url + `exam/export/${examId}`;
+  }
+
 
   // Get Detail Exam
   getExamById(id: string): Observable<Exam> {
