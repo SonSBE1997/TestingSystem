@@ -1,15 +1,11 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {catchError, finalize} from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { Exam } from 'src/app/entity/Exam.interface';
-import { ListExamService } from 'src/app/exam/list-exam/list-exam.service';
-import { ListExamDataSource } from 'src/app/exam/list-exam/list-exam.datasource';
 import { merge } from 'rxjs/observable/merge';
 import {
-  debounceTime,
   distinctUntilChanged,
   startWith,
   tap,
@@ -28,7 +24,6 @@ import { MatSortModule } from '@angular/material/sort';
   styleUrls: ['./list-exam.component.css']
 })
 export class ListExamComponent implements OnInit, AfterViewInit {
-  listExam: Exam[] = [];
 
   public dataSource = new MatTableDataSource<Exam>();
 
@@ -46,19 +41,15 @@ export class ListExamComponent implements OnInit, AfterViewInit {
     'status',
     'createAt'
   ];
-  //public dataSource = new MatTableDataSource<Exam>();
+
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  //listExam: Exam;
+  listExam: Exam[] = [];
+  constructor(private http: HttpClient) {
 
-  constructor(
-    private listExamService: ListExamService,
-    private route: ActivatedRoute,
-    private http: HttpClient
-  ) {}
-
+  }
   ngOnInit() {
     this.findExams( 0, 5, 'title', 'ASC');
   }
@@ -82,17 +73,16 @@ export class ListExamComponent implements OnInit, AfterViewInit {
     sortTerm = 'title',
     sortOrder = 'ASC'
   ) => {
-     this.http
+    this.http
       .get<Exam[]>('http://localhost:8080/exam/listExams/pagination', {
         params: new HttpParams()
           .set('pageNumber', pageNumber.toString())
           .set('pageSize', pageSize.toString())
           .set('sortTerm', sortTerm)
-        .set('sortOrder', sortOrder)
+          .set('sortOrder', sortOrder)
       }).subscribe(listExam => {
         this.listExam = listExam;
         this.dataSource.data = listExam;
-
       });
   }
 

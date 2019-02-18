@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Exam } from '../update-content/update-content.interface';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { mergeMap } from 'rxjs/operators';
+import { ExamService } from 'src/app/service/examService.service';
+import { Exam } from 'src/app/entity/Exam.interface';
 
 @Component({
   selector: 'app-update-exam',
@@ -13,7 +14,8 @@ export class UpdateExamComponent implements OnInit {
   detailExam: Exam;
   constructor(
     private activatedRoute: ActivatedRoute,
-    private http: HttpClient
+    private http: HttpClient,
+    private examService: ExamService
   ) {}
 
   ngOnInit() {
@@ -21,7 +23,7 @@ export class UpdateExamComponent implements OnInit {
       .pipe(
         mergeMap(params => {
           const id = params.get('id');
-          return this.http.get<Exam>(`http://localhost:8080/exam/${id}`);
+          return this.examService.getExamById(id);
         })
       )
       .subscribe(detailExam => {
@@ -32,19 +34,15 @@ export class UpdateExamComponent implements OnInit {
   approve() {
     if (this.detailExam.status === 'Draft') {
       // console.log('Draft');
-      this.http
-        .put('http://localhost:8080/exam/approve', {
-          examId: this.detailExam.examId
-        })
-        .subscribe(
-          success => {},
-          error => {
-            // console.log(error.error.text);
-            if (error.error.text === 'Ok') {
-              this.detailExam.status = 'Public';
-            }
+      this.examService.approve(this.detailExam.examId).subscribe(
+        success => {},
+        error => {
+          // console.log(error.error.text);
+          if (error.error.text === 'Ok') {
+            this.detailExam.status = 'Public';
           }
-        );
+        }
+      );
     }
   }
 }

@@ -18,4 +18,7 @@ public interface QuestionRepository extends JpaRepository<Question, String> {
 
   @Query("SELECT q FROM Question q")
   List<Question> pageQuestion(Pageable pageable);
+  
+  @Query("select count(question_id) from Question")
+  String questionSum();
 }

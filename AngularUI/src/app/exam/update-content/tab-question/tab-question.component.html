@@ -8,7 +8,10 @@
         <div class="dataTables_length" id="example1_length">
           <label
             >Show
-            <select class="form-control input-sm">
+            <select
+              class="form-control br-5 input-sm"
+              (change)="changePageSizeTabAllQuestion($event.target)"
+            >
               <option value="10">10</option>
               <option value="15">15</option>
               <option value="20">20</option>
@@ -19,46 +22,57 @@
           </label>
         </div>
       </div>
-      <div class="col-sm-4">
-        <label
-          >Type
-          <select class="form-control input-sm">
-            <option value="Easy">Easy</option>
-            <option value="Medium">Medium</option>
-            <option value="Difficult">Difficult</option>
-          </select>
-        </label>
+      <div class="col-sm-4 form-group">
+        <label for="fType">Type </label>
+        <select class="form-control br-5 input-sm" id="fType">
+          <option value="Easy">Easy</option>
+          <option value="Medium">Medium</option>
+          <option value="Difficult">Difficult</option>
+        </select>
       </div>
-      <div class="col-sm-4">
-        <div class="dataTables_filter pull-right">
-          <label
+      <div class="col-sm-4 form-group">
+        <div class="pull-right">
+          <!-- <label
             >Search
             <input
               type="search"
-              class="form-control input-sm"
+              class="form-control br-5 font-search input-sm"
               placeholder="Question Content"
-          /></label>
+          /></label> -->
+          <div class="input-group input-group-sm">
+            <input
+              type="text"
+              class="form-control "
+              placeholder="Question content..."
+            />
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-info btn-flat">
+                Search
+              </button>
+            </span>
+          </div>
         </div>
       </div>
     </div>
     <div class="clearfix"></div>
-    <br/>
-    <br/>
+    <br />
+    <br />
     <div class="row">
       <div class="col-sm-12">
-        <table
-          id="example1"
-          class="table table-bordered table-striped"
-        >
+        <table id="example1" class="table table-bordered table-striped">
           <thead>
             <tr role="row" class="text-center">
               <th style="width: 30px;">
-                <input
-                  class="scale"
-                  type="checkbox"
-                  [checked]="isCheckAll"
-                  (change)="selectAll()"
-                />
+                <span class="custom-checkbox">
+                  <input
+                    if="selectAll"
+                    class="scale"
+                    type="checkbox"
+                    [checked]="isCheckAll"
+                    (change)="selectAll()"
+                  />
+                  <label for="selectAll"></label>
+                </span>
               </th>
               <th style="width: 10px;">No</th>
               <th style="width: 210.6px;">Question content</th>
@@ -71,14 +85,22 @@
           <tbody *ngFor="let question of questions; index as i">
             <tr role="row" class="odd">
               <td>
-                <input
-                  type="checkbox"
-                  class="scale"
-                  [checked]="selection[i].checked"
-                  (change)="selectQuestion(question.questionId)"
-                />
+                <span class="custom-checkbox">
+                  <input
+                    [id]="'chk-' + i"
+                    type="checkbox"
+                    class="scale"
+                    [checked]="selection[i].checked"
+                    (change)="selectQuestion(question.questionId)"
+                  />
+                  <label [attr.for]="'chk-' + i"></label>
+                </span>
               </td>
-              <td>{{ i + 1 }}</td>
+              <td>
+                {{
+                  tabAllQuestion.currentPage * tabAllQuestion.sizeOfPage + i + 1
+                }}
+              </td>
               <td>
                 {{ question.content }}
               </td>
@@ -104,7 +126,16 @@
           role="status"
           aria-live="polite"
         >
-          Showing 1 to 10 of 30 entries
+          Showing
+          {{ tabAllQuestion?.currentPage * tabAllQuestion?.sizeOfPage + 1 }}
+          to
+          {{
+            (tabAllQuestion?.currentPage + 1) * tabAllQuestion?.sizeOfPage <
+            tabAllQuestion?.entities
+              ? (tabAllQuestion?.currentPage + 1) * tabAllQuestion?.sizeOfPage
+              : tabAllQuestion?.entities
+          }}
+          of {{ tabAllQuestion?.entities }} entries
         </div>
       </div>
       <div class="col-sm-7">
@@ -113,26 +144,61 @@
           id="example1_paginate"
         >
           <ul class="pagination">
-            <li class="paginate_button previous" id="example1_previous">
-              <a href="#">Previous</a>
+            <li
+              class="paginate_button previous"
+              id="example1_previous"
+              [ngClass]="{
+                disabled: tabAllQuestion?.currentPage === 0
+              }"
+            >
+              <ng-template
+                [ngIf]="
+                  tabAllQuestion?.currentPage > 0 &&
+                  tabAllQuestion?.entities > 0
+                "
+              >
+                <a (click)="previousPage()">Previous</a>
+              </ng-template>
+              <ng-template
+                [ngIf]="
+                  tabAllQuestion?.currentPage === 0 &&
+                  tabAllQuestion?.entities > 0
+                "
+              >
+                <a>Previous</a>
+              </ng-template>
             </li>
             <li class="paginate_button active">
-              <a href="#">1</a>
+              <a href="#">{{ tabAllQuestion?.currentPage + 1 }}</a>
             </li>
-            <li class="paginate_button ">
-              <a href="#" aria-controls="example1" data-dt-idx="2" tabindex="0"
-                >2</a
+            <li
+              class="paginate_button next"
+              id="example1_next"
+              [ngClass]="{
+                disabled:
+                  (tabAllQuestion?.currentPage + 1) *
+                  tabAllQuestion?.sizeOfPage >=
+                  tabAllQuestion?.entities
+              }"
+            >
+              <ng-template
+                [ngIf]="
+                  (tabAllQuestion?.currentPage + 1) *
+                    tabAllQuestion?.sizeOfPage >=
+                  tabAllQuestion?.entities
+                "
               >
-            </li>
-            <li class="paginate_button ">
-              <a href="#" aria-controls="example1" data-dt-idx="3" tabindex="0"
-                >3</a
+                <a>Next</a>
+              </ng-template>
+              <ng-template
+                [ngIf]="
+                  (tabAllQuestion?.currentPage + 1) *
+                    tabAllQuestion?.sizeOfPage <
+                  tabAllQuestion?.entities
+                "
               >
-            </li>
-            <li class="paginate_button next" id="example1_next">
-              <a href="#" aria-controls="example1" data-dt-idx="7" tabindex="0"
-                >Next</a
-              >
+                <a (click)="nextPage()">Next</a>
+              </ng-template>
             </li>
           </ul>
         </div>
