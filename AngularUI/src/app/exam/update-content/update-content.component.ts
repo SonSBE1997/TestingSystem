@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { mergeMap } from 'rxjs/operators';
 import { TabInfo } from './update-content.interface';
 import { Exam } from 'src/app/entity/Exam.interface';
 import { ExamQuestion } from 'src/app/entity/ExamQuestion.interface';
 import { ExamService } from 'src/app/service/examService.service';
+import { NotifierService } from 'angular-notifier';
 
 @Component({
   selector: 'app-update-content',
@@ -24,7 +24,8 @@ export class UpdateContentComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private http: HttpClient,
-    private examService: ExamService
+    private examService: ExamService,
+    private notifierService: NotifierService
   ) {}
 
   ngOnInit() {
@@ -39,11 +40,9 @@ export class UpdateContentComponent implements OnInit {
   removeQuestion(event, id) {
     this.isRemove = true;
     event.preventDefault();
-    // console.log(id);
     this.detailExam.examQuestions = this.detailExam.examQuestions.filter(
       v => v.id !== id
     );
-    // console.log(this.detailExam.examQuestions);
   }
 
   clickResetRemoveQuestion() {
@@ -61,9 +60,8 @@ export class UpdateContentComponent implements OnInit {
       examId: this.detailExam.examId,
       examQuestions: data
     };
-    console.log(exam);
 
-    this.http.put('http://localhost:8080/exam/remove-question', exam).subscribe(
+    this.examService.removeListQuestion(exam).subscribe(
       success => {
         console.log(success);
       },
@@ -82,6 +80,12 @@ export class UpdateContentComponent implements OnInit {
         ) {
           this.tabListQuestionInExam.currentPage--;
         }
+
+        this.notifierService.notify(
+          'success',
+          'Remove question successfully',
+          ''
+        );
       }
     );
   }
@@ -104,18 +108,24 @@ export class UpdateContentComponent implements OnInit {
     if (
       this.detailExam.numberOfQuestion > this.detailExam.examQuestions.length
     ) {
-      this.http
-        .post('http://localhost:8080/exam/random-question', {
-          examId: this.detailExam.examId,
-          numberOfQuestion: this.numberOfRandom
-        })
-        .subscribe(
-          success => {},
-          error => {
-            console.log(error.error.text);
-            this.loadData(this.tabListQuestionInExam.sizeOfPage);
-          }
-        );
+      const data = {
+        examId: this.detailExam.examId,
+        numberOfQuestion: this.numberOfRandom
+      };
+      this.examService.randomQuestion(data).subscribe(
+        success => {},
+        error => {
+          console.log(error.error.text);
+          this.loadData(this.tabListQuestionInExam.sizeOfPage);
+          this.notifierService.notify(
+            'success',
+            'Random question successfully',
+            ''
+          );
+        }
+      );
+    } else {
+      this.notifierService.notify('error', 'Can not random question', '');
     }
   }
 
@@ -143,29 +153,6 @@ export class UpdateContentComponent implements OnInit {
     this.tabListQuestionInExam.currentPage++;
   }
 
-  // reloadData() {
-  //   this.http
-  //     .get<Exam>(`http://localhost:8080/exam/${this.detailExam.examId}`)
-  //     .subscribe(detailExam => {
-  //       detailExam.examQuestions = detailExam.examQuestions.sort(function(
-  //         a,
-  //         b
-  //       ) {
-  //         return a.id - b.id;
-  //       });
-  //       this.detailExam = detailExam;
-  //       this.backupExamQuestions = detailExam.examQuestions;
-  //       // this.examQuestions = detailExam.examQuestions.filter((v, i) => i < 5);
-  //       // console.log(this.backupExamQuestions);
-  //       this.tabListQuestionInExam = {
-  //         currentPage: 0,
-  //         sizeOfPage: this.tabListQuestionInExam.sizeOfPage,
-  //         entities: detailExam.examQuestions.length
-  //       };
-  //       // console.log(this.tabListQuestionInExam);
-  //     });
-  // }
-
   loadData(sizeOfPage: number) {
     this.examService.getExamById(this.examId).subscribe(detailExam => {
       detailExam.examQuestions = detailExam.examQuestions.sort(function(a, b) {
@@ -185,6 +172,17 @@ export class UpdateContentComponent implements OnInit {
     if (e) {
       this.loadData(this.tabListQuestionInExam.sizeOfPage);
       this.inTabOne = true;
+      this.notifierService.notify(
+        'success',
+        'Add question to exam successfully',
+        ''
+      );
+    } else {
+      this.notifierService.notify(
+        'error',
+        'Can not add question to this exam!',
+        ''
+      );
     }
   }
 }

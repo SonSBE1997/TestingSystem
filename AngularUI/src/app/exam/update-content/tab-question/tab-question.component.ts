@@ -3,6 +3,8 @@ import { Question } from 'src/app/entity/Question.interface';
 import { TabInfo, Selection } from '../update-content.interface';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { ExamService } from 'src/app/service/examService.service';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-tab-question',
@@ -25,7 +27,8 @@ export class TabQuestionComponent implements OnInit {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private http: HttpClient
+    private http: HttpClient,
+    private examService: ExamService
   ) {}
 
   ngOnInit() {
@@ -33,14 +36,36 @@ export class TabQuestionComponent implements OnInit {
       this.examId = pm.get('id');
     });
 
-    this.http
-      .get<Question[]>(`http://localhost:8080/question/all`)
+    this.tabAllQuestion = { currentPage: 0, entities: 0, sizeOfPage: 10 };
+
+    this.examService.getQuestionSum().subscribe(sum => {
+      this.tabAllQuestion.entities = +sum.headers.get('SumQuestion');
+    });
+
+    this.loadDataByPage();
+  }
+
+  loadDataByPage() {
+    this.examService
+      .getQuestions(
+        this.tabAllQuestion.currentPage + '',
+        this.tabAllQuestion.sizeOfPage + ''
+      )
       .subscribe(questions => {
         this.questions = questions;
+        this.selection = [];
         questions.forEach(question => {
+          // if (this.selection.find(v => v.id === question.questionId)) {
           this.selection.push({ id: question.questionId, checked: false });
+          // }
         });
       });
+  }
+
+  // change page size tab one
+  changePageSizeTabAllQuestion(e) {
+    this.tabAllQuestion.sizeOfPage = e.value;
+    this.tabAllQuestion.currentPage = 0;
   }
 
   // click checkbox question
@@ -86,25 +111,45 @@ export class TabQuestionComponent implements OnInit {
     }
 
     if (this.numberOfQuestion === this.entities) {
+      this.apply.emit(false);
       return;
     }
+
     const selectedQuestion = this.selection.filter(v => v.checked);
-    const arr = [];
+    let arr = [];
     selectedQuestion.forEach(v => {
       arr.push({ question: { questionId: v.id } });
     });
+
+    const addNumber = this.numberOfQuestion - this.entities;
+    if (arr.length > addNumber) {
+      arr = arr.slice(0, addNumber);
+    }
 
     const data = {
       examId: this.examId,
       examQuestions: arr
     };
 
-    this.http.post('http://localhost:8080/exam/add-question', data).subscribe(
+    this.examService.addListQuestionToExam(data).subscribe(
       success => {},
       error => {
         console.log(error.error.text);
         this.apply.emit(true);
       }
     );
+
+    this.selection.forEach(v => (v.checked = false));
+  }
+
+  previousPage() {
+    this.tabAllQuestion.currentPage--;
+    this.loadDataByPage();
+    console.log(this.tabAllQuestion.currentPage);
+  }
+  nextPage() {
+    this.tabAllQuestion.currentPage++;
+    this.loadDataByPage();
+    console.log(this.tabAllQuestion.currentPage);
   }
 }

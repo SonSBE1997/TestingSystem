@@ -16,4 +16,5 @@ public interface QuestionServices {
 	List<Question> searchByContent( String contentSearch);
 	void updateMultiQuestion(String category_id, String level_id, String tag_id, String question_id);
 	List<Question> pageQuestion(Pageable pageable);
+	String countQuestion();
 }
