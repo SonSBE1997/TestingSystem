@@ -142,7 +142,7 @@ export class UpdateContentComponent implements OnInit {
     this.tabListQuestionInExam.currentPage = 0;
   }
 
-  priviousPageTabOne() {
+  previousPageTabOne() {
     this.tabListQuestionInExam.currentPage--;
   }
 
