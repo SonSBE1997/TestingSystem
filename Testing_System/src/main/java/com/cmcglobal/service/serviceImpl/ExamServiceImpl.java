@@ -1,5 +1,6 @@
 package com.cmcglobal.service.serviceImpl;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -11,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.cmcglobal.entity.Exam;
 import com.cmcglobal.entity.ExamQuestion;
 import com.cmcglobal.entity.Question;
+import com.cmcglobal.entity.User;
 import com.cmcglobal.repository.ExamRepository;
 import com.cmcglobal.service.ExamQuestionService;
 import com.cmcglobal.service.ExamService;
@@ -31,9 +33,14 @@ public class ExamServiceImpl implements ExamService {
 
     @Override
     public void createExam(Exam ex) {
-	examRepository.save(ex);
-    }
-
+	   User user= new User();
+	   user.setUserId(1);
+	    ex.setExamId(this.createId());
+	      ex.setNote(ex.getNote().substring(3, ex.getNote().length()-4));
+	      ex.setUserCreated(user);
+	        ex.setCreateAt(new Date());
+		examRepository.save(ex);	   
+}
     @Override
     public List<Exam> findAll() {
 	return examRepository.findAll();
@@ -142,4 +149,15 @@ public class ExamServiceImpl implements ExamService {
 	return id;
     }
 
+	@Override
+	public List<Exam> pageExamSortByUserCreatedByAsc(Pageable pageable) {
+		return examRepository.pageExamSortByUserCreatedByAsc(pageable);
+	}
+
+	@Override
+	public List<Exam> pageExamSortByUserCreatedByDesc(Pageable pageable) {
+		return examRepository.pageExamSortByUserCreatedByDesc(pageable);
+	}
+
 }
+

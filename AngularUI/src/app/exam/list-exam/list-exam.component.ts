@@ -45,12 +45,12 @@ export class ListExamComponent implements OnInit, AfterViewInit {
     'status',
     'createAt'
   ];
-  //public dataSource = new MatTableDataSource<Exam>();
+
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  //listExam: Exam;
+
 
   constructor(
     private listExamService: ListExamService,
@@ -59,7 +59,7 @@ export class ListExamComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit() {
-    this.findExams('ASC', 0, 5);
+    this.findExams( 0, 5, 'title', 'ASC');
   }
 
   ngAfterViewInit() {
@@ -69,21 +69,27 @@ export class ListExamComponent implements OnInit, AfterViewInit {
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
 
-      console.log(this.dataSource.paginator.hasNextPage);
+      console.log(this.dataSource.sort);
+            console.log(this.dataSource.sort);
+
 
   }
 
   public findExams = (
-    sortOrder = 'ASC',
+
     pageNumber = 0,
-    pageSize = 5
+    pageSize = 5,
+    sortTerm = 'title',
+    sortOrder = 'ASC'
   ) => {
      this.http
       .get<Exam[]>('http://localhost:8080/exam/listExams/pagination', {
         params: new HttpParams()
-        .set('sortOrder', sortOrder)
+
           .set('pageNumber', pageNumber.toString())
           .set('pageSize', pageSize.toString())
+          .set('sortTerm', sortTerm)
+        .set('sortOrder', sortOrder)
       }).subscribe(listExam => {
         this.listExam = listExam;
         this.dataSource.data = listExam;
@@ -92,10 +98,11 @@ export class ListExamComponent implements OnInit, AfterViewInit {
 
   public loadExamsPage() {
     this.findExams(
-      this.sort.direction,
       this.paginator.pageIndex,
       this.paginator.pageSize,
+      this.sort.direction,
     );
+
 
   }
   public doFilter = (value: string) => {

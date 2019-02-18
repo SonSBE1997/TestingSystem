@@ -1,13 +1,38 @@
 package com.cmcglobal.service;
 
-import java.util.List;
-
 import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 import com.cmcglobal.entity.Exam;
 
 public interface ExamService {
+    /**
+     * Author: ntmduyen Created date: Feb 14, 2019 Created time: 5:12:48 PM
+     * Description: TODO - find all exam.
+     * 
+     * @return
+     */
     public List<Exam> findAll();
+
+    /**
+     * Author: ntmduyen Created date: Feb 14, 2019 Created time: 5:12:48 PM
+     * Description: TODO - pagination .
+     * 
+     * @return
+     */
+    public List<Exam> pageExam(Pageable pageable);
+
+    /**
+     * Author: ntmduyen Created date: Feb 15, 2019 Created time: 8:35:47 AM
+     * Description: TODO - .
+     * 
+     * @param contentSearch
+     * @return
+     */
+    public List<Exam> pageExamSortByUserCreatedByAsc(Pageable pageable);
+
+    public List<Exam> pageExamSortByUserCreatedByDesc(Pageable pageable);
 
     public Exam findByID(String id);
 
@@ -40,12 +65,4 @@ public interface ExamService {
      * @return
      */
     public String createId();
-
-    /**
-     * Author: ntmduyen Created date: Feb 14, 2019 Created time: 5:12:48 PM
-     * Description: TODO - pagination .
-     * 
-     * @return
-     */
-    public List<Exam> pageExam(Pageable pageable);
 }
