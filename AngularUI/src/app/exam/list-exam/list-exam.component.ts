@@ -15,7 +15,9 @@ export class ListExamComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort: MatSort;
 
   listExam: Exam[] = [];
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+
+  }
   ngOnInit() {
     this.getAll();
   }
