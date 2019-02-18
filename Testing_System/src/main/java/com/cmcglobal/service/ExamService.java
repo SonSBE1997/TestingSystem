@@ -11,5 +11,7 @@ Exam getOne(String examId);
 	
 	Exam update(Exam exam);
 	
+	String createId();
+	
 	List<Exam> readExcel(String exelFilePath);
 }

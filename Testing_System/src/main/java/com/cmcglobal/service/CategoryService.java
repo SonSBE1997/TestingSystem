@@ -25,6 +25,10 @@ public class CategoryService {
 		return categoryRepository.findAll();
 	}
 	
+	public Category getOneById(int categoryId) {
+		return entityManager.find(Category.class, categoryId);
+	}
+	
 	public Category getOne(String categoryName) {
 		return categoryRepository.findByName(categoryName);
 	}

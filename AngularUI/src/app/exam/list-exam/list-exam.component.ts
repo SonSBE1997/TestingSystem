@@ -1,37 +1,64 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { ListExams } from './listExam.interface';
+import { HttpResponse, HttpEventType, HttpClient } from '@angular/common/http';
+import { UploadserviceService } from 'src/app/service/upload/uploadservice.service';
+import { NotifierService } from 'angular-notifier';
+import { error } from 'util';
+
 
 @Component({
   selector: 'app-list-exam',
   templateUrl: './list-exam.component.html',
   styleUrls: ['./list-exam.component.css']
 })
-export class ListExamComponent implements OnInit {
-  listExam: ListExams[] = [];
-  showMedia: boolean;
-  imageSrc: any;
-  file: any;
 
-  constructor(private http: HttpClient) { }
+export class ListExamComponent implements OnInit {
+
+  selectedFiles: FileList;
+  currentFileUpload: File;
+  currentFileInport: File;
+  mess: string;
+
+  constructor(private uploadService: UploadserviceService, private http: HttpClient, private notifierService: NotifierService) { }
 
   ngOnInit() {
-    this.http.get<ListExams[]>('http://localhost:3000/listExams')
-    .subscribe(listExam => {
-      this.listExam = listExam;
-    });
+
   }
 
-  onChangeFile(event) {
-    if (event.target.files && event.target.files[0]) {
-      this.showMedia = false;
-      this.file = event.target.files[0];
-      const reader = new FileReader();
-      reader.onload = e => (this.imageSrc = reader.result);
-      reader.readAsDataURL(this.file);
-    } else {
-      this.imageSrc = '';
-    }
+  selectFile(event) {
+    this.selectedFiles = event.target.files;
   }
 
+  upload() {
+    this.currentFileUpload = this.selectedFiles.item(0);
+    this.currentFileInport = this.selectedFiles.item(0);
+    this.uploadService.pushFileToStorage(this.currentFileUpload);
+
+    console.log("imp" + this.currentFileInport);
+    console.log("up: " + this.currentFileUpload);
+    setTimeout(() => {
+    }, 3000);
+
+    this.uploadService.importToServer(this.currentFileInport)
+      .subscribe(
+        // event => {
+        //   console.log("Event: " + event);
+        //   if (event instanceof HttpResponse) {
+        //     this.notifierService.notify('success', 'Import exam successfully');
+        //     console.log('File is completely uploaded!');
+        //    }else {
+        //      this.notifierService.notify('error', 'Import exam Failed');
+        //    }
+        //  }
+
+        success => {
+        this.notifierService.notify('success', 'Import exam successfully');
+        },
+        error => {
+            console.log(error.error.text);
+           if (error.error.text !== 'Ok') {
+             this.notifierService.notify('error', 'Import exam Failed');
+           }
+         }
+      );
+  }
 }

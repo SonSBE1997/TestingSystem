@@ -23,8 +23,10 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.cmcglobal.entity.Category;
 import com.cmcglobal.entity.Exam;
 import com.cmcglobal.repository.ExamRepository;
+import com.cmcglobal.service.CategoryService;
 import com.cmcglobal.service.ExamService;
 
 @Service
@@ -35,6 +37,9 @@ public class ExamServiceImpl implements ExamService {
 
 	@Autowired
 	ExamRepository examRepository;
+
+	@Autowired
+	CategoryService categoryService;
 
 	@Override
 	public Exam getOne(String examId) {
@@ -57,9 +62,9 @@ public class ExamServiceImpl implements ExamService {
 	@Override
 	public List<Exam> readExcel(final String exelFilePath) {
 //		https://stackoverflow.com/questions/40214772/file-upload-in-angular
-		final int COLUMN_INDEX_ID = 0;
-		final int COLUMN_INDEX_TITLE = 1;
-		final int COLUMN_INDEX_DURATION = 2;
+		final int COLUMN_INDEX_TITLE = 0;
+		final int COLUMN_INDEX_DURATION = 1;
+		final int COLUMN_INDEX_CATEGORYID = 2;
 		final int COLUMN_INDEX_NOTE = 3;
 		final int COLUMN_INDEX_STATUS = 4;
 		final int COLUMN_INDEX_ENABLE = 5;
@@ -76,7 +81,7 @@ public class ExamServiceImpl implements ExamService {
 
 			Workbook workbook = getWorkbook(fileInput, exelFilePath);
 			Sheet sheet = workbook.getSheetAt(0);
-			
+
 //			Row rowFirst = sheet.getRow(0);
 //			Iterator<Cell> cellrowFirst = rowFirst.cellIterator();
 
@@ -100,9 +105,6 @@ public class ExamServiceImpl implements ExamService {
 					int columnIndex = cell.getColumnIndex();
 
 					switch (columnIndex) {
-					case COLUMN_INDEX_ID:
-						exam.setExamId((String) getCellValue(cell));
-						break;
 					case COLUMN_INDEX_TITLE:
 						exam.setTitle((String) getCellValue(cell));
 						;
@@ -111,6 +113,12 @@ public class ExamServiceImpl implements ExamService {
 						float duration = Float.parseFloat(getCellValue(cell).toString());
 						exam.setDuration(duration);
 						break;
+					case COLUMN_INDEX_CATEGORYID:
+						float catergoryCell = Float.parseFloat(getCellValue(cell).toString());
+						int categoryId = (int) catergoryCell;
+						Category category = categoryService.getOneById(categoryId);
+						exam.setCategory(category);
+						break;
 					case COLUMN_INDEX_NOTE:
 						exam.setNote((String) getCellValue(cell));
 						break;
@@ -118,7 +126,9 @@ public class ExamServiceImpl implements ExamService {
 						exam.setStatus((String) getCellValue(cell));
 						break;
 					case COLUMN_INDEX_NUMBEROFQUES:
-						// exam.setNumberOfQuestion(Double.parseDouble(getCellValue(cell).toString());
+						float x = Float.parseFloat(getCellValue(cell).toString());
+						int numberQues = (int) x;
+						exam.setNumberOfQuestion(numberQues);
 						break;
 					case COLUMN_INDEX_ENABLE:
 						exam.setEnable(Boolean.parseBoolean(getCellValue(cell).toString()));
@@ -197,6 +207,23 @@ public class ExamServiceImpl implements ExamService {
 		}
 
 		return workbook;
+	}
+
+	@Override
+	public String createId() {
+		String id;
+		List<Exam> exam = examRepository.findAll();
+		int ids = exam.size() - 1;
+		String tmp = exam.get(ids).getExamId();
+		tmp = tmp.substring(tmp.length() - 3, tmp.length());
+		int id1 = Integer.parseInt(tmp) + 1;
+		if (id1 < 10)
+			id = ("Exam00") + id1;
+		else if (id1 > 9 && id1 < 100)
+			id = ("Exam0") + id1;
+		else
+			id = ("Exam") + id1;
+		return id;
 	}
 
 }

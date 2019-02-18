@@ -54,7 +54,7 @@ export class UpdateCommonComponent implements OnInit {
       note: ['']
     })
 
-    this.http.get<Category[]>(`http://localhost:8015/category/list-category`)
+    this.http.get<Category[]>(`http://localhost:8080/category/list-category`)
       .subscribe(categories => {
         this.categories = categories;
         console.table(this.categories)
@@ -64,7 +64,7 @@ export class UpdateCommonComponent implements OnInit {
       mergeMap(params => {
         const examId = params.get('id');
         console.log(examId);
-        return this.http.get<Exam>(`http://localhost:8015/exam/${examId}`);
+        return this.http.get<Exam>(`http://localhost:8080/exam/${examId}`);
       })
     ).subscribe(exam => {
       this.exam = exam;
@@ -99,7 +99,7 @@ export class UpdateCommonComponent implements OnInit {
 
     console.log(exam);
 
-    this.http.put(`http://localhost:8015/exam/update/update-common/${this.exam.examId}`, exam)
+    this.http.put(`http://localhost:8080/exam/update/update-common/${this.exam.examId}`, exam)
       .subscribe(() => {
         this.router.navigateByUrl('/exam');
       })

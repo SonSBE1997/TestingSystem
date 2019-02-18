@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,19 +24,19 @@ import com.cmcglobal.service.ExamService;
 @RestController
 @RequestMapping("/exam")
 public class examController {
-	
+
 	@Autowired
 	ExamService examService;
-	
+
 	@GetMapping("/{examId}")
 	public Exam getOne(@PathVariable String examId) {
 		return examService.getOne(examId);
 	}
-	
+
 	@PutMapping("/update/update-common/{examId}")
 	public Exam updateCommon(@RequestBody Exam exam, @PathVariable String examId) {
 		Exam ex = examService.getOne(examId);
-		if(ex != null) {
+		if (ex != null) {
 			ex.setTitle(exam.getTitle());
 			ex.setCategory(exam.getCategory());
 			ex.setDuration(exam.getDuration());
@@ -49,9 +48,9 @@ public class examController {
 		}
 		return ex;
 	}
-	
-	@PostMapping("/upload-excel-file")
-	public ResponseEntity<String> readExcelFile(@RequestParam MultipartFile multipartFile) {
+
+	@PostMapping("/import-excel-file")
+	public ResponseEntity<String> readExcelFile(@RequestParam("multipartFile") MultipartFile multipartFile) {
 
 		File file = new File("files");
 		String pathToSave = file.getAbsolutePath();
@@ -66,10 +65,14 @@ public class examController {
 		System.out.println(multipartFile.getOriginalFilename());
 
 		List<Exam> listExam = examService.readExcel(fileTranfer.toString());
-		for (Exam exam : listExam) {
-			examService.insert(exam);
+		try {
+			for (Exam exam : listExam) {
+				exam.setExamId(examService.createId());
+				examService.insert(exam);
+			}
+		} catch (Exception e) {
+			return ResponseEntity.ok("Not ok");
 		}
-		String mess = "import successfully";
-		return new ResponseEntity<String>(mess, HttpStatus.OK);
+		return ResponseEntity.ok("Ok");
 	}
 }
