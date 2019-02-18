@@ -8,6 +8,7 @@ import { v4 as uuid } from 'uuid';
 import { Category } from '../../entity/Category.interface';
 import { User } from 'src/app/entity/User.interface';
 import { ExamQuestion } from 'src/app/entity/ExamQuestion.interface';
+import { NotifierService } from 'angular-notifier';
 
 @Component({
   selector: 'app-create-exam',
@@ -22,7 +23,8 @@ export class CreateExamComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private notifierService: NotifierService
   ) {}
     ngOnInit() {
       this.http.get<Category[]>('http://localhost:8080/category/listCategories').subscribe(category => {
@@ -61,7 +63,10 @@ export class CreateExamComponent implements OnInit {
       console.log(cate);
       this.http
       .post('http://localhost:8080/exam/create', exam)
-      .subscribe(success => this.router.navigateByUrl('/exam'));
+      .subscribe(success => {
+        this.notifierService.notify('success', 'Create exam successfully', '');
+        setTimeout(() => { this.router.navigateByUrl('/exam'); }, 2000);
+      });
     }
   onReset() {
     this.examFrm.reset();
