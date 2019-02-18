@@ -68,12 +68,12 @@ public class ExamController {
 				sortable = Sort.by("category").descending();
 			}
 			break;
-		case ("id"):
+		case ("examId"):
 			if (("asc").equals(sortOrder.toLowerCase())) {
-				sortable = Sort.by("id").ascending();
+				sortable = Sort.by("examId").ascending();
 			}
 			if (("desc").equals(sortOrder.toLowerCase())) {
-				sortable = Sort.by("id").descending();
+				sortable = Sort.by("examId").descending();
 			}
 			break;
 		case ("duration"):

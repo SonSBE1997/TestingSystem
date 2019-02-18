@@ -19,6 +19,7 @@ import {
 import { fromEvent } from 'rxjs/observable/fromEvent';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
+import { MatSortModule } from '@angular/material/sort';
 
 
 @Component({
@@ -59,7 +60,7 @@ export class ListExamComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit() {
-    this.findExams( 0, 5, 'userCreated', 'ASC');
+    this.findExams( 0, 5, 'title', 'ASC');
   }
 
   ngAfterViewInit() {
@@ -68,15 +69,14 @@ export class ListExamComponent implements OnInit, AfterViewInit {
       .subscribe();
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
+      this.dataSource.paginator._length=this.paginator._length;
 
-      console.log(this.dataSource.sort.key);
-            console.log(this.dataSource.sort.key.id);
-
-
+      console.log(this.paginator._length);
+      console.log(this.dataSource.paginator.getNumberOfPages());
+      console.log(this.dataSource.paginator.page);
   }
-
+  // This function is to find Exams from the API backend
   public findExams = (
-
     pageNumber = 0,
     pageSize = 5,
     sortTerm = 'title',
@@ -85,7 +85,6 @@ export class ListExamComponent implements OnInit, AfterViewInit {
      this.http
       .get<Exam[]>('http://localhost:8080/exam/listExams/pagination', {
         params: new HttpParams()
-
           .set('pageNumber', pageNumber.toString())
           .set('pageSize', pageSize.toString())
           .set('sortTerm', sortTerm)
@@ -93,6 +92,7 @@ export class ListExamComponent implements OnInit, AfterViewInit {
       }).subscribe(listExam => {
         this.listExam = listExam;
         this.dataSource.data = listExam;
+
       });
   }
 
@@ -100,11 +100,9 @@ export class ListExamComponent implements OnInit, AfterViewInit {
     this.findExams(
       this.paginator.pageIndex,
       this.paginator.pageSize,
-      this.sort.key,
+      this.sort.active,
       this.sort.direction,
     );
-
-
   }
   public doFilter = (value: string) => {
     this.dataSource.filter = value.trim().toLocaleLowerCase();
