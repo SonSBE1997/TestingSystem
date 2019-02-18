@@ -18,11 +18,17 @@
   <button class="btn btn-primary btnUpdate" (click)="export()" style="width: 100px;margin-bottom: 10px">
     Export
   </button>
-
-  <button class="btn btn-success" style="width: 100px;margin-bottom: 10px" data-toggle="modal"
-    data-target="#modal-approve">
-    Approve
-  </button>
+  <ng-template [ngIf]="exam?.status !== 'Draft'">
+    <button class="btn btn-success disabled" style="width: 100px;margin-bottom: 10px">
+      Approve
+    </button>
+  </ng-template>
+  <ng-template [ngIf]="exam?.status === 'Draft'">
+    <button class="btn btn-success" style="width: 100px;margin-bottom: 10px" data-toggle="modal"
+      data-target="#modal-approve">
+      Approve
+    </button>
+  </ng-template>
   <div class="modal modal-warning fade in" id="modal-approve" style="display: none;">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -57,7 +63,7 @@
   <div class="box box-warning" *ngIf="exam">
     <div class="box-header with-border">
       <b>
-        <h3 class="text-center">{{ exam.title.toUpperCase() }}.</h3>
+        <h3 class="text-center">{{ exam.title.toUpperCase() }}</h3>
         <div class="pull-left" style="margin-left: 5%">
           Exam ID: {{exam.examId}}
           <p>Category: {{exam.category.categoryName}} </p>
