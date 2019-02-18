@@ -51,7 +51,7 @@ public class ExamQuestionServiceImpl implements ExamQuestionService {
    * Created time: 5:55:04 PM
    */
   @Override
-  public void delete(int examQuestionId) {
+  public void deleteById(int examQuestionId) {
     repository.deleteById(examQuestionId);
   }
 

@@ -1,0 +1,151 @@
+<div class="box-body">
+  <div
+    id="example1_wrapper"
+    class="dataTables_wrapper form-inline dt-bootstrap"
+  >
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="dataTables_length" id="example1_length">
+          <label
+            >Show
+            <select class="form-control input-sm">
+              <option value="10">10</option>
+              <option value="15">15</option>
+              <option value="20">20</option>
+              <option value="30">30</option>
+              <option value="50">50</option>
+            </select>
+            entries
+          </label>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <label
+          >Type
+          <select class="form-control input-sm">
+            <option value="Easy">Easy</option>
+            <option value="Medium">Medium</option>
+            <option value="Difficult">Difficult</option>
+          </select>
+        </label>
+      </div>
+      <div class="col-sm-4">
+        <div class="dataTables_filter pull-right">
+          <label
+            >Search
+            <input
+              type="search"
+              class="form-control input-sm"
+              placeholder="Question Content"
+          /></label>
+        </div>
+      </div>
+    </div>
+    <div class="clearfix"></div>
+    <br/>
+    <br/>
+    <div class="row">
+      <div class="col-sm-12">
+        <table
+          id="example1"
+          class="table table-bordered table-striped"
+        >
+          <thead>
+            <tr role="row" class="text-center">
+              <th style="width: 30px;">
+                <input
+                  class="scale"
+                  type="checkbox"
+                  [checked]="isCheckAll"
+                  (change)="selectAll()"
+                />
+              </th>
+              <th style="width: 10px;">No</th>
+              <th style="width: 210.6px;">Question content</th>
+              <th style="width: 268.2px;">Option one</th>
+              <th style="width: 245.8px;">Option two</th>
+              <th style="width: 183.4px;">Option three</th>
+              <th style="width: 135.6px;">Option four</th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let question of questions; index as i">
+            <tr role="row" class="odd">
+              <td>
+                <input
+                  type="checkbox"
+                  class="scale"
+                  [checked]="selection[i].checked"
+                  (change)="selectQuestion(question.questionId)"
+                />
+              </td>
+              <td>{{ i + 1 }}</td>
+              <td>
+                {{ question.content }}
+              </td>
+              <ng-template ngFor let-answer [ngForOf]="question.answers">
+                <td
+                  [ngClass]="{
+                    'text-red': answer.true === true
+                  }"
+                >
+                  {{ answer.content }}
+                </td>
+              </ng-template>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-5">
+        <div
+          class="dataTables_info"
+          id="example1_info"
+          role="status"
+          aria-live="polite"
+        >
+          Showing 1 to 10 of 30 entries
+        </div>
+      </div>
+      <div class="col-sm-7">
+        <div
+          class="dataTables_paginate paging_simple_numbers"
+          id="example1_paginate"
+        >
+          <ul class="pagination">
+            <li class="paginate_button previous" id="example1_previous">
+              <a href="#">Previous</a>
+            </li>
+            <li class="paginate_button active">
+              <a href="#">1</a>
+            </li>
+            <li class="paginate_button ">
+              <a href="#" aria-controls="example1" data-dt-idx="2" tabindex="0"
+                >2</a
+              >
+            </li>
+            <li class="paginate_button ">
+              <a href="#" aria-controls="example1" data-dt-idx="3" tabindex="0"
+                >3</a
+              >
+            </li>
+            <li class="paginate_button next" id="example1_next">
+              <a href="#" aria-controls="example1" data-dt-idx="7" tabindex="0"
+                >Next</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="row text-center">
+        <button
+          class="btn btn-primary"
+          (click)="clickSubmitTab2()"
+          [ngClass]="{ disabled: isAdd === false }"
+        >
+          Apply
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
