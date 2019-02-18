@@ -36,6 +36,7 @@ public class ExamServiceImpl implements ExamService {
     User user = new User();
     user.setUserId(1);
     ex.setExamId(this.createId());
+    ex.setTitle(ex.getTitle().trim());
     ex.setNote(ex.getNote().substring(3, ex.getNote().length() - 4));
     ex.setUserCreated(user);
     ex.setCreateAt(new Date());
