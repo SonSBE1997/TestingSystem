@@ -31,6 +31,13 @@ export class ExamService {
   addListQuestionToExam(data): Observable<Object> {
     return this.http.post(this.url + 'exam/add-question', data);
   }
+
+  approve(examId) {
+    return this.http.put(this.url + 'exam/approve', {
+      examId: examId
+    });
+  }
+
   // QUESTION
   // getAllQuestion
   getQuestionPaging(): Observable<Question[]> {

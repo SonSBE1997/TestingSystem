@@ -18,3 +18,10 @@ export interface Exam {
   examQuestions: ExamQuestion[];
   enable: boolean;
 }
+
+export interface TabInfo {
+  currentPage: number;
+  entities: number;
+  sizeOfPage: number;
+}
+

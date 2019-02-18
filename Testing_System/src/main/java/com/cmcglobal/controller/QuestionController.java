@@ -54,7 +54,6 @@ public class QuestionController {
   private List<Question> searchByContent(
       @PathVariable("contentSearch") String contentSearch) {
     return questionService.searchByContent(contentSearch);
-
   }
 
   @RequestMapping(value = "question/add", method = RequestMethod.POST)

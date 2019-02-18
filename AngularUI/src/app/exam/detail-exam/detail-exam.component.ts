@@ -14,9 +14,9 @@ export class DetailExamComponent implements OnInit {
   flag = true;
   constructor(
     private activatedRoute: ActivatedRoute,
-    private http: HttpClient
-  ) {}
+    private http: HttpClient,
 
+  ) { }
   ngOnInit() {
     this.activatedRoute.paramMap
       .pipe(
@@ -28,6 +28,7 @@ export class DetailExamComponent implements OnInit {
       .subscribe(exam => {
         this.exam = exam;
       });
+
   }
 
 
@@ -50,7 +51,7 @@ export class DetailExamComponent implements OnInit {
           examId: this.exam.examId
         })
         .subscribe(
-          success => {},
+          success => { },
           error => {
             // console.log(error.error.text);
             if (error.error.text === 'Ok') {

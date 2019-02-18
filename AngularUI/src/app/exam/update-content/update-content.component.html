@@ -196,44 +196,20 @@
                             </tr>
                           </thead>
                           <tbody
-                            *ngFor="
-                              let examQuestion of detailExam?.examQuestions;
-                              index as i
-                            "
+                            *ngFor=" let examQuestion of detailExam?.examQuestions; index as i"
                           >
                             <ng-template
-                              [ngIf]="
-                                i <
-                                  (tabListQuestionInExam.currentPage + 1) *
-                                    tabListQuestionInExam.sizeOfPage &&
-                                i >=
-                                  tabListQuestionInExam.currentPage *
+                              [ngIf]="i <(tabListQuestionInExam.currentPage + 1) * tabListQuestionInExam.sizeOfPage &&
+                                i >= tabListQuestionInExam.currentPage *
                                     tabListQuestionInExam.sizeOfPage
                               "
                             >
                               <tr role="row" class="odd">
                                 <td>{{ i + 1 }}</td>
-                                <td>
-                                  {{ examQuestion.question.content }}
-                                </td>
-                                <ng-template
-                                  ngFor
-                                  let-i
-                                  [ngForOf]="
-                                    examQuestion.choiceOrder.split(' ')
-                                  "
-                                >
-                                  <td
-                                    [ngClass]="{
-                                      'text-red':
-                                        examQuestion.question.answers[i - 1]
-                                          .true === true
-                                    }"
-                                  >
-                                    {{
-                                      examQuestion.question.answers[i - 1]
-                                        .content
-                                    }}
+                                <td>{{ examQuestion.question.content }}</td>
+                                <ng-template ngFor let-i [ngForOf]=" examQuestion.choiceOrder.split(' ')">
+                                  <td [ngClass]="{ 'text-red': examQuestion.question.answers[i - 1] .true === true }"                                 >
+                                    {{ examQuestion.question.answers[i - 1].content }}
                                   </td>
                                 </ng-template>
                                 <td>

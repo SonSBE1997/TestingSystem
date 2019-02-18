@@ -81,6 +81,7 @@ public class ExportExamPDF extends AbstractPdfView {
       String content = ex.getQuestion().getContent();
       Paragraph title1 = new Paragraph(
           "\nQuestion " + i + ": " + content + "\n", font);
+      title1.setIndentationLeft(5);
       document.add(title1);
       com.lowagie.text.List l = new com.lowagie.text.List(
           com.lowagie.text.List.ALPHABETICAL);
@@ -91,7 +92,7 @@ public class ExportExamPDF extends AbstractPdfView {
             .toString();
         l.add(new ListItem(" "+s));
       }
-      l.setIndentationLeft(10);
+      l.setIndentationLeft(15);
       i++;
       document.add(l);
     }
