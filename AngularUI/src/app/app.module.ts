@@ -13,11 +13,9 @@ import { QuestionModule } from './question/question.module';
 import { ExamModule } from './exam/exam.module';
 import { CategoryModule } from './category/category.module';
 import { HttpClientModule } from '@angular/common/http';
-<<<<<<< HEAD
-=======
 import { HttpModule } from '@angular/http';
 import { ListExamService } from 'src/app/exam/list-exam/list-exam.service';
->>>>>>> dbf0fd505d58eddd12d2c4a723c9e0d1ea34c1c7
+
 @NgModule({
   declarations: [AppComponent],
   imports: [

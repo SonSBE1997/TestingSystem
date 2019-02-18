@@ -43,7 +43,7 @@ export class ListExamComponent implements OnInit, AfterViewInit {
 
   }
   ngOnInit() {
-    this.findExams(0, 5, 'title', 'ASC');
+    this.findExams(0, 5, 'ASC');
   }
 
   ngAfterViewInit() {
@@ -63,7 +63,6 @@ export class ListExamComponent implements OnInit, AfterViewInit {
 
     pageNumber = 0,
     pageSize = 5,
-    sortTerm = 'title',
     sortOrder = 'ASC'
   ) => {
     this.http
@@ -72,7 +71,7 @@ export class ListExamComponent implements OnInit, AfterViewInit {
 
           .set('pageNumber', pageNumber.toString())
           .set('pageSize', pageSize.toString())
-          .set('sortTerm', sortTerm)
+
           .set('sortOrder', sortOrder)
       }).subscribe(listExam => {
         this.listExam = listExam;

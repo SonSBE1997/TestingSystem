@@ -16,7 +16,7 @@ export class DetailExamComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private http: HttpClient,
 
-  ) {}
+  ) { }
   ngOnInit() {
     this.activatedRoute.paramMap
       .pipe(
@@ -36,7 +36,7 @@ export class DetailExamComponent implements OnInit {
     if (this.exam.examQuestions.length > 0) {
       this.activatedRoute.paramMap.subscribe(params => {
         const id = params.get('id');
-        return (window.location.href =`http://localhost:8080/exam/export/${id}`);
+        return (window.location.href = `http://localhost:8080/exam/export/${id}`);
       });
     } else {
       this.flag = false;
@@ -51,7 +51,7 @@ export class DetailExamComponent implements OnInit {
           examId: this.exam.examId
         })
         .subscribe(
-          success => {},
+          success => { },
           error => {
             // console.log(error.error.text);
             if (error.error.text === 'Ok') {
