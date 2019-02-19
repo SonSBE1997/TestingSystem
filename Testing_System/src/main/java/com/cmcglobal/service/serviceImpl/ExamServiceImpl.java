@@ -85,7 +85,10 @@ public class ExamServiceImpl implements ExamService {
         numberRandom, examId);
     for (ExamQuestion examQuestion : examQuestions) {
       examQuestion.setExamId(examId);
-      String choiceOrder = Helper.randomChoiceOrder(random);
+      Question question = questionService
+          .findById(examQuestion.getQuestion().getQuestionId());
+      int countAnswer = question.getAnswers().size();
+      String choiceOrder = Helper.randomChoiceOrder(random, countAnswer);
       examQuestion.setChoiceOrder(choiceOrder);
       examQuestionService.insert(examQuestion);
     }
@@ -123,7 +126,12 @@ public class ExamServiceImpl implements ExamService {
     Random random = new Random();
     for (ExamQuestion examQuestion : exam.getExamQuestions()) {
       examQuestion.setExamId(examId);
-      String choiceOrder = Helper.randomChoiceOrder(random);
+      Question question = questionService
+          .findById(examQuestion.getQuestion().getQuestionId());
+      int countAnswer = question.getAnswers().size();
+
+      String choiceOrder = Helper.randomChoiceOrder(random, countAnswer);
+      System.out.println(choiceOrder);
       examQuestion.setChoiceOrder(choiceOrder);
       examQuestionService.insert(examQuestion);
     }

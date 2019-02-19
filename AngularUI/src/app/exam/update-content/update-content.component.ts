@@ -20,6 +20,8 @@ export class UpdateContentComponent implements OnInit {
   isRemove = false;
   examId: string;
   numberOfRandom = 0;
+  numberOption = [];
+  optionWidth = '';
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -39,6 +41,7 @@ export class UpdateContentComponent implements OnInit {
   // click remove question
   removeQuestion(event, id) {
     this.isRemove = true;
+    this.tabListQuestionInExam.entities--;
     event.preventDefault();
     this.detailExam.examQuestions = this.detailExam.examQuestions.filter(
       v => v.id !== id
@@ -48,6 +51,7 @@ export class UpdateContentComponent implements OnInit {
   clickResetRemoveQuestion() {
     this.detailExam.examQuestions = this.backupExamQuestions;
     this.isRemove = false;
+    this.tabListQuestionInExam.entities = this.backupExamQuestions.length;
   }
 
   // click button submit
@@ -79,6 +83,10 @@ export class UpdateContentComponent implements OnInit {
           entities
         ) {
           this.tabListQuestionInExam.currentPage--;
+        }
+
+        if (this.backupExamQuestions.length === 0) {
+          this.tabListQuestionInExam.currentPage = 0;
         }
 
         this.notifierService.notify(
@@ -158,6 +166,18 @@ export class UpdateContentComponent implements OnInit {
       detailExam.examQuestions = detailExam.examQuestions.sort(function(a, b) {
         return a.id - b.id;
       });
+      let maxOption = 0;
+
+      detailExam.examQuestions.forEach(v => {
+        maxOption = Math.max(maxOption, v.question.answers.length);
+      });
+
+      this.numberOption = Array(maxOption)
+        .fill(1)
+        .map((v, k) => k);
+
+      this.optionWidth = 74 / maxOption + '%';
+
       this.detailExam = detailExam;
       this.backupExamQuestions = detailExam.examQuestions;
       this.tabListQuestionInExam = {

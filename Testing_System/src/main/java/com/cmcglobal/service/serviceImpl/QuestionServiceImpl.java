@@ -71,10 +71,21 @@ public class QuestionServiceImpl implements QuestionServices {
   public List<Question> pageQuestion(Pageable pageable) {
     return questionRepository.pageQuestion(pageable);
   }
-  
+
   @Override
   public String countQuestion() {
     return questionRepository.questionSum();
+  }
+
+  @Override
+  public List<Question> searchByContent(String content, Pageable pageable) {
+    return questionRepository.findByContentContaining(content, pageable);
+  }
+
+  @Override
+  public String countSearchQuestion(String content) {
+    content = "%" + content + "%";
+    return questionRepository.countSearchQuestion(content);
   }
 
 }
