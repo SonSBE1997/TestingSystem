@@ -178,10 +178,8 @@ public class ExamController {
 		examService.deleteExam(examId);
 	}
 	@PostMapping(value = "/filter")
-	public ResponseEntity<Page<Exam>> findAll(@RequestBody Exam exam) {
+	public ResponseEntity<List<Exam>> findAll(@RequestBody Exam exam) {
 		List<Exam> exams = examService.FilterExam(exam);
-		Page<Exam> pageExams=new PageImpl<>(exams);
-		pageExams.forEach(System.out::println);
-		return ResponseEntity.ok(pageExams);
+		return ResponseEntity.ok(exams);
 	}
 }

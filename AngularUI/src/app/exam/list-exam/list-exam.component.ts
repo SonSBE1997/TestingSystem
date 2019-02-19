@@ -1,14 +1,14 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
-
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { Exam } from 'src/app/entity/Exam.interface';
 import { merge, } from 'rxjs/observable/merge';
 import { mergeMap } from 'rxjs/operators';
-import { FormGroup,FormBuilder} from '@angular/forms';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { ListExamService } from './list-exam.service';
 import { v4 as uuid } from 'uuid';
+
 import {
   distinctUntilChanged,
   startWith,
@@ -56,7 +56,7 @@ export class ListExamComponent implements OnInit, AfterViewInit {
   listDuration: number[] = [];
   numberOfQuestions: number[] = [];
   statuss: String[] = [];
-  caterogyNames:String[]=[];
+  caterogyNames: String[] = [];
   isCheckALL = false;
   examFrm: FormGroup;
 
@@ -65,9 +65,9 @@ export class ListExamComponent implements OnInit, AfterViewInit {
   public createAt: Date = new Date('dd/mm/yyyy');
   public status: String;
   public category: Category;
-  public categoryName:String;
+  public categoryName: String;
 
-  constructor(private http: HttpClient,private fb: FormBuilder,
+  constructor(private http: HttpClient, private fb: FormBuilder,
     private listExamService: ListExamService
   ) {
 
@@ -112,10 +112,8 @@ export class ListExamComponent implements OnInit, AfterViewInit {
           .set('sortTerm', sortTerm)
           .set('sortOrder', sortOrder)
       }).subscribe(listExam => {
-        this.listExam = listExam;
-        this.dataSource.data = listExam;
-
-
+        this.listExam = listExam
+        this.dataSource.data = listExam
       });
   }
 
@@ -130,7 +128,7 @@ export class ListExamComponent implements OnInit, AfterViewInit {
   public doFilter = (value: string) => {
     this.dataSource.filter = value.trim().toLocaleLowerCase();
   }
-
+  // Start Delete
   onCheck(event) {
     const input = event.target as HTMLInputElement;
     this.isCheckALL = input.checked;
@@ -170,12 +168,11 @@ export class ListExamComponent implements OnInit, AfterViewInit {
       if (this.listId.length > 0) {
         this.listId.forEach(element => {
           this.http.delete(`http://localhost:8080/exam/${element}`).pipe(
-            mergeMap(() => this.listExamService.findExams())
+            mergeMap(() => this.http.get<Exam[]>('http://localhost:8080/exam/listExams/pagination'))
           ).subscribe(listExam => {
             this.listExam = listExam;
             this.dataSource.data = listExam;
           })
-
         }
         )
       }
@@ -183,7 +180,9 @@ export class ListExamComponent implements OnInit, AfterViewInit {
 
     }
   }
-  //filter
+  //end
+
+  //Filter Start
   onSubmit() {
     console.log(this.examFrm.value);
     if (this.examFrm.valid) {
@@ -192,16 +191,16 @@ export class ListExamComponent implements OnInit, AfterViewInit {
         id: uuid(),
         ...value
       };
-
-      this.http.post<Exam[]>(`http://localhost:8080/exam/filter`, exam).subscribe(listExam => {
-        this.listExam = listExam;
-        this.dataSource.data = listExam;
-      });
-
+      this.http.post<Exam[]>('http://localhost:8080/exam/filter', exam)
+        .subscribe(listExam => {
+          this.listExam = listExam,
+            console.log(this.listExam)
+          this.dataSource.data = listExam
+        })
     }
   }
   getDuration() {
-    this.http.get('http://localhost:8080/exam/listExams/pagination').subscribe((exams: Exam[]) => {
+    this.http.get('http://localhost:8080/exam/listExams').subscribe((exams: Exam[]) => {
 
       exams.forEach(x => {
         this.listDuration.push(x.duration);
@@ -230,4 +229,5 @@ export class ListExamComponent implements OnInit, AfterViewInit {
     })
 
   }
+  //end
 }
