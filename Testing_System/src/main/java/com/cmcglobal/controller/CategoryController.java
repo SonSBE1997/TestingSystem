@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cmcglobal.entity.Category;
-import com.cmcglobal.repository.CategoryRepository;
 import com.cmcglobal.service.CategoryService;
 /*
  * @author ptphuong.
