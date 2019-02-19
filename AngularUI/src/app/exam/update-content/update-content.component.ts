@@ -21,6 +21,7 @@ export class UpdateContentComponent implements OnInit {
   examId: string;
   numberOfRandom = 0;
   numberOption = [];
+  optionWidth = '';
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -174,6 +175,8 @@ export class UpdateContentComponent implements OnInit {
       this.numberOption = Array(maxOption)
         .fill(1)
         .map((v, k) => k);
+
+      this.optionWidth = 74 / maxOption + '%';
 
       this.detailExam = detailExam;
       this.backupExamQuestions = detailExam.examQuestions;

@@ -28,6 +28,7 @@ export class TabQuestionComponent implements OnInit {
   searchStr = '';
   isSearching = false;
   numberOption = [];
+  optionWidth = '';
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -53,7 +54,7 @@ export class TabQuestionComponent implements OnInit {
         this.tabAllQuestion.currentPage + '',
         this.tabAllQuestion.sizeOfPage + ''
       );
-      console.log(this.searchStr);
+      // console.log(this.searchStr);
 
       this.examService.countSearchQuestion(this.searchStr).subscribe(h => {
         this.tabAllQuestion.entities = +h.headers.get('CountSearchQuestion');
@@ -81,6 +82,7 @@ export class TabQuestionComponent implements OnInit {
       this.numberOption = Array(maxOption)
         .fill(1)
         .map((v, k) => k);
+      this.optionWidth = 74 / maxOption + '%';
     });
   }
 
@@ -93,7 +95,7 @@ export class TabQuestionComponent implements OnInit {
 
   // click checkbox question
   selectQuestion(questionId) {
-    console.log(questionId);
+    // console.log(questionId);
     let count = 0;
     this.selection.forEach(item => {
       if (item.id === questionId) {
@@ -168,12 +170,14 @@ export class TabQuestionComponent implements OnInit {
   previousPage() {
     this.tabAllQuestion.currentPage--;
     this.loadDataByPage();
-    console.log(this.tabAllQuestion.currentPage);
+    this.isCheckAll = false;
+    // console.log(this.tabAllQuestion.currentPage);
   }
   nextPage() {
     this.tabAllQuestion.currentPage++;
     this.loadDataByPage();
-    console.log(this.tabAllQuestion.currentPage);
+    this.isCheckAll = false;
+    // console.log(this.tabAllQuestion.currentPage);
   }
 
   sortTableByContent() {
