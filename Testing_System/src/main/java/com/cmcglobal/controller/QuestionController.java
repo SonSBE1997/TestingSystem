@@ -31,10 +31,15 @@ public class QuestionController {
   private List<Question> getAllQuestion() {
     return questionService.getAllQuestion();
   }
-  
+
   @RequestMapping(value = "question/sum", method = RequestMethod.GET)
   private void sumQuestion(HttpServletResponse responseHeaders) {
     responseHeaders.addHeader("SumQuestion", questionService.countQuestion());
+  }
+  
+  @RequestMapping(value = "question/count-search-question", method = RequestMethod.GET)
+  private void countQuestion(HttpServletResponse responseHeaders,@RequestParam String content) {
+    responseHeaders.addHeader("CountSearchQuestion", questionService.countSearchQuestion(content));
   }
 
   @RequestMapping(value = "question/pagination", method = RequestMethod.GET)
@@ -50,10 +55,17 @@ public class QuestionController {
     return questionService.findById(id);
   }
 
-  @RequestMapping(value = "question/search-by-content/{contentSearch}", method = RequestMethod.GET)
+  @RequestMapping(value = "question/search-by-content", method = RequestMethod.GET)
   private List<Question> searchByContent(
-      @PathVariable("contentSearch") String contentSearch) {
-    return questionService.searchByContent(contentSearch);
+      @RequestParam(defaultValue = "") String contentSearch,
+      @RequestParam(name = "page", required = false, defaultValue = "0") Integer page,
+      @RequestParam(name = "size", required = false, defaultValue = "10") Integer size) {
+    Pageable pageable = PageRequest.of(page, size);
+    String content = contentSearch.trim();
+    if (content.equals("")) {
+      return questionService.pageQuestion(pageable);
+    }
+    return questionService.searchByContent(content, pageable);
   }
 
   @RequestMapping(value = "question/add", method = RequestMethod.POST)

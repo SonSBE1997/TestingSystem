@@ -31,20 +31,18 @@ public class Helper {
    * @param random
    * @return
    */
-  public static String randomChoiceOrder(Random random) {
+  public static String randomChoiceOrder(Random random, int numberRandom) {
     ArrayList<Integer> arr = new ArrayList<>();
-    arr.add(1);
-    arr.add(2);
-    arr.add(3);
-    arr.add(4);
-    int n = arr.size();
+    for (int i = 0; i < numberRandom; i++) {
+      arr.add(i + 1);
+    }
     String choiceOrder = "";
-    while (n > 0) {
-      int index = random.nextInt(n);
+    while (numberRandom > 0) {
+      int index = random.nextInt(numberRandom);
       int number = arr.get(index);
       choiceOrder += number + " ";
       arr.remove(index);
-      n--;
+      numberRandom--;
     }
     return choiceOrder.trim();
   }
@@ -70,7 +68,8 @@ public class Helper {
       examQuestion.setExamId(examId);
       Question question = questions.get(index);
       examQuestion.setQuestion(question);
-      String choiceOrder = randomChoiceOrder(random);
+      String choiceOrder = randomChoiceOrder(random,
+          question.getAnswers().size());
       examQuestion.setChoiceOrder(choiceOrder);
       examQuestions.add(examQuestion);
     }
