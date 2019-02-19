@@ -3,6 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { mergeMap } from 'rxjs/operators';
 import { Exam } from 'src/app/entity/Exam.interface';
+import { ExamService } from 'src/app/service/examService.service';
+import { NotifierService } from 'angular-notifier';
 
 @Component({
   selector: 'app-detail-exam',
@@ -15,14 +17,15 @@ export class DetailExamComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private http: HttpClient,
-
+    private examService: ExamService,
+    private notifierService: NotifierService
   ) { }
   ngOnInit() {
     this.activatedRoute.paramMap
       .pipe(
         mergeMap(params => {
           const id = params.get('id');
-          return this.http.get<Exam>(`http://localhost:8080/exam/${id}`);
+          return this.examService.getExamById(id);
         })
       )
       .subscribe(exam => {
@@ -34,10 +37,7 @@ export class DetailExamComponent implements OnInit {
 
   export() {
     if (this.exam.examQuestions.length > 0) {
-      this.activatedRoute.paramMap.subscribe(params => {
-        const id = params.get('id');
-        return (window.location.href = `http://localhost:8080/exam/export/${id}`);
-      });
+      return (window.location.href = this.examService.exportUrl(this.exam.examId));
     } else {
       this.flag = false;
     }
@@ -46,19 +46,16 @@ export class DetailExamComponent implements OnInit {
   approve() {
     if (this.exam.status === 'Draft') {
       // console.log('Draft');
-      this.http
-        .put('http://localhost:8080/exam/approve', {
-          examId: this.exam.examId
-        })
-        .subscribe(
-          success => { },
-          error => {
-            // console.log(error.error.text);
-            if (error.error.text === 'Ok') {
-              this.exam.status = 'Public';
-            }
+      this.examService.approve(this.exam.examId).subscribe(
+        success => { },
+        error => {
+          // console.log(error.error.text);
+          if (error.error.text === 'Ok') {
+            this.exam.status = 'Public';
           }
-        );
+          this.notifierService.notify('success', 'Approve exam successfully', '');
+        }
+      );
     }
   }
 }

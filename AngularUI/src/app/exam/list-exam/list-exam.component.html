@@ -79,15 +79,11 @@
               </mat-form-field>
             </div>
           </div>
-
           <div class="spinner-container" *ngIf="loading$ | async">
-
             <mat-spinner></mat-spinner>
-
-        </div>
-
+          </div>
             <table class="table table-bordered table-striped" mat-table [dataSource]="dataSource"
-               matSort matSortActive="seqNo" matSortDirection="asc" matSortDisableClear>
+               matSort matSortActive="title" matSortDirection="asc" matSortDisableClear>
 
               <ng-container matColumnDef="examId">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
@@ -119,7 +115,7 @@
               </ng-container>
 
               <ng-container matColumnDef="userCreated">
-                  <th mat-header-cell *matHeaderCellDef> Created by </th>
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Created by </th>
                   <td mat-cell *matCellDef="let element"> {{element.userCreated.fullName}} </td>
               </ng-container>
 

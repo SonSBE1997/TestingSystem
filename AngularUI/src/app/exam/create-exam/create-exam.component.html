@@ -12,8 +12,9 @@
       <li class="active">Create</li>
     </ol>
   </section>
-
   <!-- Main content -->
+  <notifier-container></notifier-container>
+
   <section class="content">
     <div class="row">
       <div class="box box-solid">
@@ -38,16 +39,10 @@
                           examFrm.get('title').invalid && examFrm.get('title').touched
                       }"
                     />
-                    <ng-template
-                    [ngIf]="examFrm.get('title').invalid && examFrm.get('title').touched"
-                  >
-                    <br />
-                    <div class="col alert alert-light" style="color: blue" role="alert"
-                        *ngIf="examFrm.get('title').hasError('required')
-                            && examFrm.get('title')?.touched">
-                        Title is required!
-                   </div>
-                   </ng-template>
+                    <ng-container *ngIf="examFrm.get('title').hasError('required')&& examFrm.get('title').touched">
+                      <p class="col alert alert-light" role="alert" style="color: blue">
+                        Title is required!</p>
+                  </ng-container>
                   </div>
                 </div>
 
@@ -65,26 +60,36 @@
                     >
                       <option *ngFor="let category of categories" [ngValue]= "category">{{category.categoryName}}</option>
                     </select>
-                    <div class="col alert alert-light" role="alert" style="color: blue"
-                        *ngIf="examFrm.get('category').hasError('required')
-                            && examFrm.get('category')?.touched">
-                        Exam category is required!
-                   </div>
+                    <ng-container *ngIf="examFrm.get('category').hasError('required')&& examFrm.get('category').touched">
+                      <p class="col alert alert-light" role="alert" style="color: blue">
+                        Category is required!</p>
+                  </ng-container>
                   </div>
                 </div>
 
                 <div class="form-group">
                   <label for="iNumQues" class="col-sm-2 control-label"
-                    >Number Question</label
-                  >
-
+                    >Number Question</label>
                   <div class="col-sm-10">
                     <input formControlName="numberquestion"
                       type="number"
                       class="form-control"
                       id="iNumQues"
                       placeholder="Number question"
+                      [ngClass]="{
+                        'is-valid': examFrm.get('numberquestion').valid,
+                        'is-invalid': examFrm.get('numberquestion').invalid && examFrm.get('numberquestion').touched
+                      }"
+                      pattern="^\d+$"
                     />
+                    <ng-container *ngIf="examFrm.get('numberquestion').hasError('required')&& examFrm.get('numberquestion').touched">
+                      <p class="col alert alert-light" role="alert" style="color: blue">
+                        Number Of Question is required!</p>
+                  </ng-container>
+                  <ng-container *ngIf="examFrm.get('numberquestion').hasError('pattern')">
+                      <p class="col alert alert-light" role="alert" style="color: blue">
+                        Number Of Question must be positive number!</p>
+                  </ng-container>
                   </div>
                 </div>
 
@@ -98,12 +103,20 @@
                       class="form-control"
                       id="iDuration"
                       placeholder="Duration"
+                      [ngClass]="{
+                        'is-valid': examFrm.get('duration').valid,
+                        'is-invalid': examFrm.get('duration').invalid && examFrm.get('duration').touched
+                      }"
+                      pattern="^\d+$"
                     />
-                    <div class="col-10 alert alert-light" role="alert" style="color: blue"
-                    *ngIf="examFrm.get('duration').hasError('required')
-                        && examFrm.get('duration')?.touched">
-                    Duration is required!
-                    </div>
+                    <ng-container *ngIf="examFrm.get('duration').hasError('required')&& examFrm.get('duration').touched">
+                      <p class="col alert alert-light" role="alert" style="color: blue">
+                        Duration is required!</p>
+                  </ng-container>
+                  <ng-container *ngIf="examFrm.get('duration').hasError('pattern')">
+                      <p class="col alert alert-light" role="alert" style="color: blue">
+                        Duration must be positive number!</p>
+                  </ng-container>
                   </div>
                </div>
                 <div class="form-group">
