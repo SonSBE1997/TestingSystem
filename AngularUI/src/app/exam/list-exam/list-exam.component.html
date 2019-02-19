@@ -4,9 +4,11 @@
     <small>show all the fields of exams</small>
   </h1>
   <ol class="breadcrumb">
-    <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-    <li><a href="#">Tables</a></li>
-    <li class="active">Data tables</li>
+    <li>
+      <a href="#"><i class="fa fa-dashboard"></i> Home</a>
+    </li>
+    <li><a href="#">Exam</a></li>
+    <li class="active">View list exam</li>
   </ol>
 </section>
 <notifier-container></notifier-container>
@@ -34,11 +36,11 @@
                     </button>
                   </div>
                   <div class="modal-body">
-                      <div>
-                          <span style="color: red">{{mess}}</span>
-                        </div>
+                    <div>
+                      <span style="color: red">{{mess}}</span>
+                    </div>
                     <div style="text-align:center">
-                        <input type="file" (change)="selectFile($event)" accept=".xlsx">
+                      <input type="file" (change)="selectFile($event)" accept=".xlsx">
                     </div>
                   </div>
                   <div class="modal-footer">
@@ -48,10 +50,12 @@
                 </div>
               </div>
             </div>
+            <!-- End Modal -->
           </div>
-          <div class="left">
-          </div>
+          <div></div>
+          <div class="left"></div>
         </div>
+
         <div>
           <div class="box-body">
             <div class="row-3">
@@ -61,7 +65,6 @@
                 <option>English</option>
                 <option>Sql</option>
                 <option>C##</option>
-
               </select>
               <select class=" select2" style="width: 25%;height: 30px;margin-left: 25px">
                 <option selected="selected" disabled="disabled">Time Test</option>
@@ -75,7 +78,6 @@
                 <option>20</option>
                 <option>30</option>
               </select>
-
             </div>
             <select class=" select2" style="width: 25%;height: 30px;margin-top: 15px">
               <option disabled="disabled">Creator</option>
@@ -85,54 +87,118 @@
             <select class=" select2" style="width: 25%;height: 30px;margin-left: 25px">
               <option selected="selected" disabled="disabled">Status</option>
               <option>Public</option>
-              <option>Darft</option>
+              <option>Draft</option>
             </select>
           </div>
         </div>
         <!-- /.box-header -->
         <div class="box-body">
 
-          <table id="example1" class="table table-bordered table-striped">
-            <thead>
-              <tr>
-                <th></th>
-                <th class="text-center">Exam Title</th>
-                <th class="text-center">Category</th>
-                <th class="text-center">Duration</th>
-                <th class="text-center">Number of question(s)</th>
-                <th class="text-center">Created by</th>
-                <th class="text-center">Status</th>
-                <th class="text-center">Created date</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let listExam of listExam">
-                <td><input type="checkbox"></td>
-                <td class="text-center">
-                  <a [routerLink]="['/exam', listExam.id]">{{listExam.title}}</a>
-                </td>
-                <td class="text-center">{{listExam.category_name}} </td>
-                <td class="text-center">{{listExam.duration}}</td>
-                <td class="text-center">{{listExam.number_of_question}}</td>
-                <td class="text-center">{{listExam.created_by}}</td>
-                <td class="text-center">{{listExam.status}}</td>
-                <td class="text-center">{{listExam.created_at}}</td>
-              </tr>
 
-            </tbody>
-          </table>
-          <div>
-            <a style="margin-right: 10px" class="btn btn-primary" [routerLink]="['/exam', 'create']">Create Exam</a>
-            <button type="Delete" class="btn btn-danger">Delete</button>
-          </div>
-        </div>
-        <!-- /.box-body -->
-      </div>
 
+              <div class=" box-body">
+                <div class="row">
+                  <!-- <div class="col-sm-4 form-inline">
+                <div class="dataTables_length" id="example1_length">
+                  <label>Show
+                    <select class="form-control input-sm" (change)="changePageSize($event.target)">
+                      <option value="5">5</option>
+                      <option value="10">10</option>
+                      <option value="15">15</option>
+                      <option value="30">30</option>
+                    </select>
+                    entries
+                  </label>
+                </div>
+              </div> -->
+
+                  <div style="float:right" fxLayout fxLayoutAlign="center center">
+                    <mat-form-field fxFlex="40%">
+                      <input matInput type="text" (keyup)="doFilter($event.target.value)" placeholder="Search">
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class="spinner-container" *ngIf="loading$ | async">
+                  <mat-spinner></mat-spinner>
+                </div>
+
+                <table class="table table-bordered table-striped" mat-table [dataSource]="dataSource" matSort
+                  matSortActive="title" matSortDirection="asc" matSortDisableClear>
+
+                  <ng-container matColumnDef="examId">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+                    <td mat-cell *matCellDef="let element">
+                      <input type="checkbox">
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="title">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Title </th>
+                    <td mat-cell *matCellDef="let element">
+                      <a [routerLink]="['/exam', element.examId]">{{element.title}}</a>
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="category">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Category name </th>
+                    <td mat-cell *matCellDef="let element"> {{element.category.categoryName}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="duration">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Duration </th>
+                    <td mat-cell *matCellDef="let element"> {{element.duration}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="numberOfQuestion">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Number of question(s) </th>
+                    <td mat-cell *matCellDef="let element"> {{element.numberOfQuestion}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="userCreated">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Created by </th>
+                    <td mat-cell *matCellDef="let element"> {{element.userCreated.fullName}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="status">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+                    <td mat-cell *matCellDef="let element"> {{element.status}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="createAt">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Created at </th>
+                    <td mat-cell *matCellDef="let element"> {{element.createAt | date: 'dd/MM/yyyy'}} </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                </table>
+                <!-- <div class="col-sm-5">
+              <div class="dataTables_info" id="example1_info" role="status" aria-live="polite">
+                Showing
+                {{ tabListExam?.currentPage * tabListExam?.sizeOfPage + 1 }}
+                to
+                {{ (tabListExam?.currentPage + 1) * tabListExam?.sizeOfPage }}
+                of {{ tabListExam?.entities }} entries
+              </div>
+            </div> -->
+                <mat-paginator [length]="16" [pageSize]="5" [pageSizeOptions]="[5, 10, 15, 25]">
+                </mat-paginator>
+
+
+                <div style="margin-top: 10px">
+                  <a style="margin-right: 10px" class="btn btn-primary" [routerLink]="['/exam', 'create']">Create
+                    Exam</a>
+                  <button type="Delete" class="btn btn-danger">Delete</button>
+                </div>
+              </div>
+              <!-- /.box-body -->
+              </div>
+       </div>
       <!-- /.box -->
     </div>
     <!-- /.col -->
   </div>
-
   <!-- /.row -->
 </section>

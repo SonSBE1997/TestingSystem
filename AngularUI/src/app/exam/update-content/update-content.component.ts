@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Event } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { mergeMap } from 'rxjs/operators';
-import { Exam, Question, Selection, TabInfo } from './update-content.interface';
-import { SelectionModel } from '@angular/cdk/collections';
+import { TabInfo } from './update-content.interface';
+import { Exam } from 'src/app/entity/Exam.interface';
+import { ExamQuestion } from 'src/app/entity/ExamQuestion.interface';
+import { ExamService } from 'src/app/service/examService.service';
+import { NotifierService } from 'angular-notifier';
 
 @Component({
   selector: 'app-update-content',
@@ -12,85 +14,127 @@ import { SelectionModel } from '@angular/cdk/collections';
 })
 export class UpdateContentComponent implements OnInit {
   detailExam: Exam;
-  questions: Question[] = [];
-  selection: Selection[] = [];
-  isCheckAll = false;
+  backupExamQuestions: ExamQuestion[] = [];
   tabListQuestionInExam: TabInfo;
-  tabAllQuestion: TabInfo;
   inTabOne = true;
+  isRemove = false;
+  examId: string;
+  numberOfRandom = 0;
+  numberOption = [];
+  optionWidth = '';
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private http: HttpClient
+    private http: HttpClient,
+    private examService: ExamService,
+    private notifierService: NotifierService
   ) {}
 
   ngOnInit() {
-    this.activatedRoute.paramMap
-      .pipe(
-        mergeMap(params => {
-          const id = params.get('id');
-          return this.http.get<Exam>(`http://localhost:3000/exam/${id}`);
-        })
-      )
-      .subscribe(detailExam => {
-        this.detailExam = detailExam;
-        this.tabListQuestionInExam = {
-          currentPage: 0,
-          sizeOfPage: 5,
-          entities: detailExam.examQuestions.length
-        };
-        // console.log(this.tabListQuestionInExam);
-      });
+    this.activatedRoute.paramMap.subscribe(pm => {
+      this.examId = pm.get('id');
+    });
 
-    this.http
-      .get<Question[]>(`http://localhost:3000/questions`)
-      .subscribe(questions => {
-        this.questions = questions;
-        questions.forEach(question => {
-          this.selection.push({ id: question.id, checked: false });
-        });
-      });
+    this.loadData(5);
   }
 
   // click remove question
-  removeQuestion(event, questionId) {
+  removeQuestion(event, id) {
+    this.isRemove = true;
+    this.tabListQuestionInExam.entities--;
     event.preventDefault();
-    console.log(questionId);
+    this.detailExam.examQuestions = this.detailExam.examQuestions.filter(
+      v => v.id !== id
+    );
   }
 
-  // click checkbox question
-  selectQuestion(questionId) {
-    this.selection.forEach(item => {
-      if (item.id === questionId) {
-        item.checked = !item.checked;
-      }
-    });
-
-    const isAll = this.selection.filter(v => v.checked);
-    if (isAll.length === this.selection.length) {
-      this.isCheckAll = true;
-    } else {
-      this.isCheckAll = false;
-    }
-    // console.log(JSON.stringify(this.selection));
-  }
-
-  // click checkbox all
-  selectAll() {
-    this.isCheckAll = !this.isCheckAll;
-    this.selection.forEach(item => {
-      item.checked = this.isCheckAll;
-    });
+  clickResetRemoveQuestion() {
+    this.detailExam.examQuestions = this.backupExamQuestions;
+    this.isRemove = false;
+    this.tabListQuestionInExam.entities = this.backupExamQuestions.length;
   }
 
   // click button submit
   clickUpdate() {
-    console.log('update');
+    this.isRemove = false;
+    const data = this.backupExamQuestions.filter(
+      v => !this.detailExam.examQuestions.includes(v)
+    );
+    const exam = {
+      examId: this.detailExam.examId,
+      examQuestions: data
+    };
+
+    this.examService.removeListQuestion(exam).subscribe(
+      success => {
+        console.log(success);
+      },
+      error => {
+        console.log(error.error.text);
+        console.log(error);
+        this.backupExamQuestions = this.backupExamQuestions.filter(
+          v => !data.includes(v)
+        );
+        const entities = this.backupExamQuestions.length;
+        this.tabListQuestionInExam.entities = entities;
+        if (
+          this.tabListQuestionInExam.currentPage *
+            this.tabListQuestionInExam.sizeOfPage ===
+          entities
+        ) {
+          this.tabListQuestionInExam.currentPage--;
+        }
+
+        if (this.backupExamQuestions.length === 0) {
+          this.tabListQuestionInExam.currentPage = 0;
+        }
+
+        this.notifierService.notify(
+          'success',
+          'Remove question successfully',
+          ''
+        );
+      }
+    );
+  }
+
+  changeNumberRandom(e) {
+    const value = +e.target.value;
+    const maxRandom =
+      this.detailExam.numberOfQuestion - this.tabListQuestionInExam.entities;
+    if (value > maxRandom) {
+      this.numberOfRandom = maxRandom;
+    } else if (value < 0) {
+      this.numberOfRandom = 0;
+    } else {
+      this.numberOfRandom = value;
+    }
   }
 
   // click button random
-  clickRandom(event) {
-    console.log('random');
+  clickRandom() {
+    if (
+      this.detailExam.numberOfQuestion > this.detailExam.examQuestions.length
+    ) {
+      const data = {
+        examId: this.detailExam.examId,
+        numberOfQuestion: this.numberOfRandom
+      };
+      this.examService.randomQuestion(data).subscribe(
+        success => {},
+        error => {
+          console.log(error.error.text);
+          this.loadData(this.tabListQuestionInExam.sizeOfPage);
+          this.notifierService.notify(
+            'success',
+            'Random question successfully',
+            ''
+          );
+        }
+      );
+    } else {
+      this.notifierService.notify('error', 'Can not random question', '');
+    }
   }
 
   // change to tab one
@@ -106,6 +150,59 @@ export class UpdateContentComponent implements OnInit {
   // change page size tab one
   changePageSizeTabOne(e) {
     this.tabListQuestionInExam.sizeOfPage = e.value;
-    console.log(this.tabListQuestionInExam);
+    this.tabListQuestionInExam.currentPage = 0;
+  }
+
+  previousPageTabOne() {
+    this.tabListQuestionInExam.currentPage--;
+  }
+
+  nextPageTabOne() {
+    this.tabListQuestionInExam.currentPage++;
+  }
+
+  loadData(sizeOfPage: number) {
+    this.examService.getExamById(this.examId).subscribe(detailExam => {
+      detailExam.examQuestions = detailExam.examQuestions.sort(function(a, b) {
+        return a.id - b.id;
+      });
+      let maxOption = 0;
+
+      detailExam.examQuestions.forEach(v => {
+        maxOption = Math.max(maxOption, v.question.answers.length);
+      });
+
+      this.numberOption = Array(maxOption)
+        .fill(1)
+        .map((v, k) => k);
+
+      this.optionWidth = 74 / maxOption + '%';
+
+      this.detailExam = detailExam;
+      this.backupExamQuestions = detailExam.examQuestions;
+      this.tabListQuestionInExam = {
+        currentPage: 0,
+        sizeOfPage: sizeOfPage,
+        entities: detailExam.examQuestions.length
+      };
+    });
+  }
+
+  onTabTwoApply(e) {
+    if (e) {
+      this.loadData(this.tabListQuestionInExam.sizeOfPage);
+      this.inTabOne = true;
+      this.notifierService.notify(
+        'success',
+        'Add question to exam successfully',
+        ''
+      );
+    } else {
+      this.notifierService.notify(
+        'error',
+        'Can not add question to this exam!',
+        ''
+      );
+    }
   }
 }

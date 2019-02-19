@@ -1,12 +1,16 @@
 package com.cmcglobal.entity;
 
 import java.io.Serializable;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 @Entity
 public class User implements Serializable {
@@ -22,7 +26,9 @@ public class User implements Serializable {
 	private String mobile;
 	private String password;
 	private int status;
-
+	@OneToMany(mappedBy="userCreated",fetch=FetchType.LAZY,cascade=CascadeType.ALL)
+    private List<Exam> exams;
+	
 	public int getUserId() {
 		return userId;
 	}
@@ -70,5 +76,4 @@ public class User implements Serializable {
 	public void setStatus(int status) {
 		this.status = status;
 	}
-
 }

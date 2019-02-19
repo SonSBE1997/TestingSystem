@@ -2,41 +2,31 @@ export interface Exam {
   examId: string;
   title: string;
   duration: number;
-  category: [
-    {
-      id: number;
-      name: string;
-    }
-  ];
+  category: {
+    id: number;
+    categoryName: string;
+  };
   note: string;
   numberOfQuestion: number;
   created_at: Date;
   create_by: string;
   status: string;
-  examQuestions: [
-    {
-      choiceOrder: string;
-      question: {
-        question_id: string;
-        content: string;
-        answers: [
-          {
-            content: string;
-            is_true: number;
-          }
-        ];
-      };
-    }
-  ];
+  examQuestions: ExamQuestion[];
+}
+
+export interface ExamQuestion {
+  id: number;
+  choiceOrder: string;
+  question: Question;
 }
 
 export interface Question {
-  id: string;
+  questionId: string;
   content: string;
   answers: [
     {
       content: string;
-      is_true: number;
+      true: number;
     }
   ];
 }

@@ -8,34 +8,74 @@
     <li class="active">Exam detail</li>
   </ol>
 </section>
+<notifier-container></notifier-container>
 <!-- Main content -->
 <section class="content">
-  <button
-    class="btn btn-warning btnUpdate"
-    style="width: 100px;margin-bottom: 10px"
-    [routerLink]="['/exam', detailExam?.id, 'update']"
-  >
+  <button class="btn btn-warning btnUpdate" style="width: 100px;margin-bottom: 10px"
+    [routerLink]="['/exam', exam?.examId, 'update']">
     Update
   </button>
 
-  <button class="btn btn-primary" style="width: 100px;margin-bottom: 10px">
+  <button class="btn btn-primary btnUpdate" (click)="export()" style="width: 100px;margin-bottom: 10px">
     Export
   </button>
-  <div class="box box-warning" *ngIf="detailExam">
+  <ng-template [ngIf]="exam?.status !== 'Draft'">
+    <button class="btn btn-success disabled" style="width: 100px;margin-bottom: 10px">
+      Approve
+    </button>
+  </ng-template>
+  <ng-template [ngIf]="exam?.status === 'Draft'">
+    <button class="btn btn-success" style="width: 100px;margin-bottom: 10px" data-toggle="modal"
+      data-target="#modal-approve">
+      Approve
+    </button>
+  </ng-template>
+  <div class="modal modal-warning fade in" id="modal-approve" style="display: none;">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+          <h4 class="modal-title">Confirm Approve</h4>
+        </div>
+        <div class="modal-body">
+          <p>Do you sure approve this exam to Public?</p>
+        </div>
+        <div class="modal-footer text-black">
+          <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">
+            Cancel
+          </button>
+          <button type="button" class="btn btn-outline" data-dismiss="modal" (click)="approve()">
+            Confirm
+          </button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+
+  <div class="alert alert-danger alert-dismissible" *ngIf="flag == false; ">
+    <i class="icon fa fa-ban"></i> This exam has not question!
+  </div>
+
+
+  <div class="box box-warning" *ngIf="exam">
     <div class="box-header with-border">
       <b>
-        <h3 class="text-center">{{ detailExam.title }}</h3>
+        <h3 class="text-center">{{ exam.title.toUpperCase() }}</h3>
         <div class="pull-left" style="margin-left: 5%">
-          Exam ID: {{detailExam.id}}
-          <p>Category: {{detailExam.category_id}} </p>
-          <p>Duration: {{detailExam.duration}} minute(s)</p>
-          <p>Note: {{detailExam.note}}</p>
+          Exam ID: {{exam.examId}}
+          <p>Category: {{exam.category.categoryName}} </p>
+          <p>Duration: {{exam.duration}} minute(s)</p>
+          <p>Note: {{exam.note}}</p>
         </div>
         <div class="pull-right" style="padding-right: 5%">
-          <p>Number of question: {{ detailExam.number_of_question }}</p>
-          <p>Created at: {{ detailExam.created_at }}</p>
+          <p>Number of question: {{ exam.numberOfQuestion }}</p>
+          <p>Created at: {{ exam.createAt | date:'dd/MM/yyyy'}}</p>
           <p>
-            Created by: <a href="#">{{ detailExam.create_by }}</a>
+            Created by: {{ exam.userCreated.fullName }}
           </p>
         </div>
       </b>
@@ -43,30 +83,28 @@
 
     <hr />
     <div style="margin-left: 5%">
-      <div *ngFor="let question of detailExam.questions; index as i">
-        <label>Question {{ i + 1 }}:</label> {{ question.content }}
-        <div *ngFor="let answer of question.answers">
-          <div *ngIf="answer.is_true == 0; else template">
+      <div *ngFor="let q of exam.examQuestions; index as i">
+        <label>Question {{ i + 1 }}:</label> {{ q.question.content }}
+        <ng-template ngFor let-j [ngForOf]="q.choiceOrder.split(' ')">
+          <div *ngIf="q.question.answers[j - 1].true === false; else template">
             <div class="checkbox">
-              <label
-                ><input type="checkbox" value="" disabled />{{
-                  answer.content
-                }}</label
-              >
+              <label><input type="checkbox" value="" disabled />{{
+                q.question.answers[j - 1].content
+                }}</label>
             </div>
           </div>
           <ng-template #template>
             <div class="checkbox">
-              <label style="color: red"
-                ><input type="checkbox" value="" disabled checked />{{
-                  answer.content
-                }}</label
-              >
+              <label style="color: red"><input type="checkbox" value="" disabled checked />{{
+                q.question.answers[j - 1].content
+                }}</label>
             </div>
           </ng-template>
-        </div>
+        </ng-template>
       </div>
     </div>
     <br>
   </div>
 </section>
+
+

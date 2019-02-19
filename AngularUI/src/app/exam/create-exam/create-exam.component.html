@@ -12,102 +12,118 @@
       <li class="active">Create</li>
     </ol>
   </section>
-
   <!-- Main content -->
+  <notifier-container></notifier-container>
+
   <section class="content">
     <div class="row">
       <div class="box box-solid">
         <!-- /.box-header -->
         <div class="box-body">
           <div class="row">
-            <form class="form-horizontal col-xs-10" novalidate method="POST">
+            <form [formGroup]="examFrm" class="form-horizontal col-xs-10" (ngSubmit)="onCreate()"  novalidate method="POST">
               <div class="box-body">
                 <div class="form-group">
-                  <label for="inputEmail3" class="col-sm-2 control-label"
-                    >Title</label
-                  >
-
+                  <label for="inputTitle" class="col-sm-2 control-label"
+                    >Title</label>
                   <div class="col-sm-10">
                     <input
-                      type="email"
+                      type="text"
                       class="form-control"
-                      id="inputEmail3"
-                      placeholder="Email"
+                      id="inputTitle"
+                      placeholder="Enter title of test"
+                      formControlName="title"
+                      [ngClass]="{
+                        'is-valid': examFrm.get('title').valid,
+                        'is-invalid':
+                          examFrm.get('title').invalid && examFrm.get('title').touched
+                      }"
                     />
+                    <ng-container *ngIf="examFrm.get('title').hasError('required')&& examFrm.get('title').touched">
+                      <p class="col alert alert-light" role="alert" style="color: blue">
+                        Title is required!</p>
+                  </ng-container>
                   </div>
                 </div>
+
+
                 <div class="form-group">
                   <label for="inputPassword3" class="col-sm-2 control-label"
                     >Exam Category</label
                   >
                   <div class="col-sm-10">
-                    <select
+                    <select formControlName="category"
                       class="form-control select2 select2-hidden-accessible"
                       style="width: 100%;"
                       tabindex="-1"
                       aria-hidden="true"
                     >
-                      <option selected="selected">SQL</option>
-                      <option>Java Basic</option>
-                      <option>Java Advanced</option>
-                      <option>Front End Advanced</option>
-                      <option>Automation Test</option>
+                      <option *ngFor="let category of categories" [ngValue]= "category">{{category.categoryName}}</option>
                     </select>
+                    <ng-container *ngIf="examFrm.get('category').hasError('required')&& examFrm.get('category').touched">
+                      <p class="col alert alert-light" role="alert" style="color: blue">
+                        Category is required!</p>
+                  </ng-container>
                   </div>
                 </div>
 
                 <div class="form-group">
                   <label for="iNumQues" class="col-sm-2 control-label"
-                    >Number Question</label
-                  >
-
+                    >Number Question</label>
                   <div class="col-sm-10">
-                    <input
+                    <input formControlName="numberquestion"
                       type="number"
                       class="form-control"
                       id="iNumQues"
                       placeholder="Number question"
+                      [ngClass]="{
+                        'is-valid': examFrm.get('numberquestion').valid,
+                        'is-invalid': examFrm.get('numberquestion').invalid && examFrm.get('numberquestion').touched
+                      }"
+                      pattern="^\d+$"
                     />
+                    <ng-container *ngIf="examFrm.get('numberquestion').hasError('required')&& examFrm.get('numberquestion').touched">
+                      <p class="col alert alert-light" role="alert" style="color: blue">
+                        Number Of Question is required!</p>
+                  </ng-container>
+                  <ng-container *ngIf="examFrm.get('numberquestion').hasError('pattern')">
+                      <p class="col alert alert-light" role="alert" style="color: blue">
+                        Number Of Question must be positive number!</p>
+                  </ng-container>
                   </div>
                 </div>
 
                 <div class="form-group">
                   <label for="iDuration" class="col-sm-2 control-label"
-                    >Duration</label
-                  >
+                    >Duration</label>
 
                   <div class="col-sm-10">
-                    <input
+                    <input formControlName="duration"
                       type="number"
                       class="form-control"
                       id="iDuration"
                       placeholder="Duration"
+                      [ngClass]="{
+                        'is-valid': examFrm.get('duration').valid,
+                        'is-invalid': examFrm.get('duration').invalid && examFrm.get('duration').touched
+                      }"
+                      pattern="^\d+$"
                     />
+                    <ng-container *ngIf="examFrm.get('duration').hasError('required')&& examFrm.get('duration').touched">
+                      <p class="col alert alert-light" role="alert" style="color: blue">
+                        Duration is required!</p>
+                  </ng-container>
+                  <ng-container *ngIf="examFrm.get('duration').hasError('pattern')">
+                      <p class="col alert alert-light" role="alert" style="color: blue">
+                        Duration must be positive number!</p>
+                  </ng-container>
                   </div>
-                </div>
-
+               </div>
                 <div class="form-group">
-                  <label for="inputPassword3" class="col-sm-2 control-label"
-                    >Status</label
-                  >
-                  <div class="col-sm-10">
-                    <select
-                      class="form-control select2 select2-hidden-accessible"
-                      style="width: 100%;"
-                      tabindex="-1"
-                      aria-hidden="true"
-                    >
-                      <option selected="selected">Draft</option>
-                      <option>Public</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <label for="iNote" class="col-sm-2 control-label">Note</label>
+                  <label for="iNote" class="col-sm-2 control-label" >Note</label>
                   <div class="col-sm-10">
                     <!-- <textarea id="editor1" name="editor1" rows="10" cols="130"></textarea> -->
-                    <ckeditor
+                    <ckeditor formControlName="note"
                       [editor]="Editor"
                     ></ckeditor>
                   </div>
@@ -116,8 +132,8 @@
                 <div class="form-group">
                   <div class="col-sm-2"></div>
                   <div class="col-sm-10">
-                    <button class="btn btn-primary mr-3">Update</button>
-                    <button class="btn btn-primary">Reset</button>
+                    <button class="btn btn-primary mr-3" (click)="onCreate()">Create</button>
+                    <button class="btn btn-primary" (click)="onReset()">Reset</button>
                   </div>
                 </div>
               </div>
@@ -129,3 +145,4 @@
     </div>
   </section>
   <!-- /.content -->
+
