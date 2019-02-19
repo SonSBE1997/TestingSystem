@@ -17,7 +17,37 @@
       <div class="box">
         <div class="box-header">
           <div>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+              Import
+            </button>
 
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+              aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Choose a file</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                      <div>
+                          <span style="color: red">{{mess}}</span>
+                        </div>
+                    <div style="text-align:center">
+                        <input type="file" (change)="selectFile($event)" accept=".xlsx">
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button (click)="upload()" class="btn btn-primary" data-dismiss="modal">Upload</button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="left">
           </div>
@@ -94,37 +124,6 @@
           <div>
             <a style="margin-right: 10px" class="btn btn-primary" [routerLink]="['/exam', 'create']">Create Exam</a>
             <button type="Delete" class="btn btn-danger">Delete</button>
-            <!-- Button trigger modal -->
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-              Import
-            </button>
-
-            <!-- Modal -->
-            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-              aria-hidden="true">
-              <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Choose a file</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body">
-                      <div>
-                          <span style="color: red">{{mess}}</span>
-                        </div>
-                    <div style="text-align:center">
-                        <input type="file" (change)="selectFile($event)" accept=".xlsx">
-                    </div>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button (click)="upload()" class="btn btn-primary" data-dismiss="modal">Upload</button>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
         <!-- /.box-body -->

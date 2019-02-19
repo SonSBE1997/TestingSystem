@@ -13,7 +13,7 @@ export class UploadserviceService {
     const formdata: FormData = new FormData();
     formdata.append('files', file);
     const req = new HttpRequest('POST', 'http://localhost:8080/uploadfile', formdata, {
-      // reportProgress: true,
+      //reportProgress: true,
       //responseType: 'text'
     }
     );

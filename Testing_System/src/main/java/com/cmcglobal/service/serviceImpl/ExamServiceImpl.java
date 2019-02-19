@@ -56,23 +56,16 @@ public class ExamServiceImpl implements ExamService {
 	@Override
 	public Exam update(Exam exam) {
 		// TODO Auto-generated method stub
-		return entityManager.merge(exam);
+		return examRepository.save(exam);
 	}
 
 	@Override
-	public List<Exam> readExcel(final String exelFilePath) {
-//		https://stackoverflow.com/questions/40214772/file-upload-in-angular
+	public List<Exam> readExcel(final String exelFilePath)  {
 		final int COLUMN_INDEX_TITLE = 0;
 		final int COLUMN_INDEX_DURATION = 1;
 		final int COLUMN_INDEX_CATEGORYID = 2;
 		final int COLUMN_INDEX_NOTE = 3;
-		final int COLUMN_INDEX_STATUS = 4;
-		final int COLUMN_INDEX_ENABLE = 5;
-		final int COLUMN_INDEX_NUMBEROFQUES = 6;
-		final int COLUMN_INDEX_CREATE_AT = 7;
-		final int COLUMN_INDEX_CREATED_BY = 8;
-		final int COLUMN_INDEX_MODIFIED_AT = 9;
-		final int COLUMN_INDEX_MODIFIED_BY = 10;
+		final int COLUMN_INDEX_NUMBEROFQUES = 4;
 
 		List<Exam> listExam = new ArrayList<Exam>();
 		File file = new File(exelFilePath);
@@ -101,59 +94,57 @@ public class ExamServiceImpl implements ExamService {
 					}
 					System.out.println(cell.toString());
 
-					SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+//					SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 					int columnIndex = cell.getColumnIndex();
 
 					switch (columnIndex) {
 					case COLUMN_INDEX_TITLE:
 						exam.setTitle((String) getCellValue(cell));
-						;
 						break;
 					case COLUMN_INDEX_DURATION:
 						float duration = Float.parseFloat(getCellValue(cell).toString());
 						exam.setDuration(duration);
 						break;
 					case COLUMN_INDEX_CATEGORYID:
-						float catergoryCell = Float.parseFloat(getCellValue(cell).toString());
-						int categoryId = (int) catergoryCell;
-						Category category = categoryService.getOneById(categoryId);
+						Category category = categoryService.getOne(getCellValue(cell).toString());
 						exam.setCategory(category);
 						break;
 					case COLUMN_INDEX_NOTE:
 						exam.setNote((String) getCellValue(cell));
 						break;
-					case COLUMN_INDEX_STATUS:
-						exam.setStatus((String) getCellValue(cell));
-						break;
+//					case COLUMN_INDEX_STATUS:
+//						exam.setStatus((String) getCellValue(cell));
+//						break;
 					case COLUMN_INDEX_NUMBEROFQUES:
 						float x = Float.parseFloat(getCellValue(cell).toString());
 						int numberQues = (int) x;
 						exam.setNumberOfQuestion(numberQues);
 						break;
-					case COLUMN_INDEX_ENABLE:
-						exam.setEnable(Boolean.parseBoolean(getCellValue(cell).toString()));
-						break;
-					case COLUMN_INDEX_CREATE_AT:
-						try {
-							exam.setCreateAt(formatter.parse(getCellValue(cell).toString()));
-						} catch (ParseException e) {
-							e.printStackTrace();
-						}
-						break;
-					case COLUMN_INDEX_CREATED_BY:
-
-						break;
-					case COLUMN_INDEX_MODIFIED_AT:
-						try {
-							exam.setModifiedAt(formatter.parse((String) getCellValue(cell)));
-						} catch (ParseException e) {
-							e.printStackTrace();
-						}
-						break;
-					case COLUMN_INDEX_MODIFIED_BY:
-
-						break;
+//					case COLUMN_INDEX_ENABLE:
+//						exam.setEnable(Boolean.parseBoolean(getCellValue(cell).toString()));
+//						break;
+//					case COLUMN_INDEX_CREATE_AT:
+//						try {
+//							exam.setCreateAt(formatter.parse(getCellValue(cell).toString()));
+//						} catch (ParseException e) {
+//							e.printStackTrace();
+//						}
+//						break;
+//					case COLUMN_INDEX_CREATED_BY:
+//
+//						break;
+//					case COLUMN_INDEX_MODIFIED_AT:
+//						try {
+//							exam.setModifiedAt(formatter.parse((String) getCellValue(cell)));
+//						} catch (ParseException e) {
+//							e.printStackTrace();
+//						}
+//						break;
+//					case COLUMN_INDEX_MODIFIED_BY:
+//
+//						break;
 					default:
+						exam.setStatus("draft");
 						break;
 					}
 				}
@@ -214,6 +205,7 @@ public class ExamServiceImpl implements ExamService {
 		String id;
 		List<Exam> exam = examRepository.findAll();
 		int ids = exam.size() - 1;
+		
 		String tmp = exam.get(ids).getExamId();
 		tmp = tmp.substring(tmp.length() - 3, tmp.length());
 		int id1 = Integer.parseInt(tmp) + 1;

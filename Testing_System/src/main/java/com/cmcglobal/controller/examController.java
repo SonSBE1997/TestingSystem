@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -65,14 +66,14 @@ public class examController {
 		System.out.println(multipartFile.getOriginalFilename());
 
 		List<Exam> listExam = examService.readExcel(fileTranfer.toString());
-		try {
-			for (Exam exam : listExam) {
-				exam.setExamId(examService.createId());
-				examService.insert(exam);
-			}
-		} catch (Exception e) {
-			return ResponseEntity.ok("Not ok");
+		if (listExam.size() == 0) {
+			return ResponseEntity.status(HttpStatus.OK).body("not Ok");
 		}
-		return ResponseEntity.ok("Ok");
+		for (Exam exam : listExam) {
+			System.out.println(examService.createId());
+			exam.setExamId(examService.createId());
+			examService.insert(exam);
+		}
+		return ResponseEntity.status(HttpStatus.OK).body("Ok");
 	}
 }
