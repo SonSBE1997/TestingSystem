@@ -21,8 +21,8 @@ import org.hibernate.annotations.Where;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
-@SQLDelete(sql = "UPDATE Exam " + "SET is_enable = true " + "WHERE exam_Id = ?")
-@Where(clause = "is_enable = false")
+@SQLDelete(sql = "UPDATE Exam " + "SET is_enable = false " + "WHERE exam_Id = ?")
+@Where(clause = "is_enable = true")
 public class Exam implements Serializable {
 
   private static final long serialVersionUID = 1L;
