@@ -60,7 +60,7 @@ export class ListExamComponent implements OnInit, AfterViewInit {
       .subscribe();
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
-      this.dataSource.paginator._length=this.paginator._length;
+      this.dataSource.paginator._length = this.paginator._length;
 
       console.log(this.paginator._length);
       console.log(this.dataSource.paginator.getNumberOfPages());

@@ -15,6 +15,7 @@ import { CategoryModule } from './category/category.module';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
 import { ListExamService } from 'src/app/exam/list-exam/list-exam.service';
+import { UserModule } from './user/user.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -32,7 +33,8 @@ import { ListExamService } from 'src/app/exam/list-exam/list-exam.service';
     AppRoutingModule,
     HttpClientModule,
     ListExamModule,
-    HttpModule
+    HttpModule,
+    UserModule
   ],
   providers: [ListExamService],
   bootstrap: [AppComponent]
