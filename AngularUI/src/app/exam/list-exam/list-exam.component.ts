@@ -96,5 +96,6 @@ export class ListExamComponent implements OnInit, AfterViewInit {
   }
   public doFilter = (value: string) => {
     this.dataSource.filter = value.trim().toLocaleLowerCase();
+
   }
 }

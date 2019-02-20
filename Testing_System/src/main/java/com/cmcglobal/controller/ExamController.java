@@ -22,10 +22,11 @@ import org.springframework.web.servlet.ModelAndView;
 import com.cmcglobal.entity.Exam;
 import com.cmcglobal.repository.CategoryRepository;
 import com.cmcglobal.service.ExamService;
+import com.cmcglobal.utils.Api;
 import com.cmcglobal.utils.ExportExamPDF;
 
 @RestController
-@RequestMapping("/exam")
+@RequestMapping(Api.Exam.BASE_URL)
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 public class ExamController {
   @Autowired
@@ -43,85 +44,85 @@ public class ExamController {
     return examService.findAll();
   }
 
-	@RequestMapping(value = "listExams/pagination", method = RequestMethod.GET)
-	private List<Exam> getPageExam(
-			@RequestParam(name = "pageNumber", required = false, defaultValue = "0") Integer page,
-			@RequestParam(name = "pageSize", required = false, defaultValue = "5") Integer size,
-			@RequestParam(name = "sortOrder", required = false, defaultValue = "ASC") String sortOrder,
-			@RequestParam(name = "sortTerm", required = false, defaultValue = "title") String sortTerm) {
-		Pageable sortedBy = null;
-		Sort sortable = null;
-		switch (sortTerm) {
-		case ("title"):
-			if (("asc").equals(sortOrder.toLowerCase())) {
-				sortable = Sort.by("title").ascending();
-			}
-			if (("desc").equals(sortOrder.toLowerCase())) {
-				sortable = Sort.by("title").descending();
-			}
-			break;
-		case ("category"):
-			if (("asc").equals(sortOrder.toLowerCase())) {
-				sortable = Sort.by("category").ascending();
-			}
-			if (("desc").equals(sortOrder.toLowerCase())) {
-				sortable = Sort.by("category").descending();
-			}
-			break;
-		case ("examId"):
-			if (("asc").equals(sortOrder.toLowerCase())) {
-				sortable = Sort.by("examId").ascending();
-			}
-			if (("desc").equals(sortOrder.toLowerCase())) {
-				sortable = Sort.by("examId").descending();
-			}
-			break;
-		case ("duration"):
-			if (("asc").equals(sortOrder.toLowerCase())) {
-				sortable = Sort.by("duration").ascending();
-			}
-			if (("desc").equals(sortOrder.toLowerCase())) {
-				sortable = Sort.by("duration").descending();
-			}
-			break;
-		case ("numberOfQuestion"):
-			if (("asc").equals(sortOrder.toLowerCase())) {
-				sortable = Sort.by("numberOfQuestion").ascending();
-			}
-			if (("desc").equals(sortOrder.toLowerCase())) {
-				sortable = Sort.by("numberOfQuestion").descending();
-			}
-			break;
-		case ("status"):
-			if (("asc").equals(sortOrder.toLowerCase())) {
-				sortable = Sort.by("status").ascending();
-			}
-			if (("desc").equals(sortOrder.toLowerCase())) {
-				sortable = Sort.by("status").descending();
-			}
-			break;
-		case ("createAt"):
-			if (("asc").equals(sortOrder.toLowerCase())) {
-				sortable = Sort.by("createAt").ascending();
-			}
-			if (("desc").equals(sortOrder.toLowerCase())) {
-				sortable = Sort.by("createAt").descending();
-			}
-			break;
-			//sort theo trường fullname của user create_by
-		case ("userCreated"):
-			if (("asc").equals(sortOrder.toLowerCase())) {
-				sortedBy = PageRequest.of(page, size);
-				return examService.pageExamSortByUserCreatedByAsc(sortedBy);
-			}
-			if (("desc").equals(sortOrder.toLowerCase())) {
-				sortedBy = PageRequest.of(page, size);
-				return examService.pageExamSortByUserCreatedByDesc(sortedBy);
-			}
-			break;
-		}
-		sortedBy = PageRequest.of(page, size, sortable);
-		return examService.pageExam(sortedBy);
+  @RequestMapping(value = "listExams/pagination", method = RequestMethod.GET)
+  private List<Exam> getPageExam(
+      @RequestParam(name = "pageNumber", required = false, defaultValue = "0") Integer page,
+      @RequestParam(name = "pageSize", required = false, defaultValue = "5") Integer size,
+      @RequestParam(name = "sortOrder", required = false, defaultValue = "ASC") String sortOrder,
+      @RequestParam(name = "sortTerm", required = false, defaultValue = "title") String sortTerm) {
+    Pageable sortedBy = null;
+    Sort sortable = null;
+    switch (sortTerm) {
+    case ("title"):
+      if (("asc").equals(sortOrder.toLowerCase())) {
+        sortable = Sort.by("title").ascending();
+      }
+      if (("desc").equals(sortOrder.toLowerCase())) {
+        sortable = Sort.by("title").descending();
+      }
+      break;
+    case ("category"):
+      if (("asc").equals(sortOrder.toLowerCase())) {
+        sortable = Sort.by("category").ascending();
+      }
+      if (("desc").equals(sortOrder.toLowerCase())) {
+        sortable = Sort.by("category").descending();
+      }
+      break;
+    case ("examId"):
+      if (("asc").equals(sortOrder.toLowerCase())) {
+        sortable = Sort.by("examId").ascending();
+      }
+      if (("desc").equals(sortOrder.toLowerCase())) {
+        sortable = Sort.by("examId").descending();
+      }
+      break;
+    case ("duration"):
+      if (("asc").equals(sortOrder.toLowerCase())) {
+        sortable = Sort.by("duration").ascending();
+      }
+      if (("desc").equals(sortOrder.toLowerCase())) {
+        sortable = Sort.by("duration").descending();
+      }
+      break;
+    case ("numberOfQuestion"):
+      if (("asc").equals(sortOrder.toLowerCase())) {
+        sortable = Sort.by("numberOfQuestion").ascending();
+      }
+      if (("desc").equals(sortOrder.toLowerCase())) {
+        sortable = Sort.by("numberOfQuestion").descending();
+      }
+      break;
+    case ("status"):
+      if (("asc").equals(sortOrder.toLowerCase())) {
+        sortable = Sort.by("status").ascending();
+      }
+      if (("desc").equals(sortOrder.toLowerCase())) {
+        sortable = Sort.by("status").descending();
+      }
+      break;
+    case ("createAt"):
+      if (("asc").equals(sortOrder.toLowerCase())) {
+        sortable = Sort.by("createAt").ascending();
+      }
+      if (("desc").equals(sortOrder.toLowerCase())) {
+        sortable = Sort.by("createAt").descending();
+      }
+      break;
+    // sort theo trường fullname của user create_by
+    case ("userCreated"):
+      if (("asc").equals(sortOrder.toLowerCase())) {
+        sortedBy = PageRequest.of(page, size);
+        return examService.pageExamSortByUserCreatedByAsc(sortedBy);
+      }
+      if (("desc").equals(sortOrder.toLowerCase())) {
+        sortedBy = PageRequest.of(page, size);
+        return examService.pageExamSortByUserCreatedByDesc(sortedBy);
+      }
+      break;
+    }
+    sortedBy = PageRequest.of(page, size, sortable);
+    return examService.pageExam(sortedBy);
   }
 
   @GetMapping(value = "/export/{id}")
@@ -142,32 +143,68 @@ public class ExamController {
     return examService.findByID(id);
   }
 
-  @PutMapping(value = "/approve")
+  /**
+   * Author: Sanero.
+   * Created date: Feb 19, 2019
+   * Created time: 4:03:02 PM
+   * Description: TODO - controller handle approve exam to public.
+   * @param exam
+   * @return
+   */
+  @PutMapping(value = Api.Exam.APPROVE)
   public ResponseEntity<String> approveExam(@RequestBody Exam exam) {
     boolean success = examService.approveExam(exam.getExamId());
     if (success)
-      return ResponseEntity.ok("Ok");
-    return ResponseEntity.ok("Not ok");
+      return ResponseEntity.ok(Api.Exam.OK);
+    return ResponseEntity.ok(Api.Exam.NOT_OK);
   }
 
-  @PutMapping(value = "/remove-question")
+  /**
+   * Author: Sanero.
+   * Created date: Feb 19, 2019
+   * Created time: 4:02:52 PM
+   * Description: TODO - controller handle remove question to exam.
+   * @param exam
+   * @return
+   */
+  @PutMapping(value = Api.Exam.REMOVE_QUESTION)
   public ResponseEntity<String> removeQuestion(@RequestBody Exam exam) {
     boolean success = examService.removeQuestion(exam);
     if (success)
-      return ResponseEntity.ok("Ok");
-    return ResponseEntity.ok("Not ok");
+      return ResponseEntity.ok(Api.Exam.OK);
+    return ResponseEntity.ok(Api.Exam.NOT_OK);
   }
 
-  @PostMapping(value = "/add-question")
+  /**
+   * Author: Sanero.
+   * Created date: Feb 19, 2019
+   * Created time: 4:02:45 PM
+   * Description: TODO - controller handle add question to exam.
+   * @param exam
+   * @return
+   */
+  @PostMapping(value = Api.Exam.ADD_QUESTION)
   public ResponseEntity<String> addQuestion(@RequestBody Exam exam) {
-    
-    examService.addListQuestion(exam);
-    return ResponseEntity.ok("Ok");
+    boolean success = examService.addListQuestion(exam);
+    if (success)
+      return ResponseEntity.ok(Api.Exam.OK);
+    return ResponseEntity.ok(Api.Exam.NOT_OK);
   }
 
-  @PostMapping(value = "/random-question")
+  /**
+   * Author: Sanero.
+   * Created date: Feb 19, 2019
+   * Created time: 4:02:29 PM
+   * Description: TODO - controller handle random question to exam.
+   * @param exam
+   * @return
+   */
+  @PostMapping(value = Api.Exam.RANDOM_QUESTION)
   public ResponseEntity<String> randomQuestion(@RequestBody Exam exam) {
-    examService.randomQuestion(exam.getExamId(), exam.getNumberOfQuestion());
-    return ResponseEntity.ok("Ok");
+    boolean success = examService.randomQuestion(exam.getExamId(),
+        exam.getNumberOfQuestion());
+    if (success)
+      return ResponseEntity.ok(Api.Exam.OK);
+    return ResponseEntity.ok(Api.Exam.NOT_OK);
   }
 }

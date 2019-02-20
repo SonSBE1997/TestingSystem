@@ -36,19 +36,44 @@ public interface ExamService {
 
     public Exam findByID(String id);
 
+    /**
+     * Author: Sanero.
+     * Created date: Feb 19, 2019
+     * Created time: 4:01:15 PM
+     * Description: TODO - approve exam to public.
+     * @param examId
+     * @return
+     */
     public boolean approveExam(String examId);
 
+    /**
+     * Author: Sanero.
+     * Created date: Feb 19, 2019
+     * Created time: 4:00:44 PM
+     * Description: TODO - random question to exam.
+     * @param examId - exam id.
+     * @param numberRandom - number of random question.
+     * @return
+     */
     public boolean randomQuestion(String examId,int numberRandom);
 
+    /**
+     * Author: Sanero.
+     * Created date: Feb 19, 2019
+     * Created time: 4:00:26 PM
+     * Description: TODO - remove question from exam.
+     * @param exam
+     * @return
+     */
     public boolean removeQuestion(Exam exam);
 
     /**
      * Author: Sanero. Created date: Feb 14, 2019 Created time: 8:35:49 AM
-     * Description: TODO - .
+     * Description: TODO - add list question to exam.
      * 
      * @param exam
      */
-    public void addListQuestion(Exam exam);
+    public boolean addListQuestion(Exam exam);
 
     /**
      * Author: ptphuong. Created date: Feb 15, 2019 Created time: 5:22:39 AM
