@@ -88,4 +88,17 @@ public class QuestionServiceImpl implements QuestionServices {
     return questionRepository.countSearchQuestion(content);
   }
 
+  @Override
+  public String countQuestionByCategoryId(int categoryId) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public String countSearchQuestionByCategoryId(String content,
+      int categoryId) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
 }

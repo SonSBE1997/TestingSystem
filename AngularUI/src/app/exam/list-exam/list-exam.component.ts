@@ -1,12 +1,11 @@
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { Exam } from 'src/app/entity/Exam.interface';
 import { merge, } from 'rxjs/observable/merge';
-import { mergeMap } from 'rxjs/operators';
+import { mergeMap, debounceTime } from 'rxjs/operators';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { ListExamService } from './list-exam.service';
 import { v4 as uuid } from 'uuid';
 
 import {
@@ -50,6 +49,7 @@ export class ListExamComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('input') input: ElementRef;
 
   listExam: Exam[] = [];
   listId: string[] = [];
@@ -67,25 +67,37 @@ export class ListExamComponent implements OnInit, AfterViewInit {
   public category: Category;
   public categoryName: String;
 
-  constructor(private http: HttpClient, private fb: FormBuilder,
-    private listExamService: ListExamService
-  ) {
+  constructor(private http: HttpClient, private fb: FormBuilder) {
 
   }
   ngOnInit() {
-    this.findExams(0, 5, 'title', 'ASC');
+    this.findExams(0, 5, 'title', 'ASC', '');
     this.examFrm = this.fb.group({
       duration: [''],
       numberOfQuestion: [''],
       createAt: [''],
       status: [''],
       categoryName: ['']
-
     });
     this.getDuration();
   }
 
   ngAfterViewInit() {
+    fromEvent(this.input.nativeElement, 'keyup')
+    .pipe(
+        debounceTime(150),
+        distinctUntilChanged(),
+        tap(() => {
+            this.paginator.pageIndex = 0;
+            this.loadExamsPage();
+        })
+    )
+    .subscribe();
+
+
+    // reset the paginator after sorting
+    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+
     merge(this.sort.sortChange, this.paginator.page)
       .pipe(tap(() => this.loadExamsPage()))
       .subscribe();
@@ -102,7 +114,8 @@ export class ListExamComponent implements OnInit, AfterViewInit {
     pageNumber = 0,
     pageSize = 5,
     sortTerm = 'title',
-    sortOrder = 'ASC'
+    sortOrder = 'ASC',
+    searchContent = ''
   ) => {
     this.http
       .get<Exam[]>('http://localhost:8080/exam/listExams/pagination', {
@@ -111,9 +124,10 @@ export class ListExamComponent implements OnInit, AfterViewInit {
           .set('pageSize', pageSize.toString())
           .set('sortTerm', sortTerm)
           .set('sortOrder', sortOrder)
+          .set('searchContent', searchContent)
       }).subscribe(listExam => {
-        this.listExam = listExam
-        this.dataSource.data = listExam
+        this.listExam = listExam;
+        this.dataSource.data = listExam;
       });
   }
 
@@ -123,12 +137,20 @@ export class ListExamComponent implements OnInit, AfterViewInit {
       this.paginator.pageSize,
       this.sort.active,
       this.sort.direction,
+      this.input.nativeElement.value,
+
     );
   }
   public doFilter = (value: string) => {
-    this.dataSource.filter = value.trim().toLocaleLowerCase();
-
+    this.findExams(
+      this.paginator.pageIndex,
+      this.paginator.pageSize,
+      this.sort.active,
+      this.sort.direction,
+      value
+    );
   }
+
   // Start Delete
   onCheck(event) {
     const input = event.target as HTMLInputElement;

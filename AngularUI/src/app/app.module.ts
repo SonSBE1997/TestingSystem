@@ -14,7 +14,7 @@ import { ExamModule } from './exam/exam.module';
 import { CategoryModule } from './category/category.module';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
-import { ListExamService } from 'src/app/exam/list-exam/list-exam.service';
+
 
 @NgModule({
   declarations: [AppComponent],
@@ -34,7 +34,7 @@ import { ListExamService } from 'src/app/exam/list-exam/list-exam.service';
     ListExamModule,
     HttpModule
   ],
-  providers: [ListExamService],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

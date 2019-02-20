@@ -157,8 +157,8 @@ public class ExamServiceImpl implements ExamService {
   }
 
   @Override
-  public List<Exam> pageExam(Pageable pageable) {
-    return examRepository.pageExam(pageable);
+  public List<Exam> pageExam(String searchContent, Pageable pageable) {
+    return examRepository.pageExam(searchContent, pageable);
   }
 
   @Override
@@ -179,14 +179,24 @@ public class ExamServiceImpl implements ExamService {
   }
 
   @Override
-  public List<Exam> pageExamSortByUserCreatedByAsc(Pageable pageable) {
-    return examRepository.pageExamSortByUserCreatedByAsc(pageable);
+  public List<Exam> pageExamSortByUserCreatedByAsc(String searchContent,Pageable pageable) {
+    return examRepository.pageExamSortByUserCreatedByAsc(searchContent, pageable);
   }
 
   @Override
-  public List<Exam> pageExamSortByUserCreatedByDesc(Pageable pageable) {
-    return examRepository.pageExamSortByUserCreatedByDesc(pageable);
+  public List<Exam> pageExamSortByUserCreatedByDesc(String searchContent, Pageable pageable) {
+    return examRepository.pageExamSortByUserCreatedByDesc(searchContent, pageable);
   }
+  @Override
+  public List<Exam> pageExamSortByCategoryAsc(String searchContent, Pageable pageable){
+    return examRepository.pageExamSortByCategoryAsc(searchContent, pageable);
+  }
+  
+  @Override
+  public List<Exam> pageExamSortByCategoryDesc(String searchContent, Pageable pageable){
+    return examRepository.pageExamSortByCategoryDesc(searchContent, pageable);
+  }
+  
   @Override
 	public void deleteExam(String examId) {
 		;
@@ -205,4 +215,6 @@ public class ExamServiceImpl implements ExamService {
 				.setDuration(exam.getDuration()).setDateExam(exam.getCreateAt()).setStatus(exam.getStatus())
 				.setCaterogyName(exam.getCategoryName()).builder();
 	}
+
+ 
 }
