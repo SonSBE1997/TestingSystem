@@ -73,10 +73,6 @@ export class TabQuestionComponent implements OnInit {
     }
 
     observable.subscribe(questions => {
-      questions = questions.filter(
-        v => v.category.categoryId === this.categoryId
-      );
-
       this.questions = questions;
       this.selection = [];
 
