@@ -81,30 +81,36 @@
       </b>
     </div>
 
-    <hr />
-    <div style="margin-left: 5%">
-      <div *ngFor="let q of exam.examQuestions; index as i">
-        <label>Question {{ i + 1 }}:</label> {{ q.question.content }}
-        <ng-template ngFor let-j [ngForOf]="q.choiceOrder.split(' ')">
-          <div *ngIf="q.question.answers[j - 1].true === false; else template">
-            <div class="checkbox">
-              <label><input type="checkbox" value="" disabled />{{
+    <ng-container *ngIf="exam?.examQuestions.length > 0">
+      <hr />
+      <div style="margin-left: 5%">
+        <div *ngFor="let q of exam.examQuestions; index as i">
+          <label>Question {{ i + 1 }}:</label> {{ q.question.content }}
+          <ng-template ngFor let-j [ngForOf]="q.choiceOrder.split(' ')">
+            <div *ngIf="q.question.answers[j - 1].true === false; else template">
+              <div class="checkbox">
+                <label><input type="checkbox" value="" disabled />{{
                 q.question.answers[j - 1].content
                 }}</label>
+              </div>
             </div>
-          </div>
-          <ng-template #template>
-            <div class="checkbox">
-              <label style="color: red"><input type="checkbox" value="" disabled checked />{{
+            <ng-template #template>
+              <div class="checkbox">
+                <label style="color: red"><input type="checkbox" value="" disabled checked />{{
                 q.question.answers[j - 1].content
                 }}</label>
-            </div>
+              </div>
+            </ng-template>
           </ng-template>
-        </ng-template>
+        </div>
       </div>
-    </div>
+    </ng-container>
+    <ng-container *ngIf="exam?.examQuestions.length === 0">
+      <br />
+      <div class="text-center">
+        <h3 class="text-red">No question in this exam</h3>
+      </div>
+    </ng-container>
     <br>
   </div>
 </section>
-
-

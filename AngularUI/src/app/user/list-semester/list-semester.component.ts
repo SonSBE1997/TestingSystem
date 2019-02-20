@@ -1,4 +1,8 @@
+import { UserService } from './../../service/userService.service';
 import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { ActivatedRoute } from '@angular/router';
+import { Semester } from 'src/app/entity/Semester.interface';
 
 @Component({
   selector: 'app-list-semester',
@@ -6,10 +10,17 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./list-semester.component.css']
 })
 export class ListSemesterComponent implements OnInit {
-
-  constructor() { }
+  semester: Semester;
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private http: HttpClient,
+    private userService: UserService
+  ) { }
 
   ngOnInit() {
+    return this.userService.getListSemesterByUserId(1).subscribe(semester => {
+      this.semester = semester;
+  });
   }
 
 }

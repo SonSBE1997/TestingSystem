@@ -1,3 +1,110 @@
-<p>
-  list-semester works!
-</p>
+<div class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header logo">
+      <a href="#"><img src="../../../assets/image/logo.png" height="35px"></a>
+    </div>
+    <ul class="nav navbar-nav pull-right" style="margin-right: 5%">
+      <li><a href="#">Home</a></li>
+      <li><a href="#"><span><i class="fa fa-sign-out"></i></span>Sign out</a></li>
+    </ul>
+  </div>
+</div>
+<div class="banner-info-after-menu text-center text-white">
+  <h1>
+    Profile Page
+  </h1>
+  <p>
+    <span>Follow and update your learning status regularly.</span>
+  </p>
+</div>
+<div>
+  <!-- Content Wrapper. Contains page content -->
+  <!-- Content Header (Page header) -->
+  <div class="col-md-1"></div>
+  <div class="col-md-10">
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-md-3">
+          <!-- Profile Image -->
+          <div class="box box-primary">
+            <div class="box-body box-profile">
+              <img class="profile-user-img img-responsive img-circle" src="../../../assets/image/user3-128x128.jpg"
+                alt="User profile picture">
+              <div *ngIf="semester">
+                <h3 class="profile-username text-center">{{ semester?.data[0].user.fullName }}</h3>
+              </div>
+              <ul class="list-group list-group-unbordered text-center">
+                <li class="list-group-item">
+                  <a>Profile</a>
+                </li>
+                <li class="list-group-item">
+                  <a>Semesters</a>
+                </li>
+              </ul>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+
+        </div>
+        <!-- /.col -->
+        <div class="col-md-9">
+          <!-- About Me Box -->
+          <div class="box box-primary">
+            <div class="box-header with-border">
+              <i class="fa fa-book"></i>
+              <h3 class="box-title">List Semester Exam</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="form-test">
+              <div class="panel panel-default">
+
+                <div class="panel-body">
+                  <div class="content-list">
+                    <br>
+                    <div>
+                      <table class="table table-bordered table-hover">
+                        <thead>
+                          <tr class="info">
+                            <th style="width: 30% !important">Semester Exam Title</th>
+                            <th style="width: 20%">Description</th>
+                            <th style="width: 20%">Date Start</th>
+                            <th style="width: 20%">Date Finish</th>
+                            <th style="width: 10%"></th>
+                          </tr>
+                        </thead>
+                        <tbody *ngFor="let s of semester?.data">
+                          <tr>
+                            <td style="width: 30% !important">{{ s.name }}</td>
+                            <td style="width: 20%">{{ s.description }}</td>
+                            <td style="width: 20%">{{ s.startTime | date:'dd/MM/yyyy'}}</td>
+                            <td style="width: 20%">{{ s.startTime | date:'dd/MM/yyyy'}}</td>
+                            <td style="width: 10%">
+                              <button class="btn btn-info">View Detail</button>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+  </div>
+  <script>
+    $(window).scroll(function () {
+      if ($(this).scrollTop() > 50)  /*height in pixels when the navbar becomes non opaque*/ {
+        $('.opaque-navbar').addClass('opaque');
+      } else {
+        $('.opaque-navbar').removeClass('opaque');
+      }
+    });</script>
