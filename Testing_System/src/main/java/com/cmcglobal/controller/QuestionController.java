@@ -36,26 +36,10 @@ public class QuestionController {
   private void sumQuestion(HttpServletResponse responseHeaders) {
     responseHeaders.addHeader("SumQuestion", questionService.countQuestion());
   }
-
+  
   @RequestMapping(value = "question/count-search-question", method = RequestMethod.GET)
-  private void countQuestionByCategoryID(HttpServletResponse responseHeaders,
-      @RequestParam String content) {
-    responseHeaders.addHeader("CountSearchQuestion",
-        questionService.countSearchQuestion(content));
-  }
-
-  @RequestMapping(value = "question/sum-by-category", method = RequestMethod.GET)
-  private void sumQuestion(HttpServletResponse responseHeaders,
-      @RequestParam int categoryId) {
-    responseHeaders.addHeader("SumQuestion",
-        questionService.countQuestionByCategoryId(categoryId));
-  }
-
-  @RequestMapping(value = "question/count-search-question-by-category", method = RequestMethod.GET)
-  private void countQuestionByCategoryID(HttpServletResponse responseHeaders,
-      @RequestParam String content, @RequestParam int categoryId) {
-    responseHeaders.addHeader("CountSearchQuestion",
-        questionService.countSearchQuestionByCategoryId(content, categoryId));
+  private void countQuestion(HttpServletResponse responseHeaders,@RequestParam String content) {
+    responseHeaders.addHeader("CountSearchQuestion", questionService.countSearchQuestion(content));
   }
 
   @RequestMapping(value = "question/pagination", method = RequestMethod.GET)

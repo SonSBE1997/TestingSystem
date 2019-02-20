@@ -34,4 +34,6 @@ public interface QuestionRepository extends JpaRepository<Question, String> {
   @Query("select count(question_id) from Question where content like ?1 and category_id = ?2")
   String countSearchQuestionByCategoryId(String content, int categoryId);
 
+  @Query("SELECT q FROM Question q where category_id = ?1")
+  List<Question> pageQuestionByCategoryId( int categoryId, Pageable pageable);
 }
