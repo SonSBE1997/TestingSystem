@@ -88,4 +88,41 @@ public class QuestionServiceImpl implements QuestionServices {
     return questionRepository.countSearchQuestion(content);
   }
 
+  /* (non-Javadoc)
+   * @see com.cmcglobal.service.QuestionServices#countQuestionByCategoryId(int)
+   * Author: Sanero.
+   * Created date: Feb 20, 2019
+   * Created time: 1:42:28 PM
+   */
+  @Override
+  public String countQuestionByCategoryId(int categoryId) {
+    // TODO Auto-generated method stub
+    return questionRepository.questionSumByCategoryId(categoryId);
+  }
+
+  /* (non-Javadoc)
+   * @see com.cmcglobal.service.QuestionServices#countSearchQuestionByCategoryId(java.lang.String, int)
+   * Author: Sanero.
+   * Created date: Feb 20, 2019
+   * Created time: 1:42:28 PM
+   */
+  @Override
+  public String countSearchQuestionByCategoryId(String content,
+      int categoryId) {
+    // TODO Auto-generated method stub
+    return questionRepository.countSearchQuestionByCategoryId(content,
+        categoryId);
+  }
+
+  /* (non-Javadoc)
+   * @see com.cmcglobal.service.QuestionServices#findByCategoryIdAndPage(java.lang.String, org.springframework.data.domain.Pageable)
+   * Author: Sanero.
+   * Created date: Feb 20, 2019
+   * Created time: 1:46:58 PM
+   */
+  @Override
+  public List<Question> findByCategoryIdAndPage(int categoryId,
+      Pageable pageable) {
+    return questionRepository.pageQuestionByCategoryId(categoryId, pageable);
+  }
 }

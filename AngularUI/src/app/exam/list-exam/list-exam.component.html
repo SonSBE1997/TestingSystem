@@ -46,7 +46,7 @@
                   <option value="manager">Manager</option>
                   <option value="admin">Admin</option>
                 </select>
-                <select class=" select2" style="width: 25%;height: 30px;margin-left: 25px">
+                <select class=" select2" style="width: 25%;height: 30px;margin-left: 25px" formControlName="status">
                   <option value="">Status</option>
                   <option *ngFor="let status of statuss " value="{{status}}">{{status}}</option>
                 </select>
@@ -119,7 +119,7 @@
 
             <ng-container matColumnDef="createAt">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Created at </th>
-              <td mat-cell *matCellDef="let element"> {{element.createAt | date :'dd/mm/yyyy'}} </td>
+              <td mat-cell *matCellDef="let element"> {{element.createAt | date :'dd/MM/yyyy'}} </td>
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

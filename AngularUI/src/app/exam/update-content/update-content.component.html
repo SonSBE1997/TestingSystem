@@ -319,7 +319,7 @@
               </div>
               <!-- /.tab-pane -->
               <div class="tab-pane" id="tab_2" [ngClass]="{ active: inTabOne === false }">
-                <app-tab-question [numberOfQuestion]="detailExam?.numberOfQuestion"
+                <app-tab-question [numberOfQuestion]="detailExam?.numberOfQuestion" [categoryId]="detailExam?.category.categoryId"
                   [entities]="tabListQuestionInExam?.entities" (apply)="onTabTwoApply($event)"></app-tab-question>
               </div>
             </div>
