@@ -7,6 +7,7 @@ import java.util.List;
 import com.cmcglobal.entity.Exam;
 
 public interface ExamService {
+
     /**
      * Author: ntmduyen Created date: Feb 14, 2019 Created time: 5:12:48 PM
      * Description: TODO - find all exam.
@@ -90,5 +91,14 @@ public interface ExamService {
      * @return
      */
     public String createId();
-}
 
+	/**
+	 * Author: ndvan. Created date: Feb 15, 2019 Created time: 5:22:39 AM
+	 * Description: TODO - .
+	 * 
+	 * @param ex
+	 */
+	public void deleteExam(String examId);
+
+	public List<Exam> FilterExam(Exam exam);
+}

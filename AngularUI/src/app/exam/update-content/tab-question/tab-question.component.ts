@@ -21,6 +21,8 @@ export class TabQuestionComponent implements OnInit {
   numberOfQuestion: number;
   @Input()
   entities: number;
+  @Input()
+  categoryId: number;
   @Output()
   apply: EventEmitter<boolean> = new EventEmitter();
   isSort = 0;
@@ -71,6 +73,10 @@ export class TabQuestionComponent implements OnInit {
     }
 
     observable.subscribe(questions => {
+      questions = questions.filter(
+        v => v.category.categoryId === this.categoryId
+      );
+
       this.questions = questions;
       this.selection = [];
 

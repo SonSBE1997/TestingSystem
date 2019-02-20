@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.cmcglobal.builder.FilterBuilder;
 import com.cmcglobal.entity.Exam;
 import com.cmcglobal.entity.ExamQuestion;
 import com.cmcglobal.entity.Question;
@@ -40,6 +41,7 @@ public class ExamServiceImpl implements ExamService {
     ex.setNote(ex.getNote().substring(3, ex.getNote().length() - 4));
     ex.setUserCreated(user);
     ex.setCreateAt(new Date());
+    ex.setEnable(true);
     examRepository.save(ex);
   }
 
@@ -185,5 +187,22 @@ public class ExamServiceImpl implements ExamService {
   public List<Exam> pageExamSortByUserCreatedByDesc(Pageable pageable) {
     return examRepository.pageExamSortByUserCreatedByDesc(pageable);
   }
+  @Override
+	public void deleteExam(String examId) {
+		;
+		examRepository.deleteById(examId);
 
+	}
+
+	@Override
+	public List<Exam> FilterExam(Exam exam) {
+		List<Exam> exams = examRepository.findAll(getFilterBuilder(exam));
+		return exams;
+	}
+
+	public FilterBuilder getFilterBuilder(Exam exam) {
+		return new FilterBuilder.Builder().setNumberOfQuestion(exam.getNumberOfQuestion())
+				.setDuration(exam.getDuration()).setDateExam(exam.getCreateAt()).setStatus(exam.getStatus())
+				.setCaterogyName(exam.getCategoryName()).builder();
+	}
 }
