@@ -12,10 +12,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
+//@SQLDelete(sql = "UPDATE Exam " + "SET is_enable = false " + "WHERE exam_Id = ?")
+//@Where(clause = "is_enable = true")
 public class Exam implements Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -31,6 +34,7 @@ public class Exam implements Serializable {
   @Column(name = "is_enable")
   private boolean isEnable;
   @Column(name = "create_at")
+  @JsonFormat(pattern="yyyy-MM-dd")
   private Date createAt;
   @Column(name = "modified_at")
   private Date modifiedAt;
@@ -38,7 +42,6 @@ public class Exam implements Serializable {
   private int numberOfQuestion;
   @ManyToOne
   @JoinColumn(name = "category_id")
-
   private Category category;
   @ManyToOne
   @JoinColumn(name = "create_by")

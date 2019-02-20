@@ -40,6 +40,7 @@ public interface ExamService {
 
 	public boolean randomQuestion(String examId, int numberRandom);
 
+
 	public boolean removeQuestion(Exam exam);
 
 	/**
@@ -73,4 +74,13 @@ public interface ExamService {
 	Exam update(Exam exam);
 
 	List<Exam> readExcel(String exelFilePath);
+	/**
+	 * Author: ndvan. Created date: Feb 15, 2019 Created time: 5:22:39 AM
+	 * Description: TODO - .
+	 * 
+	 * @param ex
+	 */
+	public void deleteExam(String examId);
+
+	public List<Exam> FilterExam(Exam exam);
 }

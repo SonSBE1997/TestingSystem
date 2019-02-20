@@ -10,7 +10,7 @@ export class ListExamService {
   constructor(private http: HttpClient) {}
 listExam: Exam[] = [];
 
-  public  findExams(
+  public findExams(
         sortOrder = 'ASC',
         pageNumber = 0, pageSize = 3):  Observable<Exam[]> {
 
