@@ -160,4 +160,14 @@ public class ExamServiceImpl implements ExamService {
     return examRepository.pageExamSortByUserCreatedByDesc(pageable);
   }
 
+  @Override
+  public List<Exam> pageExamSortByCategoryAsc(Pageable pageable) {
+    return examRepository.pageExamSortByCategoryAsc(pageable);
+  }
+
+  @Override
+  public List<Exam> pageExamSortByCategoryDesc(Pageable pageable) {
+    return examRepository.pageExamSortByCategoryDesc(pageable);
+  }
+
 }

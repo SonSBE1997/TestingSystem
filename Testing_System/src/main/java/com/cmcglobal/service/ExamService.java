@@ -7,63 +7,47 @@ import java.util.List;
 import com.cmcglobal.entity.Exam;
 
 public interface ExamService {
-    /**
-     * Author: ntmduyen Created date: Feb 14, 2019 Created time: 5:12:48 PM
-     * Description: TODO - find all exam.
-     * 
-     * @return
-     */
-    public List<Exam> findAll();
+  public List<Exam> findAll();
 
-    /**
-     * Author: ntmduyen Created date: Feb 14, 2019 Created time: 5:12:48 PM
-     * Description: TODO - pagination .
-     * 
-     * @return
-     */
-    public List<Exam> pageExam(Pageable pageable);
+  public List<Exam> pageExam(Pageable pageable);
 
-    /**
-     * Author: ntmduyen Created date: Feb 15, 2019 Created time: 8:35:47 AM
-     * Description: TODO - .
-     * 
-     * @param contentSearch
-     * @return
-     */
-    public List<Exam> pageExamSortByUserCreatedByAsc(Pageable pageable);
+  public List<Exam> pageExamSortByUserCreatedByAsc(Pageable pageable);
 
-    public List<Exam> pageExamSortByUserCreatedByDesc(Pageable pageable);
+  public List<Exam> pageExamSortByUserCreatedByDesc(Pageable pageable);
 
-    public Exam findByID(String id);
+  public List<Exam> pageExamSortByCategoryAsc(Pageable pageable);
 
-    public boolean approveExam(String examId);
+  public List<Exam> pageExamSortByCategoryDesc(Pageable pageable);
 
-    public boolean randomQuestion(String examId,int numberRandom);
+  public Exam findByID(String id);
 
-    public boolean removeQuestion(Exam exam);
+  public boolean approveExam(String examId);
 
-    /**
-     * Author: Sanero. Created date: Feb 14, 2019 Created time: 8:35:49 AM
-     * Description: TODO - .
-     * 
-     * @param exam
-     */
-    public void addListQuestion(Exam exam);
+  public boolean randomQuestion(String examId, int numberRandom);
 
-    /**
-     * Author: ptphuong. Created date: Feb 15, 2019 Created time: 5:22:39 AM
-     * Description: TODO - .
-     * 
-     * @param ex
-     */
-    public void createExam(Exam ex);
+  public boolean removeQuestion(Exam exam);
 
-    /**
-     * Author: ptphuong. Created date: Feb 15, 2019 Created time: 7:55:39 PM
-     * Description: TODO - .
-     * 
-     * @return
-     */
-    public String createId();
+  /**
+   * Author: Sanero. Created date: Feb 14, 2019 Created time: 8:35:49 AM
+   * Description: TODO - .
+   * 
+   * @param exam
+   */
+  public void addListQuestion(Exam exam);
+
+  /**
+   * Author: ptphuong. Created date: Feb 15, 2019 Created time: 5:22:39 AM
+   * Description: TODO - .
+   * 
+   * @param ex
+   */
+  public void createExam(Exam ex);
+
+  /**
+   * Author: ptphuong. Created date: Feb 15, 2019 Created time: 7:55:39 PM
+   * Description: TODO - .
+   * 
+   * @return
+   */
+  public String createId();
 }
-
