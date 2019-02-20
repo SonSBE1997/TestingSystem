@@ -88,4 +88,28 @@ public class QuestionServiceImpl implements QuestionServices {
     return questionRepository.countSearchQuestion(content);
   }
 
+/* (non-Javadoc)
+ * @see com.cmcglobal.service.QuestionServices#countQuestionByCategoryId(int)
+ * Author: ptphuong.
+ * Created date: Feb 20, 2019
+ * Created time: 2:09:13 PM
+ */
+@Override
+public String countQuestionByCategoryId(int categoryId) {
+    // TODO Auto-generated method stub
+    return questionRepository.questionSumByCategoryId(categoryId);
+}
+
+/* (non-Javadoc)
+ * @see com.cmcglobal.service.QuestionServices#countSearchQuestionByCategoryId(java.lang.String, int)
+ * Author: ptphuong.
+ * Created date: Feb 20, 2019
+ * Created time: 2:09:13 PM
+ */
+@Override
+public String countSearchQuestionByCategoryId(String content, int categoryId) {
+    // TODO Auto-generated method stub
+    return questionRepository.countSearchQuestionByCategoryId(content, categoryId);
+}
+
 }

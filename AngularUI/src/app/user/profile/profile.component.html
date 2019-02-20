@@ -1,0 +1,94 @@
+
+<div class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header logo">
+      <a href="#"><img
+          src="../../../assets/image/logo.png"
+          height="35px"></a>
+    </div>
+    <ul class="nav navbar-nav pull-right" style="margin-right: 5%">
+      <li><a href="#">Home</a></li>
+      <li><a href="#">Page 1</a></li>
+      <li><a href="#">Page 2</a></li>
+      <li><a href="#"><span><i class="fa fa-sign-out"></i></span>Sign out</a></li>
+    </ul>
+  </div>
+</div>
+<div class="banner-info-after-menu text-center text-white">
+  <h1>
+    trang cá nhân
+  </h1>
+  <p>
+    <span>Hãy theo dõi và cập nhật tình hình học tập của bạn thường xuyên.</span>
+  </p>
+</div>
+<div>
+  <!-- Content Wrapper. Contains page content -->
+  <!-- Content Header (Page header) -->
+  <div class="col-md-1"></div>
+  <div class="col-md-10">
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-md-3">
+          <!-- Profile Image -->
+          <div class="box box-primary">
+            <div class="box-body box-profile">
+              <img class="profile-user-img img-responsive img-circle" src="../../../assets/image/user3-128x128.jpg"
+                alt="User profile picture">
+
+              <h3 class="profile-username text-center">{{user?.fullName}}</h3>
+
+              <ul class="list-group list-group-unbordered text-center">
+                <li class="list-group-item">
+                  <a>Profile</a>
+                </li>
+                <li class="list-group-item">
+                  <a>Semesters</a>
+                </li>
+              </ul>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+
+
+        </div>
+        <!-- /.col -->
+        <div class="col-md-9">
+          <!-- About Me Box -->
+          <div class="box box-primary">
+            <div class="box-header with-border">
+              <h3 class="box-title">User Information</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <strong><i class="fa fa-map-marker margin-r-5"></i>User name</strong>
+              <p class="text-muted">{{user?.fullName}}</p>
+              <hr>
+              <strong><i class="fa fa-pencil margin-r-5"></i> Contact</strong>
+                <p class="text-muted">
+                         Email: {{user?.email}}
+                </p>
+                <p class="text-muted">
+                        Telephone Number: {{user?.mobile}}
+                </p>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+  </section>
+</div>
+<script>
+  $(window).scroll(function () {
+    if ($(this).scrollTop() > 50)  /*height in pixels when the navbar becomes non opaque*/ {
+      $('.opaque-navbar').addClass('opaque');
+    } else {
+      $('.opaque-navbar').removeClass('opaque');
+    }
+  });</script>
+
