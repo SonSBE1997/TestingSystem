@@ -2,9 +2,8 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Question } from 'src/app/entity/Question.interface';
 import { TabInfo, Selection } from '../update-content.interface';
 import { ActivatedRoute } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
 import { ExamService } from 'src/app/service/examService.service';
-import { map } from 'rxjs/operators';
+import { NotifierService } from 'angular-notifier';
 
 @Component({
   selector: 'app-tab-question',
@@ -22,13 +21,21 @@ export class TabQuestionComponent implements OnInit {
   numberOfQuestion: number;
   @Input()
   entities: number;
+  @Input()
+  categoryId: number;
   @Output()
   apply: EventEmitter<boolean> = new EventEmitter();
+  isSort = 0;
+  backupSort: Question[] = [];
+  searchStr = '';
+  isSearching = false;
+  numberOption = [];
+  optionWidth = '';
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private http: HttpClient,
-    private examService: ExamService
+    private examService: ExamService,
+    private notifierService: NotifierService
   ) {}
 
   ngOnInit() {
@@ -38,39 +45,63 @@ export class TabQuestionComponent implements OnInit {
 
     this.tabAllQuestion = { currentPage: 0, entities: 0, sizeOfPage: 10 };
 
-    this.examService.getQuestionSum().subscribe(sum => {
-      this.tabAllQuestion.entities = +sum.headers.get('SumQuestion');
-    });
-
     this.loadDataByPage();
   }
 
   loadDataByPage() {
-    this.examService
-      .getQuestions(
+    let observable;
+    if (this.isSearching) {
+      observable = this.examService.searchQuestionByContent(
+        this.searchStr,
         this.tabAllQuestion.currentPage + '',
         this.tabAllQuestion.sizeOfPage + ''
-      )
-      .subscribe(questions => {
-        this.questions = questions;
-        this.selection = [];
-        questions.forEach(question => {
-          // if (this.selection.find(v => v.id === question.questionId)) {
-          this.selection.push({ id: question.questionId, checked: false });
-          // }
-        });
+      );
+      // console.log(this.searchStr);
+
+      this.examService.countSearchQuestion(this.searchStr).subscribe(h => {
+        this.tabAllQuestion.entities = +h.headers.get('CountSearchQuestion');
       });
+    } else {
+      observable = this.examService.getQuestions(
+        this.tabAllQuestion.currentPage + '',
+        this.tabAllQuestion.sizeOfPage + ''
+      );
+
+      this.examService.getQuestionSum().subscribe(sum => {
+        this.tabAllQuestion.entities = +sum.headers.get('SumQuestion');
+      });
+    }
+
+    observable.subscribe(questions => {
+      questions = questions.filter(
+        v => v.category.categoryId === this.categoryId
+      );
+
+      this.questions = questions;
+      this.selection = [];
+
+      let maxOption = 0;
+      questions.forEach(question => {
+        maxOption = Math.max(maxOption, question.answers.length);
+        this.selection.push({ id: question.questionId, checked: false });
+      });
+      this.numberOption = Array(maxOption)
+        .fill(1)
+        .map((v, k) => k);
+      this.optionWidth = 74 / maxOption + '%';
+    });
   }
 
   // change page size tab one
   changePageSizeTabAllQuestion(e) {
     this.tabAllQuestion.sizeOfPage = e.value;
     this.tabAllQuestion.currentPage = 0;
+    this.loadDataByPage();
   }
 
   // click checkbox question
   selectQuestion(questionId) {
-    console.log(questionId);
+    // console.log(questionId);
     let count = 0;
     this.selection.forEach(item => {
       if (item.id === questionId) {
@@ -111,7 +142,7 @@ export class TabQuestionComponent implements OnInit {
     }
 
     if (this.numberOfQuestion === this.entities) {
-      this.apply.emit(false);
+      this.notifierService.notify('warning', 'Enough question already!');
       return;
     }
 
@@ -145,11 +176,51 @@ export class TabQuestionComponent implements OnInit {
   previousPage() {
     this.tabAllQuestion.currentPage--;
     this.loadDataByPage();
-    console.log(this.tabAllQuestion.currentPage);
+    this.isCheckAll = false;
+    // console.log(this.tabAllQuestion.currentPage);
   }
   nextPage() {
     this.tabAllQuestion.currentPage++;
     this.loadDataByPage();
-    console.log(this.tabAllQuestion.currentPage);
+    this.isCheckAll = false;
+    // console.log(this.tabAllQuestion.currentPage);
+  }
+
+  sortTableByContent() {
+    if (this.isSort === 0) {
+      this.backupSort = this.questions;
+      this.questions = this.questions.sort(function(a, b) {
+        return a.questionId > b.questionId ? 1 : 0;
+      });
+      this.isSort = 1;
+      return;
+    }
+
+    if (this.isSort === 1) {
+      this.questions = this.questions.reverse();
+      this.isSort = 2;
+      return;
+    }
+
+    if (this.isSort === 2) {
+      this.isSort = 0;
+      this.questions = this.backupSort;
+    }
+  }
+
+  clickSearch() {
+    this.tabAllQuestion.currentPage = 0;
+    if (this.searchStr !== '') {
+      this.isSearching = true;
+    } else {
+      this.isSearching = false;
+    }
+    this.loadDataByPage();
+  }
+
+  keyPressSearch(e) {
+    if (e.charCode === 13) {
+      this.clickSearch();
+    }
   }
 }

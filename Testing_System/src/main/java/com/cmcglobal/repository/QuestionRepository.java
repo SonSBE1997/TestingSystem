@@ -18,7 +18,20 @@ public interface QuestionRepository extends JpaRepository<Question, String> {
 
   @Query("SELECT q FROM Question q")
   List<Question> pageQuestion(Pageable pageable);
-  
+
   @Query("select count(question_id) from Question")
   String questionSum();
+
+  List<Question> findByContentContaining(String contentSearch,
+      Pageable pageable);
+
+  @Query("select count(question_id) from Question where content like ?1")
+  String countSearchQuestion(String content);
+
+  @Query("select count(question_id) from Question where category_id = ?1")
+  String questionSumByCategoryId(int categoryId);
+
+  @Query("select count(question_id) from Question where content like ?1 and category_id = ?2")
+  String countSearchQuestionByCategoryId(String content, int categoryId);
+
 }

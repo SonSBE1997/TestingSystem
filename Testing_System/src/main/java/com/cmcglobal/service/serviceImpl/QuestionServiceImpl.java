@@ -71,10 +71,45 @@ public class QuestionServiceImpl implements QuestionServices {
   public List<Question> pageQuestion(Pageable pageable) {
     return questionRepository.pageQuestion(pageable);
   }
-  
+
   @Override
   public String countQuestion() {
     return questionRepository.questionSum();
   }
+
+  @Override
+  public List<Question> searchByContent(String content, Pageable pageable) {
+    return questionRepository.findByContentContaining(content, pageable);
+  }
+
+  @Override
+  public String countSearchQuestion(String content) {
+    content = "%" + content + "%";
+    return questionRepository.countSearchQuestion(content);
+  }
+
+/* (non-Javadoc)
+ * @see com.cmcglobal.service.QuestionServices#countQuestionByCategoryId(int)
+ * Author: ptphuong.
+ * Created date: Feb 20, 2019
+ * Created time: 2:09:13 PM
+ */
+@Override
+public String countQuestionByCategoryId(int categoryId) {
+    // TODO Auto-generated method stub
+    return questionRepository.questionSumByCategoryId(categoryId);
+}
+
+/* (non-Javadoc)
+ * @see com.cmcglobal.service.QuestionServices#countSearchQuestionByCategoryId(java.lang.String, int)
+ * Author: ptphuong.
+ * Created date: Feb 20, 2019
+ * Created time: 2:09:13 PM
+ */
+@Override
+public String countSearchQuestionByCategoryId(String content, int categoryId) {
+    // TODO Auto-generated method stub
+    return questionRepository.countSearchQuestionByCategoryId(content, categoryId);
+}
 
 }

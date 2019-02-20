@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Exam } from '../entity/Exam.interface';
 import { Question } from '../entity/Question.interface';
-import { tap } from 'rxjs/operators';
+import { tap, catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -60,9 +60,36 @@ export class ExamService {
   // get question sum
   getQuestionSum(): Observable<HttpResponse<Object>> {
     return this.http
-      .get<HttpResponse<Object>>(this.url + `question/sum`, {
+      .get<HttpResponse<Object>>(this.url + `question/sum-by-category`, {
         observe: 'response'
       })
       .pipe(tap(resp => resp.headers.get('SumQuestion')));
+  }
+
+  searchQuestionByContent(
+    content: string,
+    p: string,
+    s: string
+  ): Observable<Question[]> {
+    return this.http
+      .get<Question[]>(
+        this.url +
+          `question/search-by-content?contentSearch-by-category=${content}&page=${p}&size=${s}`
+      )
+      .pipe(
+        tap(),
+        catchError(er => of([]))
+      );
+  }
+
+  countSearchQuestion(content): Observable<HttpResponse<Object>> {
+    return this.http
+      .get<HttpResponse<Object>>(
+        this.url + `question/count-search-question?content=${content}`,
+        {
+          observe: 'response'
+        }
+      )
+      .pipe(tap(resp => console.log(resp.headers.get('CountSearchQuestion'))));
   }
 }

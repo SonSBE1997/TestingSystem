@@ -1,54 +1,49 @@
-/**
- * Project name: Testing_System
- * Package name: com.cmcglobal.controller
- * File name: UserController.java
- * Author: ptphuong.
- * Created date: Feb 19, 2019
- * Created time: 2:45:23 PM
- */
-
 package com.cmcglobal.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.cmcglobal.entity.Exam;
-import com.cmcglobal.entity.User;
+import com.cmcglobal.service.ServiceResult;
 import com.cmcglobal.service.UserService;
+import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import com.cmcglobal.entity.User;
 
-/*
- * @author ptphuong.
- * Created date: Feb 19, 2019
- * Created time: 2:45:23 PM
- * Description: TODO - 
- */
 @RestController
-@RequestMapping("/user")
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 public class UserController {
     @Autowired
-    UserService userService;
+    private UserService userService;
 
-    @GetMapping(value = "/listUsers")
-    public List<User> listUsers() {
-      /*
-       * cate.delete(cate.getOne(1)); cate.deleteAll();
-       */
-
-      return userService.findAll();
+    @RequestMapping(value = "/users/{id}/semesters", method = RequestMethod.GET)
+    public ResponseEntity<ServiceResult> getSemesterListByUserId(@PathVariable("id") String id) {
+	return new ResponseEntity<ServiceResult>(userService.getSemseterListByUserId(id), HttpStatus.OK);
     }
-    int id=2;
-    @GetMapping(value = "/")
+
+    @RequestMapping(value = "/semesters/{semesterId}/tests/", method = RequestMethod.GET)
+    public ResponseEntity<ServiceResult> getTestListOfUser(@PathVariable("semesterId") String semesterId) {
+	return new ResponseEntity<ServiceResult>(userService.getExamBySemesterExamId(semesterId), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/user/listUsers")
+    public List<User> listUsers() {
+	/*
+	 * cate.delete(cate.getOne(1)); cate.deleteAll();
+	 */
+
+	return userService.findAll();
+    }
+
+    int id = 2;
+
+    @GetMapping(value = "/user/")
     public User getUser() {
-      /*
-       * cate.delete(cate.getOne(1)); cate.deleteAll();
-       */
-      return userService.findByID(id);
+	/*
+	 * cate.delete(cate.getOne(1)); cate.deleteAll();
+	 */
+	return userService.findByID(id);
     }
 }
