@@ -21,6 +21,17 @@ public class SemesterExamCode {
 
 	@Column(name = "status")
 	private String status;
+	
+	public String getSemesterExamId() {
+    return semesterExamId;
+  }
+
+  public void setSemesterExamId(String semesterExamId) {
+    this.semesterExamId = semesterExamId;
+  }
+
+  @Column(name="semester_exam_id")
+	private String semesterExamId;
 
 	public int getId() {
 		return id;

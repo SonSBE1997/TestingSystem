@@ -73,65 +73,50 @@
   <div class="row">
     <div class="col-md-2"></div>
     <div class="input-group col-md-8">
-      <input type="text" class="form-control" placeholder="Semester code">
+      <input type="text" class="form-control" placeholder="Semester code" [value]="semesterExamCode"
+        (change)="change($event.target)" />
       <div class="input-group-btn">
-        <button type="button" class="btn btn-info">Show</button>
+        <button type="button" class="btn btn-info" (click)="showSemesterTest()">Show</button>
       </div>
     </div>
     <div class="col-md-2"></div>
   </div>
 
-  <br>
-  <div class="form-test">
-    <div class="panel panel-default">
-
-      <div class="panel-body">
-        <h3 class="title">Details of the Semester</h3>
-        <br>
-        <div class="row">
-          <div class="col-md-12 col-md-offset-3">
-            Semester name: Thi tuyển fresher
-          </div>
-        </div>
-        <div class="content-list">
-          <div>
-            List Exam
-          </div>
+  <ng-container *ngIf="tests?.data.length > 0">
+    <br>
+    <div class="form-test">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <h3 class="title">List test of the Semester</h3>
           <br>
-          <div>
-            <table class="table table-bordered table-hover">
-              <thead>
-                <tr class="info">
-                  <th style="width: 28%">Exam name</th>
-                  <th style="width: 28%">Duration</th>
-                  <th>Category Exam</th>
-                  <th style="width: 10%"></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>10</td>
-                  <td>20</td>
-                  <td>20</td>
-                  <td>
-                    <button class="btn btn-info">Test</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>10</td>
-                  <td>20</td>
-                  <td>20</td>
-                  <td>
-                    <button class="btn btn-info">Test</button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+          <div class="content-list">
+            <div>
+              <table class="table table-bordered table-hover">
+                <thead>
+                  <tr class="info">
+                    <th style="width: 28%">Exam name</th>
+                    <th style="width: 28%">Duration</th>
+                    <th>Category Exam</th>
+                    <th style="width: 10%"></th>
+                  </tr>
+                </thead>
+                <tbody *ngFor="let obj of tests?.data">
+                  <tr>
+                    <td>{{obj?.title}}</td>
+                    <td>{{obj?.duration}}</td>
+                    <td>{{obj?.category?.categoryName}}</td>
+                    <td>
+                      <button class="btn btn-info">Test</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </ng-container>
 </div>
 
 <!-- Footer -->
