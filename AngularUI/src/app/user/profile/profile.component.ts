@@ -20,17 +20,8 @@ export class ProfileComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.activatedRoute.paramMap
-    .pipe(
-      mergeMap(params => {
-        const id = params.get('id');
-        return this.userService.getExamById(id);
-      })
-    )
-    .subscribe(user => {
-      this.user = user;
+    return this.userService.getExamById(1).subscribe(user => {
+        this.user = user;
     });
-
   }
-
 }
