@@ -15,35 +15,34 @@ import com.cmcglobal.entity.User;
 
 @RestController
 public class UserController {
-    @Autowired
-    private UserService userService;
+  @Autowired
+  private UserService userService;
 
-    @RequestMapping(value = "/users/{id}/semesters", method = RequestMethod.GET)
-    public ResponseEntity<ServiceResult> getSemesterListByUserId(@PathVariable("id") String id) {
-	return new ResponseEntity<ServiceResult>(userService.getSemseterListByUserId(id), HttpStatus.OK);
-    }
+  @RequestMapping(value = "/users/{id}/semesters", method = RequestMethod.GET)
+  public ResponseEntity<ServiceResult> getSemesterListByUserId(
+      @PathVariable("id") String id) {
+    return new ResponseEntity<ServiceResult>(
+        userService.getSemseterListByUserId(id), HttpStatus.OK);
+  }
 
-    @RequestMapping(value = "/semesters/{semesterId}/tests/", method = RequestMethod.GET)
-    public ResponseEntity<ServiceResult> getTestListOfUser(@PathVariable("semesterId") String semesterId) {
-	return new ResponseEntity<ServiceResult>(userService.getExamBySemesterExamId(semesterId), HttpStatus.OK);
-    }
+  @RequestMapping(value = "/semesters/{semesterId}/tests/", method = RequestMethod.GET)
+  public ResponseEntity<ServiceResult> getTestListOfUser(
+      @PathVariable("semesterId") String semesterId) {
+    return new ResponseEntity<ServiceResult>(
+        userService.getExamBySemesterExamId(semesterId), HttpStatus.OK);
+  }
 
-    @GetMapping(value = "/user/listUsers")
-    public List<User> listUsers() {
-	/*
-	 * cate.delete(cate.getOne(1)); cate.deleteAll();
-	 */
+  @GetMapping(value = "/user/listUsers")
+  public List<User> listUsers() {
+    /*
+     * cate.delete(cate.getOne(1)); cate.deleteAll();
+     */
 
-	return userService.findAll();
-    }
+    return userService.findAll();
+  }
 
-    int id = 2;
-
-    @GetMapping(value = "/user/")
-    public User getUser() {
-	/*
-	 * cate.delete(cate.getOne(1)); cate.deleteAll();
-	 */
-	return userService.findByID(id);
-    }
+  @GetMapping(value = "/user/{id}")
+  public User getUser(@PathVariable int id) {
+    return userService.findByID(id);
+  }
 }

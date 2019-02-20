@@ -1,4 +1,4 @@
-<app-profile *ngIf="!isAuthentication"></app-profile>
+<router-outlet *ngIf="!isAuthentication"></router-outlet>
 <div class="wrapper" *ngIf="isAuthentication">
 
   <app-header></app-header>
