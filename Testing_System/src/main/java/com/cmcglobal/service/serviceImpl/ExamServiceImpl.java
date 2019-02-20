@@ -70,7 +70,7 @@ public class ExamServiceImpl implements ExamService {
 	}
 
 	@Override
-	public List<Exam> findAll() {
+	public List<Exam> getAll() {
 		return examRepository.findAll();
 	}
 
@@ -415,25 +415,30 @@ public class ExamServiceImpl implements ExamService {
 		return examRepository.pageExam(pageable);
 	}
 
+	@Autowired
+	ExamService examService;
+
 	@Override
 	public String createId() {
 		String id;
-		List<Exam> findAll = examRepository.findAll();
+		List<Exam> findAll = examService.getAll();
 		int ids = findAll.size() - 1;
 		if (ids < 0) {
 			ids = 0;
-		}
-		String tmp = findAll.get(ids).getExamId();
-		tmp = tmp.substring(tmp.length() - 3, tmp.length());
+			return "Exam001";
+		} else {
+			String tmp = findAll.get(ids).getExamId();
+			tmp = tmp.substring(tmp.length() - 3, tmp.length());
 
-		int id1 = Integer.parseInt(tmp) + 1;
-		if (id1 < 10)
-			id = ("Exam00") + id1;
-		else if (id1 > 9 && id1 < 100)
-			id = ("Exam0") + id1;
-		else
-			id = ("Exam") + id1;
-		return id;
+			int id1 = Integer.parseInt(tmp) + 1;
+			if (id1 < 10)
+				id = ("Exam00") + id1;
+			else if (id1 > 9 && id1 < 100)
+				id = ("Exam0") + id1;
+			else
+				id = ("Exam") + id1;
+			return id;
+		}
 	}
 
 	@Override

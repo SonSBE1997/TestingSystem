@@ -49,7 +49,7 @@ public class ExamController {
 
 	@GetMapping(value = "/listExams")
 	public List<Exam> listExam() {
-		return examService.findAll();
+		return examService.getAll();
 	}
 
 	@RequestMapping(value = "listExams/pagination", method = RequestMethod.GET)
@@ -230,7 +230,7 @@ public class ExamController {
 		if (listExam.size() == 0) {
 			return ResponseEntity.status(HttpStatus.OK).body("not Ok");
 		}
-		List<Exam> list = examService.findAll();
+		List<Exam> list = examService.getAll();
 		int x = list.size() + 1;
 		for (Exam exam : listExam) {
 			String id = "Exam" + String.valueOf(x);

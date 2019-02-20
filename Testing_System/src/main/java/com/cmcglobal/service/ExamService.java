@@ -13,7 +13,7 @@ public interface ExamService {
 	 * 
 	 * @return
 	 */
-	public List<Exam> findAll();
+	public List<Exam> getAll();
 
 	/**
 	 * Author: ntmduyen Created date: Feb 14, 2019 Created time: 5:12:48 PM

@@ -19,7 +19,7 @@ import { v4 as uuid } from 'uuid';
 
 
 import { fromEvent } from 'rxjs/observable/fromEvent';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { MatSortModule } from '@angular/material/sort';
 import { Category } from 'src/app/entity/Category.interface';
@@ -38,7 +38,7 @@ export class ListExamComponent implements OnInit, AfterViewInit {
   mess: string;
   check: boolean;
 
-  constructor(private fb: FormBuilder,private uploadService: UploadserviceService,
+  constructor(private fb: FormBuilder,private uploadService: UploadserviceService, private router: Router,
     private http: HttpClient, private notifierService: NotifierService,  private listExamService: ListExamService) { }
 
   public dataSource = new MatTableDataSource<Exam>();
@@ -117,18 +117,18 @@ export class ListExamComponent implements OnInit, AfterViewInit {
         .subscribe(
 
            success => {
-
            },
            error => {
                console.log("error: " + error.error.text);
               if (error.error.text === 'Ok') {
+
                 this.notifierService.notify('success', 'Import exam successfully');
+                // setTimeout(() => { this.router.navigateByUrl('/exam'); }, 2000);
               }else if(error.error.text  === 'not Ok'){
                 this.notifierService.notify('error', 'Import exam Failed');
               }
             }
         );
-
     });
     // success => {
     // this.notifierService.notify('success', 'Import exam successfully');
