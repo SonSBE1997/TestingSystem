@@ -1,4 +1,5 @@
-<div class="wrapper">
+<app-profile *ngIf="!isAuthentication"></app-profile>
+<div class="wrapper" *ngIf="isAuthentication">
 
   <app-header></app-header>
 
@@ -44,3 +45,5 @@
   <!-- /.content-wrapper -->
   <app-footer></app-footer>
 </div>
+
+
