@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+
+import com.cmcglobal.custorm.FilterCustorm;
 import com.cmcglobal.entity.Exam;
 
 public interface ExamRepository extends JpaRepository<Exam, String> {
