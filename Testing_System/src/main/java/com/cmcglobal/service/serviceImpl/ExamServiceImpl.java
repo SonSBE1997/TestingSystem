@@ -23,77 +23,86 @@ import com.cmcglobal.utils.Helper;
 @Service
 @Transactional
 public class ExamServiceImpl implements ExamService {
-	@Autowired
-	ExamRepository examRepository;
+  @Autowired
+  ExamRepository examRepository;
 
-	@Autowired
-	ExamQuestionService examQuestionService;
+  @Autowired
+  ExamQuestionService examQuestionService;
 
-	@Autowired
-	QuestionServices questionService;
+  @Autowired
+  QuestionServices questionService;
 
-	@Override
-	public void createExam(Exam ex) {
-		User user = new User();
-		user.setUserId(1);
-		ex.setExamId(this.createId());
-		ex.setTitle(ex.getTitle().trim());
-		ex.setNote(ex.getNote().substring(3, ex.getNote().length() - 4));
-		ex.setUserCreated(user);
-		ex.setCreateAt(new Date());
-		examRepository.save(ex);
-	}
+  @Override
+  public void createExam(Exam ex) {
+    User user = new User();
+    user.setUserId(1);
+    ex.setExamId(this.createId());
+    ex.setTitle(ex.getTitle().trim());
+    ex.setNote(ex.getNote().substring(3, ex.getNote().length() - 4));
+    ex.setUserCreated(user);
+    ex.setCreateAt(new Date());
+    ex.setEnable(true);
+    examRepository.save(ex);
+  }
 
-	@Override
-	public List<Exam> findAll() {
-		return examRepository.findAll();
-	}
+  @Override
+  public List<Exam> findAll() {
+    return examRepository.findAll();
+  }
 
-	@Override
-	public Exam findByID(String id) {
-		return examRepository.findById(id).get();
-	}
+  @Override
+  public Exam findByID(String id) {
+    return examRepository.findById(id).get();
+  }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.cmcglobal.service.ExamService#approveExam(java.lang.String) Author:
-	 * Sanero. Created date: Feb 13, 2019 Created time: 1:45:04 PM
-	 */
-	@Override
-	public boolean approveExam(String examId) {
-		Exam exam = examRepository.findById(examId).get();
-		exam.setStatus("Public");
-		exam = examRepository.save(exam);
-		if ("Public".equals(exam.getStatus())) {
-			return true;
-		}
-		return false;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.cmcglobal.service.ExamService#randomQuestion(java.lang.String)
-	 * Author: Sanero. Created date: Feb 13, 2019 Created time: 4:17:07 PM
-	 */
-	@Override
-	public boolean randomQuestion(String examId, int numberRandom) {
-//    Exam exam = examRepository.findById(examId).get();
-    Random random = new Random();
-    List<Question> questions = questionService.getAllQuestion();
-    List<ExamQuestion> examQuestions = Helper.randomQuestion(random, questions,
-        numberRandom, examId);
-    for (ExamQuestion examQuestion : examQuestions) {
-      examQuestion.setExamId(examId);
-      Question question = questionService
-          .findById(examQuestion.getQuestion().getQuestionId());
-      int countAnswer = question.getAnswers().size();
-      String choiceOrder = Helper.randomChoiceOrder(random, countAnswer);
-      examQuestion.setChoiceOrder(choiceOrder);
-      examQuestionService.insert(examQuestion);
+  /*
+   * (non-Javadoc)
+   * 
+   * @see com.cmcglobal.service.ExamService#approveExam(java.lang.String) Author:
+   * Sanero. Created date: Feb 13, 2019 Created time: 1:45:04 PM
+   */
+  @Override
+  public boolean approveExam(String examId) {
+    try {
+      Exam exam = examRepository.findById(examId).get();
+      exam.setStatus("Public");
+      exam = examRepository.save(exam);
+      if ("Public".equals(exam.getStatus())) {
+        return true;
+      }
+      return false;
+    } catch (Exception e) {
+      return false;
     }
-    return true;
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see com.cmcglobal.service.ExamService#randomQuestion(java.lang.String)
+   * Author: Sanero. Created date: Feb 13, 2019 Created time: 4:17:07 PM
+   */
+  @Override
+  public boolean randomQuestion(String examId, int numberRandom) {
+    try {
+//    Exam exam = examRepository.findById(examId).get();
+      Random random = new Random();
+      List<Question> questions = questionService.getAllQuestion();
+      List<ExamQuestion> examQuestions = Helper.randomQuestion(random,
+          questions, numberRandom, examId);
+      for (ExamQuestion examQuestion : examQuestions) {
+        examQuestion.setExamId(examId);
+        Question question = questionService
+            .findById(examQuestion.getQuestion().getQuestionId());
+        int countAnswer = question.getAnswers().size();
+        String choiceOrder = Helper.randomChoiceOrder(random, countAnswer);
+        examQuestion.setChoiceOrder(choiceOrder);
+        examQuestionService.insert(examQuestion);
+      }
+      return true;
+    } catch (Exception e) {
+      return true;
+    }
   }
 
   /*
@@ -105,13 +114,17 @@ public class ExamServiceImpl implements ExamService {
    */
   @Override
   public boolean removeQuestion(Exam exam) {
-    // Exam updateExam = examRepository.findById(exam.getExamId()).get();
-    // updateExam.setExamQuestions(exam.getExamQuestions());
-    // updateExam = examRepository.save(updateExam);
-    for (ExamQuestion examQuestion : exam.getExamQuestions()) {
-      examQuestionService.deleteById(examQuestion.getId());
+    try {
+      // Exam updateExam = examRepository.findById(exam.getExamId()).get();
+      // updateExam.setExamQuestions(exam.getExamQuestions());
+      // updateExam = examRepository.save(updateExam);
+      for (ExamQuestion examQuestion : exam.getExamQuestions()) {
+        examQuestionService.deleteById(examQuestion.getId());
+      }
+      return true;
+    } catch (Exception e) {
+      return true;
     }
-    return true;
   }
 
   /*
@@ -122,19 +135,24 @@ public class ExamServiceImpl implements ExamService {
    * Author: Sanero. Created date: Feb 14, 2019 Created time: 8:36:00 AM
    */
   @Override
-  public void addListQuestion(Exam exam) {
-    String examId = exam.getExamId();
-    Random random = new Random();
-    for (ExamQuestion examQuestion : exam.getExamQuestions()) {
-      examQuestion.setExamId(examId);
-      Question question = questionService
-          .findById(examQuestion.getQuestion().getQuestionId());
-      int countAnswer = question.getAnswers().size();
+  public boolean addListQuestion(Exam exam) {
+    try {
+      String examId = exam.getExamId();
+      Random random = new Random();
+      for (ExamQuestion examQuestion : exam.getExamQuestions()) {
+        examQuestion.setExamId(examId);
+        Question question = questionService
+            .findById(examQuestion.getQuestion().getQuestionId());
+        int countAnswer = question.getAnswers().size();
 
-      String choiceOrder = Helper.randomChoiceOrder(random, countAnswer);
-      System.out.println(choiceOrder);
-      examQuestion.setChoiceOrder(choiceOrder);
-      examQuestionService.insert(examQuestion);
+        String choiceOrder = Helper.randomChoiceOrder(random, countAnswer);
+        System.out.println(choiceOrder);
+        examQuestion.setChoiceOrder(choiceOrder);
+        examQuestionService.insert(examQuestion);
+      }
+      return true;
+    } catch (Exception e) {
+      return false;
     }
   }
 

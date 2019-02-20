@@ -60,7 +60,7 @@ export class ExamService {
   // get question sum
   getQuestionSum(): Observable<HttpResponse<Object>> {
     return this.http
-      .get<HttpResponse<Object>>(this.url + `question/sum`, {
+      .get<HttpResponse<Object>>(this.url + `question/sum-by-category`, {
         observe: 'response'
       })
       .pipe(tap(resp => resp.headers.get('SumQuestion')));
@@ -74,7 +74,7 @@ export class ExamService {
     return this.http
       .get<Question[]>(
         this.url +
-          `question/search-by-content?contentSearch=${content}&page=${p}&size=${s}`
+          `question/search-by-content?contentSearch-by-category=${content}&page=${p}&size=${s}`
       )
       .pipe(
         tap(),

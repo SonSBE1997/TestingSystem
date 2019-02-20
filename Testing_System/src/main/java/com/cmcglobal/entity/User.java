@@ -2,7 +2,6 @@ package com.cmcglobal.entity;
 
 import java.io.Serializable;
 import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,6 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 public class User implements Serializable {
@@ -26,9 +27,14 @@ public class User implements Serializable {
 	private String mobile;
 	private String password;
 	private int status;
-	@OneToMany(mappedBy="userCreated",fetch=FetchType.LAZY,cascade=CascadeType.ALL)
-    private List<Exam> exams;
-	
+	@OneToMany(mappedBy = "userCreated", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonIgnoreProperties("user")
+	private List<Exam> exams;
+
+//	@ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+//    @JoinTable(name = "candidate", joinColumns = { @JoinColumn(name = "user_id") },inverseJoinColumns = { @JoinColumn(name = "semester_exam_id") })
+//	private List<Semester> semester= new ArrayList<Semester>();
+
 	public int getUserId() {
 		return userId;
 	}
