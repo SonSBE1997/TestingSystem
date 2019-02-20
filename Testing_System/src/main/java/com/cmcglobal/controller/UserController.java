@@ -10,10 +10,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cmcglobal.service.ServiceResult;
 import com.cmcglobal.service.UserService;
 import java.util.List;
+
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import com.cmcglobal.entity.User;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 public class UserController {
   @Autowired
   private UserService userService;
