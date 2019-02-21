@@ -5,12 +5,15 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
+
 import javax.persistence.EntityManager;
+
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
@@ -20,21 +23,20 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import com.cmcglobal.entity.Category;
-import com.cmcglobal.builder.FilterBuilder;
-import com.cmcglobal.entity.Exam;
-import com.cmcglobal.repository.ExamRepository;
-import com.cmcglobal.service.CategoryService;
-import com.cmcglobal.service.ExamService;
-import java.util.Date;
-import java.util.Random;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.cmcglobal.builder.FilterBuilder;
+import com.cmcglobal.entity.Category;
+import com.cmcglobal.entity.Exam;
 import com.cmcglobal.entity.ExamQuestion;
 import com.cmcglobal.entity.Question;
 import com.cmcglobal.entity.User;
+import com.cmcglobal.repository.ExamRepository;
+import com.cmcglobal.service.CategoryService;
 import com.cmcglobal.service.ExamQuestionService;
+import com.cmcglobal.service.ExamService;
 import com.cmcglobal.service.QuestionServices;
 import com.cmcglobal.utils.Helper;
 
@@ -230,7 +232,9 @@ public class ExamServiceImpl implements ExamService {
 		}
 		return id;
 	}
-
+  public int countExam() {
+    return examRepository.countExam();
+  };
 	@Override
 	public void deleteExam(String examId) {
 		;

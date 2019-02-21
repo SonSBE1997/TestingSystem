@@ -10,16 +10,12 @@ import com.cmcglobal.entity.User;
 import com.cmcglobal.repository.UserRepository;
 import com.cmcglobal.service.UserService;
 import com.cmcglobal.entity.Candidate;
-import com.cmcglobal.entity.Exam;
 import com.cmcglobal.entity.SemesterExam;
 import com.cmcglobal.entity.Test;
-import com.cmcglobal.entity.User;
 import com.cmcglobal.repository.CandidateRepository;
 import com.cmcglobal.repository.SemesterExamRepository;
 import com.cmcglobal.repository.TestRepository;
-import com.cmcglobal.repository.UserRepository;
 import com.cmcglobal.service.ServiceResult;
-import com.cmcglobal.service.UserService;
 
 @Service
 @Transactional

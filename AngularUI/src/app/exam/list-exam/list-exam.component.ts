@@ -174,7 +174,7 @@ export class ListExamComponent implements OnInit, AfterViewInit {
     console.log(e);
     this.paginator.pageIndex = e.pageIndex;
     this.paginator.pageSize = e.pageSize;
-    this.loadExamsPage;
+    this.loadExamsPage();
   }
 
   // Start Delete

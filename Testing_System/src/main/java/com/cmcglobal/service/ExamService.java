@@ -24,7 +24,11 @@ public interface ExamService {
 
 	public List<Exam> pageExamSortByCategoryDesc(String searchContent, Pageable pageable);
 
+	public int countExam();
+	
 	public Exam findByID(String id);
+	
+	
 
 	/**
 	 * Author: Sanero. Created date: Feb 19, 2019 Created time: 4:01:15 PM

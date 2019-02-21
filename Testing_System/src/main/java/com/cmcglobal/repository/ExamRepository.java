@@ -30,7 +30,6 @@ public interface ExamRepository
       + "GROUP BY e.examId")
   
   List<Exam> pageExam(@Param("searchInput") String searchContent, Pageable pageable);
-
   /**
    * Author: ntmduyen
    * Created date: Feb 17, 2019
@@ -49,7 +48,6 @@ public interface ExamRepository
       + "OR e.status like %:searchInput%) "
       + "GROUP BY e.examId ORDER BY u.fullName asc")
   List<Exam> pageExamSortByUserCreatedByAsc(@Param("searchInput") String searchContent, Pageable pageable);
-
   /**
    * Author: ntmduyen
    * Created date: Feb 17, 2019
@@ -69,7 +67,15 @@ public interface ExamRepository
       + "GROUP BY e.examId "
       + "ORDER BY u.fullName desc")
   List<Exam> pageExamSortByUserCreatedByDesc(@Param("searchInput") String searchContent, Pageable pageable);
-  
+  /**
+   * Author: ntmduyen.
+   * Created date: Feb 21, 2019
+   * Created time: 12:13:14 PM
+   * Description: TODO - .
+   * @param searchContent
+   * @param pageable
+   * @return
+   */
   @Query("Select e FROM Exam e, User u, Category c "
       + "WHERE e.userCreated = u and e.category = c and "
       + "(e.title like %:searchInput% "
@@ -81,7 +87,15 @@ public interface ExamRepository
       + "GROUP BY e.examId "
       + "ORDER BY c.categoryName asc")
   List<Exam> pageExamSortByCategoryAsc(@Param("searchInput") String searchContent, Pageable pageable);
-  
+  /**
+   * Author: ntmduyen.
+   * Created date: Feb 21, 2019
+   * Created time: 12:13:19 PM
+   * Description: TODO - .
+   * @param searchContent
+   * @param pageable
+   * @return
+   */
   @Query("Select e FROM Exam e, User u, Category c "
       + "WHERE e.userCreated = u and e.category = c and "
       + "(e.title like %:searchInput% "
@@ -93,4 +107,16 @@ public interface ExamRepository
       + "GROUP BY e.examId "
       + "ORDER BY c.categoryName desc")
   List<Exam> pageExamSortByCategoryDesc(@Param("searchInput") String searchContent, Pageable pageable);
+  
+  /**
+   * Author: ntmduyen.
+   * Created date: Feb 21, 2019
+   * Created time: 12:15:11 PM
+   * Description: TODO - count exam.
+   * @param content
+   * @return
+   */
+  @Query("select count(exam_id) from Exam")
+  int countExam();
+
 }

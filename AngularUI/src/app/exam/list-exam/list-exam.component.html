@@ -24,73 +24,92 @@
         <div>
           <div class="box-body">
             <!-- Button trigger modal -->
-            <button style="margin-top: -25px;" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-              Import
-            </button>
 
-            <!-- Modal -->
-            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-              aria-hidden="true">
-              <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Choose a file</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body">
-                    <div>
-                      <span style="color: red">{{mess}}</span>
-                    </div>
-                    <div style="text-align:center">
-                      <input type="file" (change)="selectFile($event)" accept=".xlsx">
-                    </div>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button (click)="upload()" class="btn btn-primary" data-dismiss="modal">Upload</button>
-                  </div>
-                </div>
-              </div>
-            </div>
             <!-- end Model -->
             <div class="row-3" style="text-align: center">
-              <form [formGroup]="examFrm">
-                <select class=" select2" style="width: 25%;height: 30px" formControlName="categoryName">
-                  <option value="">Type Exam</option>
-                  <option *ngFor="let categoryName of caterogyNames " value="{{categoryName}}">{{categoryName}}</option>
+              <form [formGroup]="examFrm" class="float: right, width: 400px">
+                  <div class="col col-lg-1 col-sm-1">
+                          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                              Import
+                            </button>
+                            <!-- Modal -->
+                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                              aria-hidden="true">
+                              <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Choose a file</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
+                                  </div>
+                                  <div class="modal-body">
+                                    <div>
+                                      <span style="color: red">{{mess}}</span>
+                                    </div>
+                                    <div style="text-align:center">
+                                      <input type="file" (change)="selectFile($event)" accept=".xlsx">
+                                    </div>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button (click)="upload()" class="btn btn-primary" data-dismiss="modal">Upload</button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                <div class="col col-lg-11 col-sm-11">
+                  <mat-accordion >
+                      <mat-expansion-panel>
+                        <mat-expansion-panel-header>
+                          <mat-panel-title>
+                              Filter your exam
+                          </mat-panel-title>
+                        </mat-expansion-panel-header>
+                            <div class="col col-lg-11 col-sm-11">
+                                <mat-form-field>
+                                    <mat-select placeholder="Category Name" formControlName="categoryName">
+                                      <mat-option *ngFor="let categoryName of caterogyNames " value="{{categoryName}}">{{categoryName}}  </mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
 
-                </select>
+                                  <mat-form-field>
+                                    <mat-select placeholder="Duration" formControlName="duration">
+                                      <mat-option *ngFor="let duration of listDuration " value="{{duration}}">{{duration}}</mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
 
-                <select class=" select2" style="width: 25%;height: 30px;margin-left: 25px" formControlName="duration">
-                  <option value="0">Time Test</option>
-                  <option *ngFor="let duration of listDuration " value="{{duration}}">{{duration}}</option>
-                </select>
-                <select class=" select2" style="width: 25%;height: 30px;margin-left: 25px"
-                  formControlName="numberOfQuestion">
-                  <option value="0">Count Question</option>
-                  <option *ngFor="let numberOfQuestion of numberOfQuestions " value="{{numberOfQuestion}}">
-                    {{numberOfQuestion}}</option>
+                                  <mat-form-field>
+                                    <mat-select placeholder="Number of Question" formControlName="numberOfQuestion">
+                                      <mat-option *ngFor="let numberOfQuestion of numberOfQuestions " value="{{numberOfQuestion}}">{{numberOfQuestion}}</mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
 
-                </select>
+                                  <mat-form-field>
+                                    <mat-select  placeholder="Creator">
+                                      <mat-option value="manager">Manager</mat-option>
+                                      <mat-option value="admin">Admin</mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
 
-                <select class=" select2" style="width: 25%;height: 30px;margin-top: 15px">
-                  <option value="">Creator</option>
-                  <option value="manager">Manager</option>
-                  <option value="admin">Admin</option>
-                </select>
-                <select class=" select2" style="width: 25%;height: 30px;margin-left: 25px" formControlName="status">
-                  <option value="">Status</option>
-                  <option *ngFor="let status of statuss " value="{{status}}">{{status}}</option>
-                </select>
+                                  <mat-form-field>
+                                    <mat-select  placeholder="Status" formControlName="status">
+                                      <mat-option *ngFor="let status of statuss " value="{{status}}">{{status}}</mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+                                  <mat-form-field>
+                                    <input  matInput type="date" value="createAt"  formControlName="createAt">
+                                  </mat-form-field>
+                            </div>
+                            <div class="col col-lg-1 col-sm-1">
+                                <input  style="width:100px" type="submit" value="Submit" class="btn btn-primary btn-block btn-flat right-side" (click)="onSubmit()">
+                            </div>
 
-                <input type="date" [(ngModel)]="createAt" value="createAt"
-                  style="width: 25%;height: 30px;margin-left: 25px" formControlName="createAt">
 
-                <input type="submit" value="Submit" class="btn btn-primary btn-block btn-flat"
-                  style="width: 10%;height: 30px;margin: 15px 0 0 130px" (click)="onSubmit()">
-
+                     </mat-expansion-panel>
+                  </mat-accordion>
+              </div>
               </form>
         </div>
         <!-- /.box-header -->
@@ -155,10 +174,12 @@
                   <td mat-cell *matCellDef="let element"  >
                       <div  class="text-center" [ngSwitch]="element.status">
                           <div   *ngSwitchCase="'Public'" >
-                              <button mat-raised-button color="warn">{{element.status}}</button>
+                              <p class="btn btn-primary">{{element.status}}</p>
+                              <!-- <button mat-raised-button color="warn">{{element.status}}</button> -->
                           </div>
                           <div *ngSwitchCase="'Draft'" >
-                              <button mat-raised-button color="primary">{{element.status}}</button>
+                              <p class="btn btn-warning">{{element.status}}</p>
+                              <!-- <button mat-raised-button color="primary">{{element.status}}</button> -->
                           </div>
                       </div>
 
