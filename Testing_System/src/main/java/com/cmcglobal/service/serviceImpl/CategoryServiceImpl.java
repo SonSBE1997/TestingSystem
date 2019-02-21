@@ -11,6 +11,7 @@ package com.cmcglobal.service.serviceImpl;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +34,29 @@ public class CategoryServiceImpl implements CategoryService {
     @Autowired
     CategoryRepository categoryRepository;
     
+    @Autowired
+    EntityManager entityManager;
+    
     @Override
     public List<Category> findAll(){
 	return categoryRepository.findAll();
     }
+
+	@Override
+	public List<Category> getAll() {
+		// TODO Auto-generated method stub
+		return categoryRepository.findAll();
+	}
+
+	@Override
+	public Category getOneById(int categoryId) {
+		// TODO Auto-generated method stub
+		return entityManager.find(Category.class, categoryId);
+	}
+
+	@Override
+	public Category getOne(String categoryName) {
+		// TODO Auto-generated method stub
+		return categoryRepository.findByName(categoryName);
+	}
 }

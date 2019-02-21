@@ -9,7 +9,9 @@ import { DetailExamComponent } from './detail-exam/detail-exam.component';
 import { UpdateCommonComponent } from './update-common/update-common.component';
 import { UpdateContentComponent } from './update-content/update-content.component';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+
 import { MatFormFieldModule, MatInputModule } from '@angular/material';
+
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NotifierModule } from 'angular-notifier';
 
@@ -46,6 +48,7 @@ import {
   MatStepperModule
 } from '@angular/material';
 import { TabQuestionComponent } from './update-content/tab-question/tab-question.component';
+
 @NgModule({
   declarations: [
     ListExamComponent,
@@ -56,6 +59,7 @@ import { TabQuestionComponent } from './update-content/tab-question/tab-question
     UpdateContentComponent,
     TabQuestionComponent
   ],
+
   imports: [
     ListExamModule,
     CommonModule,
@@ -95,6 +99,7 @@ import { TabQuestionComponent } from './update-content/tab-question/tab-question
     MatFormFieldModule,
     FormsModule,
     ReactiveFormsModule,
+
     NotifierModule.withConfig({
       position: {
         horizontal: {
