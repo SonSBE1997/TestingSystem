@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { mergeMap } from 'rxjs/operators';
 import { ExamService } from 'src/app/service/examService.service';
 import { Exam } from 'src/app/entity/Exam.interface';
+import { NotifierService } from 'angular-notifier';
 
 @Component({
   selector: 'app-update-exam',
@@ -15,8 +16,9 @@ export class UpdateExamComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private http: HttpClient,
-    private examService: ExamService
-  ) {}
+    private examService: ExamService,
+    private notifierService: NotifierService
+  ) { }
 
   ngOnInit() {
     this.activatedRoute.paramMap
@@ -35,11 +37,14 @@ export class UpdateExamComponent implements OnInit {
     if (this.detailExam.status === 'Draft') {
       // console.log('Draft');
       this.examService.approve(this.detailExam.examId).subscribe(
-        success => {},
+        success => { },
         error => {
           // console.log(error.error.text);
           if (error.error.text === 'Ok') {
             this.detailExam.status = 'Public';
+            this.notifierService.notify('success', 'Approve exam successfully', '');
+          } else {
+            this.notifierService.notify('error', 'Can not approve this exam: No question in this exam', '');
           }
         }
       );
