@@ -52,8 +52,10 @@ export class DetailExamComponent implements OnInit {
           // console.log(error.error.text);
           if (error.error.text === 'Ok') {
             this.exam.status = 'Public';
+            this.notifierService.notify('success', 'Approve exam successfully', '');
+          } else {
+            this.notifierService.notify('warning', 'Can not approve this exam: No question in this exam', '');
           }
-          this.notifierService.notify('success', 'Approve exam successfully', '');
         }
       );
     }
