@@ -25,3 +25,8 @@ export interface TabInfo {
   sizeOfPage: number;
 }
 
+export interface ListExamPaginator {
+  pageIndex: number;
+  pageSize: number;
+  length: number;
+}

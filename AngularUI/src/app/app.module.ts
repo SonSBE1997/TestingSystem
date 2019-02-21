@@ -14,7 +14,6 @@ import { ExamModule } from './exam/exam.module';
 import { CategoryModule } from './category/category.module';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
-import { ListExamService } from 'src/app/exam/list-exam/list-exam.service';
 import { UserModule } from './user/user.module';
 import { HomeModule } from './home/home.module';
 
@@ -39,7 +38,7 @@ import { HomeModule } from './home/home.module';
     UserModule,
     HomeModule
   ],
-  providers: [ListExamService],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
