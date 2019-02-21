@@ -13,6 +13,7 @@ import { QuestionModule } from './question/question.module';
 import { ExamModule } from './exam/exam.module';
 import { CategoryModule } from './category/category.module';
 import { HttpClientModule } from '@angular/common/http';
+
 import { HttpModule } from '@angular/http';
 import { UserModule } from './user/user.module';
 import { HomeModule } from './home/home.module';
@@ -40,4 +41,4 @@ import { HomeModule } from './home/home.module';
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }
