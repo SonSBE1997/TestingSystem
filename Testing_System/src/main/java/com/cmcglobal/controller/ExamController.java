@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -41,11 +40,32 @@ public class ExamController {
     examService.createExam(exam);
   }
 
+  
+  /**
+   * Author: ntmduyen.
+   * Created date: Feb 21, 2019
+   * Created time: 8:57:59 AM
+   * Description: TODO - listExams.
+   * @return
+   */
   @GetMapping(value = "/listExams")
   public List<Exam> listExam() {
     return examService.findAll();
   }
 
+  
+  /**
+   * Author: ntmduyen.
+   * Created date: Feb 21, 2019
+   * Created time: 8:58:12 AM
+   * Description: TODO - .
+   * @param page
+   * @param size
+   * @param sortOrder
+   * @param sortTerm
+   * @param searchContent
+   * @return
+   */
   @RequestMapping(value = "listExams/pagination", method = RequestMethod.GET)
   private List<Exam> getPageExam(
       @RequestParam(name = "pageNumber", required = false, defaultValue = "0") Integer page,

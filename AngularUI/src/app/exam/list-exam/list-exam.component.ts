@@ -1,9 +1,20 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  AfterViewInit,
+  ViewChild,
+  ElementRef
+} from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
+import {
+  MatTableDataSource,
+  MatPaginator,
+  MatSort,
+  PageEvent
+} from '@angular/material';
 import { Exam } from 'src/app/entity/Exam.interface';
-import { merge, } from 'rxjs/observable/merge';
+import { merge } from 'rxjs/observable/merge';
 import { mergeMap, debounceTime } from 'rxjs/operators';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { v4 as uuid } from 'uuid';
@@ -20,6 +31,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { MatSortModule } from '@angular/material/sort';
 import { Category } from 'src/app/entity/Category.interface';
+import { NgModule } from '@angular/core';
 
 @Component({
   selector: 'app-list-exam',
@@ -56,6 +68,9 @@ export class ListExamComponent implements OnInit, AfterViewInit {
   isCheckALL = false;
   examFrm: FormGroup;
 
+  pageEvent: PageEvent;
+  searchStr = '';
+
   public duration: number;
   public numberOfQuestion: number;
   public createAt: Date = new Date('dd/mm/yyyy');
@@ -63,9 +78,7 @@ export class ListExamComponent implements OnInit, AfterViewInit {
   public category: Category;
   public categoryName: String;
 
-  constructor(private http: HttpClient, private fb: FormBuilder) {
-
-  }
+  constructor(private http: HttpClient, private fb: FormBuilder) {}
   ngOnInit() {
     this.findExams(0, 5, 'title', 'ASC', '');
     this.examFrm = this.fb.group({
@@ -80,31 +93,28 @@ export class ListExamComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     fromEvent(this.input.nativeElement, 'keyup')
-    .pipe(
+      .pipe(
         debounceTime(150),
         distinctUntilChanged(),
         tap(() => {
-            this.paginator.pageIndex = 0;
-            this.loadExamsPage();
+          this.paginator.pageIndex = 0;
+          this.loadExamsPage();
         })
-    )
-    .subscribe();
-
-
+      )
+      .subscribe();
     // reset the paginator after sorting
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
 
     merge(this.sort.sortChange, this.paginator.page)
       .pipe(tap(() => this.loadExamsPage()))
       .subscribe();
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-    this.dataSource.paginator._length = this.paginator._length;
-
     // console.log(this.paginator._length);
     // console.log(this.dataSource.paginator.getNumberOfPages());
     // console.log(this.dataSource.paginator.page);
   }
+
   // This function is to find Exams from the API backend
   public findExams = (
     pageNumber = 0,
@@ -121,11 +131,12 @@ export class ListExamComponent implements OnInit, AfterViewInit {
           .set('sortTerm', sortTerm)
           .set('sortOrder', sortOrder)
           .set('searchContent', searchContent)
-      }).subscribe(listExam => {
+      })
+      .subscribe(listExam => {
         this.listExam = listExam;
         this.dataSource.data = listExam;
       });
-  };
+  }
 
   public loadExamsPage() {
     this.findExams(
@@ -133,11 +144,12 @@ export class ListExamComponent implements OnInit, AfterViewInit {
       this.paginator.pageSize,
       this.sort.active,
       this.sort.direction,
-      this.input.nativeElement.value,
-
+      this.input.nativeElement.value
     );
   }
   public doFilter = (value: string) => {
+    this.searchStr = value;
+    this.paginator.pageIndex = 0;
     this.findExams(
       this.paginator.pageIndex,
       this.paginator.pageSize,
@@ -147,17 +159,24 @@ export class ListExamComponent implements OnInit, AfterViewInit {
     );
   }
 
+  onPageEvent(e) {
+    console.log(e);
+    this.paginator.pageIndex = e.pageIndex;
+    this.paginator.pageSize = e.pageSize;
+    this.loadExamsPage;
+  }
+
   // Start Delete
   onCheck(event) {
     const input = event.target as HTMLInputElement;
     this.isCheckALL = input.checked;
   }
   onchange(event, examId) {
-    let checkId = event.target.checked;
+    const checkId = event.target.checked;
     if (checkId) {
       this.listId.push(examId);
     } else {
-      let x = this.listId.findIndex(x => {
+      const x = this.listId.findIndex(x => {
         return x === examId;
       });
       if (x !== -1) {
@@ -166,7 +185,7 @@ export class ListExamComponent implements OnInit, AfterViewInit {
     }
   }
   onCheckAllId(event) {
-    let checkId = event.target.checked;
+    const checkId = event.target.checked;
     if (checkId) {
       if (this.listId.length > 0) {
         this.listId = [];
@@ -180,7 +199,7 @@ export class ListExamComponent implements OnInit, AfterViewInit {
   }
 
   deleteAllExam() {
-    var r = confirm('Are you sure you want to Permanently delete this exam?');
+    let r = confirm('Are you sure you want to Permanently delete this exam?');
     if (r == true) {
       if (this.listId.length > 0) {
         this.listId.forEach(element => {
@@ -202,9 +221,9 @@ export class ListExamComponent implements OnInit, AfterViewInit {
     } else {
     }
   }
-  //end
+  // end
 
-  //Filter Start
+  // Filter Start
   onSubmit() {
     console.log(this.examFrm.value);
     if (this.examFrm.valid) {
@@ -257,5 +276,7 @@ export class ListExamComponent implements OnInit, AfterViewInit {
           }));
       });
   }
-  //end
+  // end
+
+
 }

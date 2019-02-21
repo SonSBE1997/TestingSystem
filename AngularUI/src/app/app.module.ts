@@ -17,7 +17,6 @@ import { HttpModule } from '@angular/http';
 import { UserModule } from './user/user.module';
 import { HomeModule } from './home/home.module';
 
-
 @NgModule({
   declarations: [AppComponent],
   imports: [
