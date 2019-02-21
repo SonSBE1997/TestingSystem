@@ -44,7 +44,7 @@ export class UpdateExamComponent implements OnInit {
             this.detailExam.status = 'Public';
             this.notifierService.notify('success', 'Approve exam successfully', '');
           } else {
-            this.notifierService.notify('error', 'Can not approve this exam: No question in this exam', '');
+            this.notifierService.notify('warning', 'Can not approve this exam: No question in this exam', '');
           }
         }
       );
