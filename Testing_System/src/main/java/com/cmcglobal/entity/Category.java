@@ -21,10 +21,13 @@ public class Category implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "category_id")
 	private int categoryId;
+	
 	@Column(name = "category_name")
 	private String categoryName;
+
 	@Column(name = "date_created")
 	private Date dateCreated;
+	
 	private int status;
 
 	@OneToMany(mappedBy="category",fetch=FetchType.LAZY,cascade=CascadeType.ALL)

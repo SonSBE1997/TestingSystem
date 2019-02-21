@@ -15,7 +15,6 @@ import com.cmcglobal.entity.SemesterExam;
 import com.cmcglobal.entity.Test;
 import com.cmcglobal.entity.User;
 import com.cmcglobal.repository.CandidateRepository;
-import com.cmcglobal.repository.ExamRepository;
 import com.cmcglobal.repository.SemesterExamRepository;
 import com.cmcglobal.repository.TestRepository;
 import com.cmcglobal.repository.UserRepository;
@@ -36,16 +35,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ServiceResult getSemseterListByUserId(String id) {
-	ServiceResult result = new ServiceResult();
-	User user = userRepository.findById(Integer.parseInt(id)).get();
-	List<Candidate> candidate = candidateRepository.findByUser(user);
-	List<SemesterExam> semesters = new ArrayList<SemesterExam>();
-
-	for (Candidate ca : candidate) {
-	    semesters.add(ca.getSemesterExam());
-	}
-	result.setData(semesters);
-	return result;
+      ServiceResult result = new ServiceResult();
+      User user = userRepository.findById(Integer.parseInt(id)).get();
+      List<Candidate> candidate = candidateRepository.findByUser(user);
+      List<SemesterExam> semesters = new ArrayList<SemesterExam>();
+      
+      for (Candidate ca : candidate) {
+          semesters.add(ca.getSemesterExam());
+      }
+      result.setData(semesters);
+      return result;
     }
 
     @Override

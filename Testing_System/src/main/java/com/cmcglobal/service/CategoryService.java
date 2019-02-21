@@ -1,12 +1,3 @@
-/**
- * Project name: Testing_System
- * Package name: com.cmcglobal.service
- * File name: CategoryService.java
- * Author: ptphuong.
- * Created date: Feb 15, 2019
- * Created time: 1:16:43 PM
- */
-
 package com.cmcglobal.service;
 
 import java.util.List;
@@ -29,5 +20,10 @@ public interface CategoryService {
      * @return
      */
     List<Category> findAll();
-
+    
+    public List<Category> getAll();
+	
+	public Category getOneById(int categoryId);
+	
+	public Category getOne(String categoryName);
 }

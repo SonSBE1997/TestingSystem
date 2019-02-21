@@ -1,14 +1,12 @@
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { Exam } from 'src/app/entity/Exam.interface';
-import { merge } from 'rxjs/observable/merge';
-import { mergeMap } from 'rxjs/operators';
+import { merge, } from 'rxjs/observable/merge';
+import { mergeMap, debounceTime } from 'rxjs/operators';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { ListExamService } from './list-exam.service';
 import { v4 as uuid } from 'uuid';
-
 import {
   distinctUntilChanged,
   startWith,
@@ -17,10 +15,13 @@ import {
   map
 } from 'rxjs/operators';
 import { fromEvent } from 'rxjs/observable/fromEvent';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { MatSortModule } from '@angular/material/sort';
 import { Category } from 'src/app/entity/Category.interface';
+import { UploadserviceService } from 'src/app/service/upload/uploadservice.service';
+import { NotifierService } from 'angular-notifier';
+
 
 @Component({
   selector: 'app-list-exam',
@@ -28,6 +29,12 @@ import { Category } from 'src/app/entity/Category.interface';
   styleUrls: ['./list-exam.component.css']
 })
 export class ListExamComponent implements OnInit, AfterViewInit {
+  selectedFiles: FileList;
+  currentFileUpload: File;
+  currentFileInport: File;
+  mess: string;
+  check: boolean;
+
   public dataSource = new MatTableDataSource<Exam>();
 
   private loadingSubject = new BehaviorSubject<boolean>(false);
@@ -46,6 +53,7 @@ export class ListExamComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('input') input: ElementRef;
 
   listExam: Exam[] = [];
   listId: string[] = [];
@@ -63,13 +71,12 @@ export class ListExamComponent implements OnInit, AfterViewInit {
   public category: Category;
   public categoryName: String;
 
-  constructor(
-    private http: HttpClient,
-    private fb: FormBuilder,
-    private listExamService: ListExamService
-  ) {}
+  constructor(private fb: FormBuilder, private uploadService: UploadserviceService, private router: Router,
+    private http: HttpClient, private notifierService: NotifierService) {
+
+  }
   ngOnInit() {
-    this.findExams(0, 5, 'title', 'ASC');
+    this.findExams(0, 5, 'title', 'ASC', '');
     this.examFrm = this.fb.group({
       duration: [''],
       numberOfQuestion: [''],
@@ -81,6 +88,21 @@ export class ListExamComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
+    fromEvent(this.input.nativeElement, 'keyup')
+      .pipe(
+        debounceTime(150),
+        distinctUntilChanged(),
+        tap(() => {
+          this.paginator.pageIndex = 0;
+          this.loadExamsPage();
+        })
+      )
+      .subscribe();
+
+
+    // reset the paginator after sorting
+    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+
     merge(this.sort.sortChange, this.paginator.page)
       .pipe(tap(() => this.loadExamsPage()))
       .subscribe();
@@ -97,7 +119,8 @@ export class ListExamComponent implements OnInit, AfterViewInit {
     pageNumber = 0,
     pageSize = 5,
     sortTerm = 'title',
-    sortOrder = 'ASC'
+    sortOrder = 'ASC',
+    searchContent = ''
   ) => {
     this.http
       .get<Exam[]>('http://localhost:8080/exam/listExams/pagination', {
@@ -106,8 +129,8 @@ export class ListExamComponent implements OnInit, AfterViewInit {
           .set('pageSize', pageSize.toString())
           .set('sortTerm', sortTerm)
           .set('sortOrder', sortOrder)
-      })
-      .subscribe(listExam => {
+          .set('searchContent', searchContent)
+      }).subscribe(listExam => {
         this.listExam = listExam;
         this.dataSource.data = listExam;
       });
@@ -118,12 +141,21 @@ export class ListExamComponent implements OnInit, AfterViewInit {
       this.paginator.pageIndex,
       this.paginator.pageSize,
       this.sort.active,
-      this.sort.direction
+      this.sort.direction,
+      this.input.nativeElement.value,
+
     );
   }
   public doFilter = (value: string) => {
-    this.dataSource.filter = value.trim().toLocaleLowerCase();
-  };
+    this.findExams(
+      this.paginator.pageIndex,
+      this.paginator.pageSize,
+      this.sort.active,
+      this.sort.direction,
+      value
+    );
+  }
+
   // Start Delete
   onCheck(event) {
     const input = event.target as HTMLInputElement;
@@ -208,24 +240,24 @@ export class ListExamComponent implements OnInit, AfterViewInit {
           this.statuss.push(x.status);
           this.caterogyNames.push(x.category.categoryName);
         });
-        (this.listDuration = this.listDuration.filter(function(
+        (this.listDuration = this.listDuration.filter(function (
           item,
           index,
           self
         ) {
           return index === self.indexOf(item);
         })),
-          (this.numberOfQuestions = this.numberOfQuestions.filter(function(
+          (this.numberOfQuestions = this.numberOfQuestions.filter(function (
             item,
             index,
             self
           ) {
             return index === self.indexOf(item);
           })),
-          (this.statuss = this.statuss.filter(function(item, index, self) {
+          (this.statuss = this.statuss.filter(function (item, index, self) {
             return index === self.indexOf(item);
           })),
-          (this.caterogyNames = this.caterogyNames.filter(function(
+          (this.caterogyNames = this.caterogyNames.filter(function (
             item,
             index,
             self
@@ -234,5 +266,40 @@ export class ListExamComponent implements OnInit, AfterViewInit {
           }));
       });
   }
-  //end
+
+  selectFile(event) {
+    this.selectedFiles = event.target.files;
+  }
+
+  upload() {
+    this.currentFileUpload = this.selectedFiles.item(0);
+    this.uploadService.pushFileToStorage(this.currentFileUpload).subscribe(event => {
+      if (event instanceof HttpResponse) {
+        this.notifierService.notify('error', 'Upload failed!')
+        console.log('upload is failed!')
+        console.log("sfsff: " + event.type)
+      }
+
+      this.notifierService.notify('success', 'File is completely uploaded!');
+      console.log('File is completely uploaded!')
+
+      this.uploadService.importToServer(this.currentFileUpload)
+        .subscribe(
+
+          success => {
+          },
+          error => {
+            console.log("error: " + error.error.text);
+            if (error.error.text === 'Ok') {
+
+              this.notifierService.notify('success', 'Import exam successfully');
+              setTimeout(() => { this.router.navigateByUrl('/exam'); }, 2000);
+            } else if (error.error.text === 'not Ok') {
+              this.notifierService.notify('error', 'Import exam Failed');
+            }
+          }
+        );
+    });
+    //end
+  }
 }

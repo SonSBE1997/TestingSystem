@@ -1,4 +1,16 @@
 /* Structure */
+.highlight {
+	color: black;
+	background: #eee;
+	border: 1px solid red;
+	border-radius: 2px;
+	margin: -1px;
+}
+
+.highlight:empty {
+	display: none;
+}
+
 .example-container {
   display: flex;
   flex-direction: column;
