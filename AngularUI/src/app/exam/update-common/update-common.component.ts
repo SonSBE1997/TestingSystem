@@ -29,20 +29,6 @@ export class UpdateCommonComponent implements OnInit {
   constructor(private activatedRoute: ActivatedRoute, private fb: FormBuilder,
     private http: HttpClient, private router: Router) { }
 
-  // onChange(value: string) {
-  //   this.inputCategory = value;
-  //   console.log(this.inputCategory)
-
-  //   // this.activatedRoute.paramMap.pipe(
-  //   //   mergeMap(params =>{
-  //   //     return this.http.get<Category>("http://localhost:8015/category/" + this.inputCategory);
-  //   //   })
-  //   // ).subscribe(category =>{
-  //   //   this.category = category;
-  //   //   console.log("category1: " + this.category);
-  //   // })
-  // }
-
   ngOnInit() {
 
     this.examFrm = this.fb.group({
@@ -119,3 +105,4 @@ export class UpdateCommonComponent implements OnInit {
     );
   }
 }
+

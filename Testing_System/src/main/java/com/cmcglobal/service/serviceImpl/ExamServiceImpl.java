@@ -6,10 +6,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
-
 import javax.persistence.EntityManager;
-
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
@@ -20,20 +21,16 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.cmcglobal.entity.Category;
 import com.cmcglobal.builder.FilterBuilder;
 import com.cmcglobal.entity.Exam;
 import com.cmcglobal.repository.ExamRepository;
 import com.cmcglobal.service.CategoryService;
 import com.cmcglobal.service.ExamService;
-
 import java.util.Date;
 import java.util.Random;
-
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.cmcglobal.entity.ExamQuestion;
 import com.cmcglobal.entity.Question;
 import com.cmcglobal.entity.User;
@@ -44,10 +41,6 @@ import com.cmcglobal.utils.Helper;
 @Service
 @Transactional
 public class ExamServiceImpl implements ExamService {
-
-	@Autowired
-	EntityManager entityManager;
-
 	@Autowired
 	ExamRepository examRepository;
 
@@ -56,6 +49,12 @@ public class ExamServiceImpl implements ExamService {
 
 	@Autowired
 	QuestionServices questionService;
+
+	@Autowired
+	EntityManager entityManager;
+
+	@Autowired
+	ExamService examService;
 
 	@Override
 	public void createExam(Exam ex) {
@@ -66,11 +65,12 @@ public class ExamServiceImpl implements ExamService {
 		ex.setNote(ex.getNote().substring(3, ex.getNote().length() - 4));
 		ex.setUserCreated(user);
 		ex.setCreateAt(new Date());
+		ex.setEnable(true);
 		examRepository.save(ex);
 	}
 
 	@Override
-	public List<Exam> getAll() {
+	public List<Exam> findAll() {
 		return examRepository.findAll();
 	}
 
@@ -87,13 +87,42 @@ public class ExamServiceImpl implements ExamService {
 	 */
 	@Override
 	public boolean approveExam(String examId) {
-		Exam exam = examRepository.findById(examId).get();
-		exam.setStatus("Public");
-		exam = examRepository.save(exam);
-		if ("Public".equals(exam.getStatus())) {
-			return true;
+		try {
+			Exam exam = examRepository.findById(examId).get();
+			exam.setStatus("Public");
+			exam = examRepository.save(exam);
+			if ("Public".equals(exam.getStatus())) {
+				return true;
+			}
+			return false;
+		} catch (Exception e) {
+			return false;
 		}
-		return false;
+	}
+
+	@Override
+	public List<Exam> pageExam(String searchContent, Pageable pageable) {
+		return examRepository.pageExam(searchContent, pageable);
+	}
+
+	@Override
+	public List<Exam> pageExamSortByUserCreatedByAsc(String searchContent, Pageable pageable) {
+		return examRepository.pageExamSortByUserCreatedByAsc(searchContent, pageable);
+	}
+
+	@Override
+	public List<Exam> pageExamSortByUserCreatedByDesc(String searchContent, Pageable pageable) {
+		return examRepository.pageExamSortByUserCreatedByDesc(searchContent, pageable);
+	}
+
+	@Override
+	public List<Exam> pageExamSortByCategoryAsc(String searchContent, Pageable pageable) {
+		return examRepository.pageExamSortByCategoryAsc(searchContent, pageable);
+	}
+
+	@Override
+	public List<Exam> pageExamSortByCategoryDesc(String searchContent, Pageable pageable) {
+		return examRepository.pageExamSortByCategoryDesc(searchContent, pageable);
 	}
 
 	/*
@@ -104,19 +133,23 @@ public class ExamServiceImpl implements ExamService {
 	 */
 	@Override
 	public boolean randomQuestion(String examId, int numberRandom) {
+		try {
 //    Exam exam = examRepository.findById(examId).get();
-		Random random = new Random();
-		List<Question> questions = questionService.getAllQuestion();
-		List<ExamQuestion> examQuestions = Helper.randomQuestion(random, questions, numberRandom, examId);
-		for (ExamQuestion examQuestion : examQuestions) {
-			examQuestion.setExamId(examId);
-			Question question = questionService.findById(examQuestion.getQuestion().getQuestionId());
-			int countAnswer = question.getAnswers().size();
-			String choiceOrder = Helper.randomChoiceOrder(random, countAnswer);
-			examQuestion.setChoiceOrder(choiceOrder);
-			examQuestionService.insert(examQuestion);
+			Random random = new Random();
+			List<Question> questions = questionService.getAllQuestion();
+			List<ExamQuestion> examQuestions = Helper.randomQuestion(random, questions, numberRandom, examId);
+			for (ExamQuestion examQuestion : examQuestions) {
+				examQuestion.setExamId(examId);
+				Question question = questionService.findById(examQuestion.getQuestion().getQuestionId());
+				int countAnswer = question.getAnswers().size();
+				String choiceOrder = Helper.randomChoiceOrder(random, countAnswer);
+				examQuestion.setChoiceOrder(choiceOrder);
+				examQuestionService.insert(examQuestion);
+			}
+			return true;
+		} catch (Exception e) {
+			return true;
 		}
-		return true;
 	}
 
 	/*
@@ -126,16 +159,20 @@ public class ExamServiceImpl implements ExamService {
 	 * com.cmcglobal.service.ExamService#removeQuestion(com.cmcglobal.entity.Exam)
 	 * Author: Sanero. Created date: Feb 13, 2019 Created time: 5:25:05 PM
 	 */
-//	@Override
-//	public boolean removeQuestion(Exam exam) {
-//		// Exam updateExam = examRepository.findById(exam.getExamId()).get();
-//		// updateExam.setExamQuestions(exam.getExamQuestions());
-//		// updateExam = examRepository.save(updateExam);
-//		for (ExamQuestion examQuestion : exam.getExamQuestions()) {
-//			examQuestionService.deleteById(examQuestion.getId());
-//		}
-//		return true;
-//	}
+	@Override
+	public boolean removeQuestion(Exam exam) {
+		try {
+			// Exam updateExam = examRepository.findById(exam.getExamId()).get();
+			// updateExam.setExamQuestions(exam.getExamQuestions());
+			// updateExam = examRepository.save(updateExam);
+			for (ExamQuestion examQuestion : exam.getExamQuestions()) {
+				examQuestionService.deleteById(examQuestion.getId());
+			}
+			return true;
+		} catch (Exception e) {
+			return true;
+		}
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -144,53 +181,74 @@ public class ExamServiceImpl implements ExamService {
 	 * com.cmcglobal.service.ExamService#addListQuestion(com.cmcglobal.entity.Exam)
 	 * Author: Sanero. Created date: Feb 14, 2019 Created time: 8:36:00 AM
 	 */
-//	@Override
-//	public void addListQuestion(Exam exam) {
-//		String examId = exam.getExamId();
-//		Random random = new Random();
-//		for (ExamQuestion examQuestion : exam.getExamQuestions()) {
-//			examQuestion.setExamId(examId);
-//			Question question = questionService.findById(examQuestion.getQuestion().getQuestionId());
-//			int countAnswer = question.getAnswers().size();
-//
-//			String choiceOrder = Helper.randomChoiceOrder(random, countAnswer);
-//			System.out.println(choiceOrder);
-//			examQuestion.setChoiceOrder(choiceOrder);
-//			examQuestionService.insert(examQuestion);
-//		}
-//	}
+	@Override
+	public boolean addListQuestion(Exam exam) {
+		try {
+			String examId = exam.getExamId();
+			Random random = new Random();
+			for (ExamQuestion examQuestion : exam.getExamQuestions()) {
+				examQuestion.setExamId(examId);
+				Question question = questionService.findById(examQuestion.getQuestion().getQuestionId());
+				int countAnswer = question.getAnswers().size();
 
-//	@Override
-//	public List<Exam> pageExam(Pageable pageable) {
-//		return examRepository.pageExam(pageable);
-//	}
+				String choiceOrder = Helper.randomChoiceOrder(random, countAnswer);
+				System.out.println(choiceOrder);
+				examQuestion.setChoiceOrder(choiceOrder);
+				examQuestionService.insert(examQuestion);
+			}
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
 
-//	@Override
-//	public String createId() {
-//		String id;
-//		List<Exam> exam = examRepository.findAll();
-//		int ids = exam.size() - 1;
-//		String tmp = exam.get(ids).getExamId();
-//		tmp = tmp.substring(tmp.length() - 3, tmp.length());
-//		int id1 = Integer.parseInt(tmp) + 1;
-//		if (id1 < 10)
-//			id = ("Exam00") + id1;
-//		else if (id1 > 9 && id1 < 100)
-//			id = ("Exam0") + id1;
-//		else
-//			id = ("Exam") + id1;
-//		return id;
-//	}
+	}
 
-//	@Override
-//	public List<Exam> pageExamSortByUserCreatedByAsc(Pageable pageable) {
-//		return examRepository.pageExamSortByUserCreatedByAsc(pageable);
-//	}
-//
-//	@Override
-//	public List<Exam> pageExamSortByUserCreatedByDesc(Pageable pageable) {
-//		return examRepository.pageExamSortByUserCreatedByDesc(pageable);
-//	}
+	@Override
+	public String createId() {
+		String id;
+		List<Exam> exam = examRepository.findAll();
+		if (exam.size() == 0)
+			id = "exam001";
+		else {
+			Collections.sort(exam, new Comparator<Exam>() {
+				@Override
+				public int compare(Exam o1, Exam o2) {
+					return o1.getExamId().compareTo(o2.getExamId());
+				}
+			});
+
+			int ids = exam.size() - 1;
+			String tmp = exam.get(ids).getExamId();
+			tmp = tmp.substring(tmp.length() - 3, tmp.length());
+			int id1 = Integer.parseInt(tmp) + 1;
+			if (id1 < 10)
+				id = ("Exam00") + id1;
+			else if (id1 > 9 && id1 < 100)
+				id = ("Exam0") + id1;
+			else
+				id = ("Exam") + id1;
+		}
+		return id;
+	}
+
+	@Override
+	public void deleteExam(String examId) {
+		;
+		examRepository.deleteById(examId);
+
+	}
+
+	@Override
+	public List<Exam> FilterExam(Exam exam) {
+		List<Exam> exams = examRepository.findAll(getFilterBuilder(exam));
+		return exams;
+	}
+
+	public FilterBuilder getFilterBuilder(Exam exam) {
+		return new FilterBuilder.Builder().setNumberOfQuestion(exam.getNumberOfQuestion())
+				.setDuration(exam.getDuration()).setDateExam(exam.getCreateAt()).setStatus(exam.getStatus())
+				.setCaterogyName(exam.getCategoryName()).builder();
+	}
 
 	@Autowired
 	CategoryService categoryService;
@@ -353,75 +411,10 @@ public class ExamServiceImpl implements ExamService {
 		return workbook;
 	}
 
-//    Random random = new Random();
-//    List<Question> questions = questionService.getAllQuestion();
-//    List<ExamQuestion> examQuestions = Helper.randomQuestion(random, questions,
-//        numberRandom, examId);
-//    for (ExamQuestion examQuestion : examQuestions) {
-//      examQuestion.setExamId(examId);
-//      Question question = questionService
-//          .findById(examQuestion.getQuestion().getQuestionId());
-//      int countAnswer = question.getAnswers().size();
-//      String choiceOrder = Helper.randomChoiceOrder(random, countAnswer);
-//      examQuestion.setChoiceOrder(choiceOrder);
-//      examQuestionService.insert(examQuestion);
-//    }
-//    return true;
-//  }
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.cmcglobal.service.ExamService#removeQuestion(com.cmcglobal.entity.Exam)
-	 * Author: Sanero. Created date: Feb 13, 2019 Created time: 5:25:05 PM
-	 */
 	@Override
-	public boolean removeQuestion(Exam exam) {
-		// Exam updateExam = examRepository.findById(exam.getExamId()).get();
-		// updateExam.setExamQuestions(exam.getExamQuestions());
-		// updateExam = examRepository.save(updateExam);
-		for (ExamQuestion examQuestion : exam.getExamQuestions()) {
-			examQuestionService.deleteById(examQuestion.getId());
-		}
-		return true;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.cmcglobal.service.ExamService#addListQuestion(com.cmcglobal.entity.Exam)
-	 * Author: Sanero. Created date: Feb 14, 2019 Created time: 8:36:00 AM
-	 */
-	@Override
-	public void addListQuestion(Exam exam) {
-		String examId = exam.getExamId();
-		Random random = new Random();
-		for (ExamQuestion examQuestion : exam.getExamQuestions()) {
-			examQuestion.setExamId(examId);
-			Question question = questionService.findById(examQuestion.getQuestion().getQuestionId());
-			int countAnswer = question.getAnswers().size();
-
-			String choiceOrder = Helper.randomChoiceOrder(random, countAnswer);
-			System.out.println(choiceOrder);
-			examQuestion.setChoiceOrder(choiceOrder);
-			examQuestionService.insert(examQuestion);
-		}
-	}
-
-	@Override
-	public List<Exam> pageExam(Pageable pageable) {
-		return examRepository.pageExam(pageable);
-	}
-
-	@Autowired
-	ExamService examService;
-
-	@Override
-	public String createId() {
+	public String createId1() {
 		String id;
-		List<Exam> findAll = examService.getAll();
+		List<Exam> findAll = examService.findAll();
 		int ids = findAll.size() - 1;
 		if (ids < 0) {
 			ids = 0;
@@ -441,32 +434,4 @@ public class ExamServiceImpl implements ExamService {
 		}
 	}
 
-	@Override
-	public List<Exam> pageExamSortByUserCreatedByAsc(Pageable pageable) {
-		return examRepository.pageExamSortByUserCreatedByAsc(pageable);
-	}
-
-	@Override
-	public List<Exam> pageExamSortByUserCreatedByDesc(Pageable pageable) {
-		return examRepository.pageExamSortByUserCreatedByDesc(pageable);
-	}
-
-	@Override
-	public void deleteExam(String examId) {
-		;
-		examRepository.deleteById(examId);
-
-	}
-
-	@Override
-	public List<Exam> FilterExam(Exam exam) {
-		List<Exam> exams = examRepository.findAll(getFilterBuilder(exam));
-		return exams;
-	}
-
-	public FilterBuilder getFilterBuilder(Exam exam) {
-		return new FilterBuilder.Builder().setNumberOfQuestion(exam.getNumberOfQuestion())
-				.setDuration(exam.getDuration()).setDateExam(exam.getCreateAt()).setStatus(exam.getStatus())
-				.setCaterogyName(exam.getCategoryName()).builder();
-	}
 }

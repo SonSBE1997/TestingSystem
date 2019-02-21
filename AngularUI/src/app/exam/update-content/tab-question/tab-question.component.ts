@@ -21,6 +21,8 @@ export class TabQuestionComponent implements OnInit {
   numberOfQuestion: number;
   @Input()
   entities: number;
+  @Input()
+  categoryId: number;
   @Output()
   apply: EventEmitter<boolean> = new EventEmitter();
   isSort = 0;

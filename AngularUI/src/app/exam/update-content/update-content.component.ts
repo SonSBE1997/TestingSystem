@@ -72,28 +72,33 @@ export class UpdateContentComponent implements OnInit {
       error => {
         console.log(error.error.text);
         console.log(error);
-        this.backupExamQuestions = this.backupExamQuestions.filter(
-          v => !data.includes(v)
-        );
-        const entities = this.backupExamQuestions.length;
-        this.tabListQuestionInExam.entities = entities;
-        if (
-          this.tabListQuestionInExam.currentPage *
-            this.tabListQuestionInExam.sizeOfPage ===
-          entities
-        ) {
-          this.tabListQuestionInExam.currentPage--;
-        }
+        if (error.error.text === 'Ok') {
+          this.backupExamQuestions = this.backupExamQuestions.filter(
+            v => !data.includes(v)
+          );
+          const entities = this.backupExamQuestions.length;
+          this.tabListQuestionInExam.entities = entities;
+          if (
+            this.tabListQuestionInExam.currentPage *
+              this.tabListQuestionInExam.sizeOfPage ===
+            entities
+          ) {
+            this.tabListQuestionInExam.currentPage--;
+          }
 
-        if (this.backupExamQuestions.length === 0) {
-          this.tabListQuestionInExam.currentPage = 0;
-        }
+          if (this.backupExamQuestions.length === 0) {
+            this.tabListQuestionInExam.currentPage = 0;
+          }
 
-        this.notifierService.notify(
-          'success',
-          'Remove question successfully',
-          ''
-        );
+          this.notifierService.notify(
+            'success',
+            'Remove question successfully',
+            ''
+          );
+        } else {
+          this.notifierService.notify('error', 'Remove question failed', '');
+          this.clickResetRemoveQuestion();
+        }
       }
     );
   }
@@ -124,12 +129,16 @@ export class UpdateContentComponent implements OnInit {
         success => {},
         error => {
           console.log(error.error.text);
-          this.loadData(this.tabListQuestionInExam.sizeOfPage);
-          this.notifierService.notify(
-            'success',
-            'Random question successfully',
-            ''
-          );
+          if (error.error.text === 'Ok') {
+            this.loadData(this.tabListQuestionInExam.sizeOfPage);
+            this.notifierService.notify(
+              'success',
+              'Random question successfully',
+              ''
+            );
+          } else {
+            this.notifierService.notify('error', 'Random question failed', '');
+          }
         }
       );
     } else {
