@@ -24,7 +24,7 @@
         <div>
           <div class="box-body">
             <!-- Button trigger modal -->
-            <button style="margin-top: -25px;" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+            <button  style="margin-top: -25px;" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
               Import
             </button>
 
@@ -40,9 +40,6 @@
                     </button>
                   </div>
                   <div class="modal-body">
-                    <div>
-                      <span style="color: red">{{mess}}</span>
-                    </div>
                     <div style="text-align:center">
                       <input type="file" (change)="selectFile($event)" accept=".xlsx">
                     </div>

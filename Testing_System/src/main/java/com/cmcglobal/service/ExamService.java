@@ -96,5 +96,5 @@ public interface ExamService {
 
 	Exam update(Exam exam);
 
-	List<Exam> readExcel(String exelFilePath);
+	List<Exam> readExcel(String exelFilePath) throws Exception;
 }

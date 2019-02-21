@@ -272,7 +272,7 @@ public class ExamServiceImpl implements ExamService {
 	}
 
 	@Override
-	public List<Exam> readExcel(final String exelFilePath) {
+	public List<Exam> readExcel(final String exelFilePath) throws Exception {
 		final int COLUMN_INDEX_TITLE = 0;
 		final int COLUMN_INDEX_DURATION = 1;
 		final int COLUMN_INDEX_CATEGORYID = 2;
@@ -361,8 +361,9 @@ public class ExamServiceImpl implements ExamService {
 				}
 				listExam.add(exam);
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
+			throw new Exception(e.toString());
 		}
 		return listExam;
 	}

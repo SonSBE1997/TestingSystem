@@ -1,5 +1,6 @@
 package com.cmcglobal.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -253,18 +254,24 @@ public class ExamController {
 		} catch (IOException e) {
 		}
 		System.out.println(multipartFile.getOriginalFilename());
-
-		List<Exam> listExam = examService.readExcel(fileTranfer.toString());
+		List<Exam> listExam = new ArrayList<>();
+		
+		try {
+			listExam = examService.readExcel(fileTranfer.toString());
+		}catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.OK).body("not Ok");
+		}
+		
 		if (listExam.size() == 0) {
 			return ResponseEntity.status(HttpStatus.OK).body("not Ok");
 		}
-		List<Exam> list = examService.findAll();
-		int x = list.size() + 1;
+		
+//		List<Exam> list = examService.findAll();
+//		int x = list.size() + 1;
 		for (Exam exam : listExam) {
-			String id = "Exam" + String.valueOf(x);
-
+//			String id = "Exam" + String.valueOf(x);
 			exam.setExamId(examService.createId1());
-			++x;
+//			++x;
 			User user = new User();
 			user.setUserId(1);
 			exam.setUserCreated(user);

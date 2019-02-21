@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, Inject } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
@@ -271,7 +271,7 @@ export class ListExamComponent implements OnInit, AfterViewInit {
     this.selectedFiles = event.target.files;
   }
 
-  upload() {
+  upload1() {
     this.currentFileUpload = this.selectedFiles.item(0);
     this.uploadService.pushFileToStorage(this.currentFileUpload).subscribe(event => {
       if (event instanceof HttpResponse) {
@@ -300,6 +300,42 @@ export class ListExamComponent implements OnInit, AfterViewInit {
           }
         );
     });
+    //end
+  }
+
+  upload() {
+    this.currentFileUpload = this.selectedFiles.item(0);
+    this.uploadService.pushFileToStorage(this.currentFileUpload).subscribe(
+      success => {
+        console.log("upload succesfully!")
+      },
+      error => {
+        console.log("error: " + error.error.text);
+        if (error.error.text === 'Not matching extension file') {
+          this.notifierService.notify('error', 'Not matching extension file');
+        } else if (error.error.text === 'OK') {
+          this.notifierService.notify('success', 'successfully uploaded ' + this.currentFileUpload.name + '!');
+          this.uploadService.importToServer(this.currentFileUpload)
+            .subscribe(
+              success => {
+              },
+              error => {
+                console.log("error: " + error.error.text);
+                if (error.error.text === 'Ok') {
+                  this.notifierService.notify('success', 'Import exam successfully');
+                  this.loadExamsPage();
+                  //window.location.reload();
+                  //this.router.navigate(['']);
+                } else if (error.error.text === 'not Ok') {
+                  this.notifierService.notify('error', 'Import exam Failed');
+                }
+              }
+            );
+        } else if (error.error.text === ("ERROR! can't upload " + this.selectFile + "!")) {
+          this.notifierService.notify('error', '"ERROR! cant upload "' + this.selectFile + "!");
+        }
+      }
+    )
     //end
   }
 }
