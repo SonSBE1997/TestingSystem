@@ -26,7 +26,8 @@
       <!-- /.box-header -->
       <div class="box-body">
         <div class="row">
-          <form class="form-horizontal col-xs-10" novalidate method="POST">
+          <form novalidate (ngSubmit)="onSubmit()" [formGroup]="examFrm"
+                  class="form-horizontal col-xs-10">
             <div class="box-body">
               <div class="form-group">
                 <label for="inputEmail3" class="col-sm-2 control-label"
@@ -36,11 +37,28 @@
                 <div class="col-sm-10">
                   <input
                     type="email"
-                    class="form-control"
+                    class="form-control row-1"
                     id="inputEmail3"
+                    name="title"
                     placeholder="Email"
                     value="SQL Exam Final"
+                    formControlName="title"
+                    [ngClass]="{
+                      'is-valid': examFrm.get('title').valid,
+                      'is-invalid': examFrm.get('title').invalid && examFrm.get('title').touched
+                    }"
+                    pattern="^[A-Za-z-_0123456789]{1,}$"
                   />
+                  <!-- validator Title -->
+                  <ng-container *ngIf="examFrm.get('title').hasError('required')">
+                      <p style="color: red; margin-bottom: -10px; font-family: unset">
+                        *Title is required!*</p>
+                  </ng-container>
+                  <ng-container *ngIf="examFrm.get('title').hasError('pattern')">
+                      <p style="color: red; margin-bottom: -10px; font-family: unset">
+                        *Title is invalid!*</p>
+                  </ng-container>
+                  <!-- end of validator Title -->
                 </div>
               </div>
               <div class="form-group">
@@ -49,16 +67,18 @@
                 >
                 <div class="col-sm-10">
                   <select
+                    id="category"
                     class="form-control select2 select2-hidden-accessible"
                     style="width: 100%;"
                     tabindex="-1"
                     aria-hidden="true"
+                    formControlName="category"
+
                   >
-                    <option selected="selected">SQL</option>
-                    <option>Java Basic</option>
-                    <option>Java Advanced</option>
-                    <option>Front End Advanced</option>
-                    <option>Automation Test</option>
+                    <option *ngFor="let category of categories" [selected]="category.categoryId === exam?.category.categoryId"
+                     [value]="category.categoryId">
+                      {{category.categoryName}}
+                    </option>
                   </select>
                 </div>
               </div>
@@ -74,8 +94,23 @@
                     class="form-control"
                     id="iNumQues"
                     placeholder="Number question"
-                    value="30"
+                    formControlName="numberOfQuestion"
+                    [ngClass]="{
+                      'is-valid': examFrm.get('numberOfQuestion').valid,
+                      'is-invalid': examFrm.get('numberOfQuestion').invalid && examFrm.get('numberOfQuestion').touched
+                    }"
+                    pattern="^\d+$"
                   />
+                  <!-- validator numberOfQuestion -->
+                  <ng-container *ngIf="examFrm.get('numberOfQuestion').hasError('required')">
+                      <p style="color: red; margin-bottom: -10px; font-family: unset">
+                        *NumberOfQuestion is required!*</p>
+                  </ng-container>
+                  <ng-container *ngIf="examFrm.get('numberOfQuestion').hasError('pattern')">
+                      <p style="color: red; margin-bottom: -10px; font-family: unset">
+                        *NumberOfQuestion must be positive number!*</p>
+                  </ng-container>
+                  <!-- end of validator numberOfQuestion -->
                 </div>
               </div>
 
@@ -90,8 +125,23 @@
                     class="form-control"
                     id="iDuration"
                     placeholder="Duration"
-                    value="30"
+                    formControlName="duration"
+                    [ngClass]="{
+                      'is-valid': examFrm.get('duration').valid,
+                      'is-invalid': examFrm.get('duration').invalid && examFrm.get('duration').touched
+                    }"
+                    pattern="^\d+$"
                   />
+                  <!-- validator duration -->
+                  <ng-container *ngIf="examFrm.get('duration').hasError('required')">
+                      <p style="color: red; margin-bottom: -10px; font-family: unset">
+                        *Duration is required!*</p>
+                  </ng-container>
+                  <ng-container *ngIf="examFrm.get('duration').hasError('pattern')">
+                      <p style="color: red; margin-bottom: -10px; font-family: unset">
+                        *Duration must be positive number!*</p>
+                  </ng-container>
+                  <!-- end of validator duration -->
                 </div>
               </div>
 
@@ -105,6 +155,7 @@
                     style="width: 100%;"
                     tabindex="-1"
                     aria-hidden="true"
+                    formControlName="status"
                   >
                     <option selected="selected">Draft</option>
                     <option>Public</option>
@@ -118,7 +169,7 @@
                   <!-- <textarea id="editor1" name="editor1" rows="10" cols="130"></textarea> -->
                   <ckeditor
                     [editor]="Editor"
-                    data="<p>Hello, world!</p>"
+                    formControlName="note"
                   ></ckeditor>
                 </div>
               </div>
@@ -127,7 +178,7 @@
                 <div class="col-sm-2"></div>
                 <div class="col-sm-10">
                   <button class="btn btn-primary mr-3">Update</button>
-                  <button class="btn btn-primary">Reset</button>
+                  <button class="btn btn-default" (click)="reset($event)">Reset</button>
                 </div>
               </div>
             </div>

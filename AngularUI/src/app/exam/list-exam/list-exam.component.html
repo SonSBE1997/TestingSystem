@@ -11,11 +11,11 @@
     <li class="active">View list exam</li>
   </ol>
 </section>
-
+<notifier-container></notifier-container>
 <!-- Main content -->
 <section class="content">
   <div class="row">
-    <div class="col-xs-12" >
+    <div class="col-xs-12">
       <div class="box">
         <div class="box-header">
           <div></div>
@@ -23,11 +23,43 @@
         </div>
         <div>
           <div class="box-body">
+            <!-- Button trigger modal -->
+            <button style="margin-top: -25px;" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+              Import
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+              aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Choose a file</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <div>
+                      <span style="color: red">{{mess}}</span>
+                    </div>
+                    <div style="text-align:center">
+                      <input type="file" (change)="selectFile($event)" accept=".xlsx">
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button (click)="upload()" class="btn btn-primary" data-dismiss="modal">Upload</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- end Model -->
             <div class="row-3" style="text-align: center">
               <form [formGroup]="examFrm">
                 <select class=" select2" style="width: 25%;height: 30px" formControlName="categoryName">
                   <option value="">Type Exam</option>
-                  <option *ngFor="let categoryName of caterogyNames " value="{{categoryName}}" >{{categoryName}}</option>
+                  <option *ngFor="let categoryName of caterogyNames " value="{{categoryName}}">{{categoryName}}</option>
 
                 </select>
 
@@ -35,9 +67,11 @@
                   <option value="0">Time Test</option>
                   <option *ngFor="let duration of listDuration " value="{{duration}}">{{duration}}</option>
                 </select>
-                <select class=" select2" style="width: 25%;height: 30px;margin-left: 25px" formControlName="numberOfQuestion">
+                <select class=" select2" style="width: 25%;height: 30px;margin-left: 25px"
+                  formControlName="numberOfQuestion">
                   <option value="0">Count Question</option>
-                  <option *ngFor="let numberOfQuestion of numberOfQuestions " value="{{numberOfQuestion}}">{{numberOfQuestion}}</option>
+                  <option *ngFor="let numberOfQuestion of numberOfQuestions " value="{{numberOfQuestion}}">
+                    {{numberOfQuestion}}</option>
 
                 </select>
 
@@ -51,7 +85,8 @@
                   <option *ngFor="let status of statuss " value="{{status}}">{{status}}</option>
                 </select>
 
-                <input type="date"  [(ngModel)]="createAt" value="createAt"  style="width: 25%;height: 30px;margin-left: 25px" formControlName="createAt">
+                <input type="date" [(ngModel)]="createAt" value="createAt"
+                  style="width: 25%;height: 30px;margin-left: 25px" formControlName="createAt">
 
                 <input type="submit" value="Submit" class="btn btn-primary btn-block btn-flat"
                   style="width: 10%;height: 30px;margin: 15px 0 0 130px" (click)="onSubmit()">
@@ -146,12 +181,8 @@
             <a style="margin-right: 10px" class="btn btn-primary" [routerLink]="['/exam', 'create']">Create Exam</a>
             <button type="Delete" class="btn btn-danger" (click)="deleteAllExam()">Delete</button>
           </div>
+          <!-- /.box -->
         </div>
-        <!-- /.box-body -->
+        <!-- /.col -->
       </div>
-      <!-- /.box -->
-    </div>
-    <!-- /.col -->
-  </div>
-  <!-- /.row -->
-
+      <!-- /.row -->
