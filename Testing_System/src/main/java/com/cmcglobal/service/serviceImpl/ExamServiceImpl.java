@@ -1,5 +1,7 @@
 package com.cmcglobal.service.serviceImpl;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -74,6 +76,37 @@ public class ExamServiceImpl implements ExamService {
     } catch (Exception e) {
       return false;
     }
+  }
+
+  @Override
+  public List<Exam> pageExam(String searchContent, Pageable pageable) {
+    return examRepository.pageExam(searchContent, pageable);
+  }
+
+  @Override
+  public List<Exam> pageExamSortByUserCreatedByAsc(String searchContent,
+      Pageable pageable) {
+    return examRepository.pageExamSortByUserCreatedByAsc(searchContent,
+        pageable);
+  }
+
+  @Override
+  public List<Exam> pageExamSortByUserCreatedByDesc(String searchContent,
+      Pageable pageable) {
+    return examRepository.pageExamSortByUserCreatedByDesc(searchContent,
+        pageable);
+  }
+
+  @Override
+  public List<Exam> pageExamSortByCategoryAsc(String searchContent,
+      Pageable pageable) {
+    return examRepository.pageExamSortByCategoryAsc(searchContent, pageable);
+  }
+
+  @Override
+  public List<Exam> pageExamSortByCategoryDesc(String searchContent,
+      Pageable pageable) {
+    return examRepository.pageExamSortByCategoryDesc(searchContent, pageable);
   }
 
   /*
@@ -154,67 +187,55 @@ public class ExamServiceImpl implements ExamService {
     } catch (Exception e) {
       return false;
     }
-  }
 
-  @Override
-  public List<Exam> pageExam(String searchContent, Pageable pageable) {
-    return examRepository.pageExam(searchContent, pageable);
   }
 
   @Override
   public String createId() {
     String id;
     List<Exam> exam = examRepository.findAll();
-    int ids = exam.size() - 1;
-    String tmp = exam.get(ids).getExamId();
-    tmp = tmp.substring(tmp.length() - 3, tmp.length());
-    int id1 = Integer.parseInt(tmp) + 1;
-    if (id1 < 10)
-      id = ("Exam00") + id1;
-    else if (id1 > 9 && id1 < 100)
-      id = ("Exam0") + id1;
-    else
-      id = ("Exam") + id1;
+    if (exam.size() == 0)
+      id = "exam001";
+    else {
+      Collections.sort(exam, new Comparator<Exam>() {
+        @Override
+        public int compare(Exam o1, Exam o2) {
+          return o1.getExamId().compareTo(o2.getExamId());
+        }
+      });
+
+      int ids = exam.size() - 1;
+      String tmp = exam.get(ids).getExamId();
+      tmp = tmp.substring(tmp.length() - 3, tmp.length());
+      int id1 = Integer.parseInt(tmp) + 1;
+      if (id1 < 10)
+        id = ("Exam00") + id1;
+      else if (id1 > 9 && id1 < 100)
+        id = ("Exam0") + id1;
+      else
+        id = ("Exam") + id1;
+    }
     return id;
   }
 
   @Override
-  public List<Exam> pageExamSortByUserCreatedByAsc(String searchContent,Pageable pageable) {
-    return examRepository.pageExamSortByUserCreatedByAsc(searchContent, pageable);
+  public void deleteExam(String examId) {
+    ;
+    examRepository.deleteById(examId);
+
   }
 
   @Override
-  public List<Exam> pageExamSortByUserCreatedByDesc(String searchContent, Pageable pageable) {
-    return examRepository.pageExamSortByUserCreatedByDesc(searchContent, pageable);
+  public List<Exam> FilterExam(Exam exam) {
+    List<Exam> exams = examRepository.findAll(getFilterBuilder(exam));
+    return exams;
   }
-  @Override
-  public List<Exam> pageExamSortByCategoryAsc(String searchContent, Pageable pageable){
-    return examRepository.pageExamSortByCategoryAsc(searchContent, pageable);
+
+  public FilterBuilder getFilterBuilder(Exam exam) {
+    return new FilterBuilder.Builder()
+        .setNumberOfQuestion(exam.getNumberOfQuestion())
+        .setDuration(exam.getDuration()).setDateExam(exam.getCreateAt())
+        .setStatus(exam.getStatus()).setCaterogyName(exam.getCategoryName())
+        .builder();
   }
-  
-  @Override
-  public List<Exam> pageExamSortByCategoryDesc(String searchContent, Pageable pageable){
-    return examRepository.pageExamSortByCategoryDesc(searchContent, pageable);
-  }
-  
-  @Override
-	public void deleteExam(String examId) {
-		;
-		examRepository.deleteById(examId);
-
-	}
-
-	@Override
-	public List<Exam> FilterExam(Exam exam) {
-		List<Exam> exams = examRepository.findAll(getFilterBuilder(exam));
-		return exams;
-	}
-
-	public FilterBuilder getFilterBuilder(Exam exam) {
-		return new FilterBuilder.Builder().setNumberOfQuestion(exam.getNumberOfQuestion())
-				.setDuration(exam.getDuration()).setDateExam(exam.getCreateAt()).setStatus(exam.getStatus())
-				.setCaterogyName(exam.getCategoryName()).builder();
-	}
-
- 
 }

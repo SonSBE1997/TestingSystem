@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -107,11 +108,13 @@ public class ExamController {
     case ("userCreated"):
       if (("asc").equals(sortOrder.toLowerCase())) {
         sortedBy = PageRequest.of(page, size);
-        return examService.pageExamSortByUserCreatedByAsc(searchContent, sortedBy);
+        return examService.pageExamSortByUserCreatedByAsc(searchContent,
+            sortedBy);
       }
       if (("desc").equals(sortOrder.toLowerCase())) {
         sortedBy = PageRequest.of(page, size);
-        return examService.pageExamSortByUserCreatedByDesc(searchContent, sortedBy);
+        return examService.pageExamSortByUserCreatedByDesc(searchContent,
+            sortedBy);
       }
       break;
     // sort theo trường category của category category_name
@@ -130,7 +133,6 @@ public class ExamController {
     return examService.pageExam(searchContent, sortedBy);
   }
 
-  
   @GetMapping(value = "/export/{id}")
   public ModelAndView handlereport(@PathVariable("id") String id) {
     try {
