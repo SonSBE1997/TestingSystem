@@ -9,6 +9,10 @@
   font-weight: normal !important;
 }
 
-#fType{
+#fType {
   margin-left: 1% !important;
+}
+
+.mt-3 {
+  margin-top: 1%;
 }
