@@ -76,7 +76,7 @@ export class ListExamComponent implements OnInit, AfterViewInit {
   examFrm: FormGroup;
 
   pageEvent: PageEvent;
-  searchStr = '';
+  searchTerm: string;
 
   public duration: number;
   public numberOfQuestion: number;
@@ -121,11 +121,11 @@ export class ListExamComponent implements OnInit, AfterViewInit {
       .subscribe();
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-    // console.log(this.paginator._length);
-    // console.log(this.dataSource.paginator.getNumberOfPages());
-    // console.log(this.dataSource.paginator.page);
   }
-
+  public getSearch(e) {
+    this.searchTerm = e.target.value;
+    console.log(this.searchTerm);
+  }
   // This function is to find Exams from the API backend
   public findExams = (
    // pageNumber = 0,
@@ -159,7 +159,7 @@ export class ListExamComponent implements OnInit, AfterViewInit {
     );
   }
   public doFilter = (value: string) => {
-    this.searchStr = value;
+
     this.paginator.pageIndex = 0;
     this.findExams(
       // this.paginator.pageIndex,
@@ -291,7 +291,7 @@ export class ListExamComponent implements OnInit, AfterViewInit {
         console.log("error: " + error.error.text);
         if (error.error.text === 'Not matching extension file') {
           this.notifierService.notify('error', 'Not matching extension file');
-        } else if (error.error.text === 'OK') {
+        }else if (error.error.text === 'OK') {
           this.notifierService.notify('success', 'successfully uploaded ' + this.currentFileUpload.name + '!');
           this.uploadService.importToServer(this.currentFileUpload)
             .subscribe(
@@ -306,6 +306,10 @@ export class ListExamComponent implements OnInit, AfterViewInit {
                   //this.router.navigate(['']);
                 } else if (error.error.text === 'not Ok') {
                   this.notifierService.notify('error', 'Import exam Failed');
+                }else if(error.error.text === 'this excel file is empty'){
+                  this.notifierService.notify('warning', 'this excel file is empty');
+                }else if(error.error.text === "this excel file is not formatted with one's template"){
+                  this.notifierService.notify('warning', "this excel file is not formatted with one's template");
                 }
               }
             );

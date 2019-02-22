@@ -2,7 +2,6 @@ package com.cmcglobal.service;
 
 import java.util.List;
 
-import com.cmcglobal.entity.Exam;
 import com.cmcglobal.entity.User;
 
 public interface UserService {

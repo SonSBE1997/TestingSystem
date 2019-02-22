@@ -95,6 +95,16 @@ export class UpdateContentComponent implements OnInit {
             'Remove question successfully',
             ''
           );
+
+          this.examService.isEmptyQuestion(this.detailExam.examId).subscribe(
+            s => {},
+            e => {
+              console.log(e);
+              if (e.error.text === 'Ok') {
+                this.detailExam.status = 'Draft';
+              }
+            }
+          );
         } else {
           this.notifierService.notify('error', 'Remove question failed', '');
           this.clickResetRemoveQuestion();

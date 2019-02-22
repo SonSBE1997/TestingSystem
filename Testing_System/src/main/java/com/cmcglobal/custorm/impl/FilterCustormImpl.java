@@ -19,86 +19,90 @@ import com.cmcglobal.entity.Exam;
 
 @Repository
 public class FilterCustormImpl implements FilterCustorm {
-	@PersistenceContext
-	private EntityManager entitymanager;
+  @PersistenceContext
+  private EntityManager entitymanager;
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Exam> findAll(FilterBuilder filterBuilder) {
-		StringBuilder builder = new StringBuilder("SELECT ex FROM Exam ex ");
-		if (StringUtils.isNotBlank(filterBuilder.getCategoryName())) {
-			builder.append("JOIN ex.category ca");
-		}
-		
-		builder.append(" WHERE 1=1 ");
-		builder = buildQuery(builder, filterBuilder);
-		Query query = entitymanager.createQuery(builder.toString());
-		return query.getResultList();
-	}
+  @SuppressWarnings("unchecked")
+  @Override
+  public List<Exam> findAll(FilterBuilder filterBuilder) {
+    StringBuilder builder = new StringBuilder("SELECT ex FROM Exam ex ");
+    if (StringUtils.isNotBlank(filterBuilder.getCategoryName())) {
+      builder.append("JOIN ex.category ca");
+    }
 
-	private StringBuilder buildQuery(StringBuilder sql, FilterBuilder filterBuilder) {
-		Field[] fields = FilterBuilder.class.getDeclaredFields();
-		for (Field field : fields) {
-			if (!field.getName().equals("categoryName")) {
+    builder.append(" WHERE 1=1 ");
+    builder = buildQuery(builder, filterBuilder);
+    Query query = entitymanager.createQuery(builder.toString());
+    return query.getResultList();
+  }
 
-				// get Type
-				String fieldType = field.getType().getName();
+  private StringBuilder buildQuery(StringBuilder sql,
+      FilterBuilder filterBuilder) {
+    Field[] fields = FilterBuilder.class.getDeclaredFields();
+    for (Field field : fields) {
+      if (!field.getName().equals("categoryName")) {
 
-				if (fieldType.equals("java.lang.String")) {
+        // get Type
+        String fieldType = field.getType().getName();
 
-					String value = getValueFiled(field, filterBuilder, String.class);
+        if (fieldType.equals("java.lang.String")) {
 
-					if (StringUtils.isNotBlank(value)) {
-						sql.append("AND LOWER(ex." + field.getName() + ") LIKE '%" + value.toLowerCase() + "%'");
-					}
+          String value = getValueFiled(field, filterBuilder, String.class);
 
-				} else if (fieldType.equals("java.lang.Integer")) {
-					Integer value = getValueFiled(field, filterBuilder, Integer.class);
-					if (value != 0) {
-						sql.append(" AND ex." + field.getName() + " = " + value + "");
-					}
-				} else if (fieldType.equals("java.lang.Float")) {
-					Float value = getValueFiled(field, filterBuilder, Float.class);
-					if (value != 0) {
-						sql.append(" AND ex." + field.getName() + " = " + value + "");
-					}
-				} else if (fieldType.equals("java.util.Date")) {
-					Date value = getValueFiled(field, filterBuilder, Date.class);
-					if (value != null) {
-						sql.append("AND Date(ex." + field.getName() + ") = " + value + "");
-					}
-				}
-			}
-		}
-		// bang khac cho xuong duoi
+          if (StringUtils.isNotBlank(value)) {
+            sql.append("AND LOWER(ex." + field.getName() + ") LIKE '%"
+                + value.toLowerCase() + "%'");
+          }
 
-		if (StringUtils.isNotBlank(filterBuilder.getCategoryName())) {
-			sql.append(" AND ca.categoryName = '" + filterBuilder.getCategoryName() + "'");
-		}
+        } else if (fieldType.equals("java.lang.Integer")) {
+          Integer value = getValueFiled(field, filterBuilder, Integer.class);
+          if (value != 0) {
+            sql.append(" AND ex." + field.getName() + " = " + value + "");
+          }
+        } else if (fieldType.equals("java.lang.Float")) {
+          Float value = getValueFiled(field, filterBuilder, Float.class);
+          if (value != 0) {
+            sql.append(" AND ex." + field.getName() + " = " + value + "");
+          }
+        } else if (fieldType.equals("java.util.Date")) {
+          Date value = getValueFiled(field, filterBuilder, Date.class);
+          if (value != null) {
+            sql.append("AND Date(ex." + field.getName() + ") = " + value + "");
+          }
+        }
+      }
+    }
+    // bang khac cho xuong duoi
 
-		return sql;
-	}
+    if (StringUtils.isNotBlank(filterBuilder.getCategoryName())) {
+      sql.append(
+          " AND ca.categoryName = '" + filterBuilder.getCategoryName() + "'");
+    }
 
-	private <T> T getValueFiled(Field field, FilterBuilder userBuilder, Class<T> type) {
-		Object result = null;
-		Method getter = getGetter(field, userBuilder);
-		if (getter != null) {
-			try {
-				result = getter.invoke(userBuilder);
-			} catch (IllegalAccessException | InvocationTargetException e) {
+    return sql;
+  }
 
-			}
-		}
-		return type.cast(result);
-	}
+  private <T> T getValueFiled(Field field, FilterBuilder userBuilder,
+      Class<T> type) {
+    Object result = null;
+    Method getter = getGetter(field, userBuilder);
+    if (getter != null) {
+      try {
+        result = getter.invoke(userBuilder);
+      } catch (IllegalAccessException | InvocationTargetException e) {
 
-	private Method getGetter(Field field, FilterBuilder builder) {
-		String getterMethod = "get" + StringUtils.capitalize(field.getName());
-		try {
-			return builder.getClass().getMethod(getterMethod);
-		} catch (Exception e) {
-			return null;
-		}
-	}
+      }
+    }
+    return type.cast(result);
+  }
+
+  private Method getGetter(Field field, FilterBuilder builder) {
+    String getterMethod = "get" + StringUtils.capitalize(field.getName());
+    try {
+      return builder.getClass().getMethod(getterMethod);
+    } catch (Exception e) {
+      return null;
+    }
+  }
 
 }
