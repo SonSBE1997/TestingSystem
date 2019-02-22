@@ -2,6 +2,7 @@ package com.cmcglobal.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -52,7 +53,8 @@ public class Exam implements Serializable {
   @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   @JoinColumn(name = "exam_id")
   private Set<ExamQuestion> examQuestions;
-
+  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL,mappedBy="exam",orphanRemoval=true)
+  private List<Test> tests;
   public String getExamId() {
     return examId;
   }

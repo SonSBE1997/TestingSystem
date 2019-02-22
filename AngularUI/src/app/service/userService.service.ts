@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { User } from '../entity/User.interface';
 import { Semester } from '../entity/Semester.interface';
+import { Test } from '../entity/Test.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -19,5 +20,9 @@ export class UserService {
 
   getListSemesterByUserId(id: number): Observable<Semester> {
     return this.http.get<Semester>(this.url + `users/${id}/semesters`);
+  }
+
+  getListTestBySemesterIdUserId(userId: number, semesterId: string): Observable<Test> {
+    return this.http.get<Test>(this.url + `test/users/${userId}/semesters/${semesterId}/tests/`);
   }
 }
