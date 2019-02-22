@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -55,76 +54,7 @@ public class ExamController {
       @RequestParam(name = "sortOrder", required = false, defaultValue = "ASC") String sortOrder,
       @RequestParam(name = "sortTerm", required = false, defaultValue = "title") String sortTerm,
       @RequestParam(name = "searchContent", required = false, defaultValue = "") String searchContent) {
-    Sort sortable = null;
-    switch (sortTerm) {
-    case ("title"):
-      if (("asc").equals(sortOrder.toLowerCase())) {
-        sortable = Sort.by("title").ascending();
-      }
-      if (("desc").equals(sortOrder.toLowerCase())) {
-        sortable = Sort.by("title").descending();
-      }
-      break;
-    case ("examId"):
-      if (("asc").equals(sortOrder.toLowerCase())) {
-        sortable = Sort.by("examId").ascending();
-      }
-      if (("desc").equals(sortOrder.toLowerCase())) {
-        sortable = Sort.by("examId").descending();
-      }
-      break;
-    case ("duration"):
-      if (("asc").equals(sortOrder.toLowerCase())) {
-        sortable = Sort.by("duration").ascending();
-      }
-      if (("desc").equals(sortOrder.toLowerCase())) {
-        sortable = Sort.by("duration").descending();
-      }
-      break;
-    case ("numberOfQuestion"):
-      if (("asc").equals(sortOrder.toLowerCase())) {
-        sortable = Sort.by("numberOfQuestion").ascending();
-      }
-      if (("desc").equals(sortOrder.toLowerCase())) {
-        sortable = Sort.by("numberOfQuestion").descending();
-      }
-      break;
-    case ("status"):
-      if (("asc").equals(sortOrder.toLowerCase())) {
-        sortable = Sort.by("status").ascending();
-      }
-      if (("desc").equals(sortOrder.toLowerCase())) {
-        sortable = Sort.by("status").descending();
-      }
-      break;
-    case ("createAt"):
-      if (("asc").equals(sortOrder.toLowerCase())) {
-        sortable = Sort.by("createAt").ascending();
-      }
-      if (("desc").equals(sortOrder.toLowerCase())) {
-        sortable = Sort.by("createAt").descending();
-      }
-      break;
-    // sort theo trường fullname của user create_by
-    case ("userCreated"):
-      if (("asc").equals(sortOrder.toLowerCase())) {
-        return examService.pageExamSortByUserCreatedByAsc(searchContent);
-      }
-      if (("desc").equals(sortOrder.toLowerCase())) {
-        return examService.pageExamSortByUserCreatedByDesc(searchContent);
-      }
-      break;
-    // sort theo trường category của category category_name
-    case ("category"):
-      if (("asc").equals(sortOrder.toLowerCase())) {
-        return examService.pageExamSortByCategoryAsc(searchContent);
-      }
-      if (("desc").equals(sortOrder.toLowerCase())) {
-        return examService.pageExamSortByCategoryDesc(searchContent);
-      }
-      break;
-    }
-    return examService.pageExam(searchContent, sortable);
+    return examService.getListExamByPage(sortOrder, sortTerm, searchContent);
   }
 
   @GetMapping(value = "/export/{id}")
@@ -260,6 +190,7 @@ public class ExamController {
       return ResponseEntity.status(HttpStatus.OK).body("not Ok");
     }
     for (Exam exam : listExam) {
+
       exam.setExamId(examService.createId1());
       User user = new User();
       user.setUserId(1);
@@ -275,7 +206,8 @@ public class ExamController {
   public ResponseEntity<String> isEmptyQuestion(@PathVariable String examId) {
     boolean success = examService.isEmptyQuestionOfExam(examId);
     System.out.println(examId);
-    if (success) return ResponseEntity.ok(Api.Exam.OK);
+    if (success)
+      return ResponseEntity.ok(Api.Exam.OK);
     return ResponseEntity.ok(Api.Exam.NOT_OK);
   }
 }

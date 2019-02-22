@@ -1,7 +1,6 @@
 package com.cmcglobal.service;
 
 import org.springframework.data.domain.Sort;
-
 import java.util.List;
 
 import com.cmcglobal.entity.Exam;
@@ -150,4 +149,17 @@ public interface ExamService {
    * @return
    */
   public boolean isEmptyQuestionOfExam(String examId);
+
+  /**
+   * Author: ntmduyen.
+   * Created date: Feb 22, 2019
+   * Created time: 4:41:50 PM
+   * Description: TODO - .
+   * @param sortOrder
+   * @param sortTerm
+   * @param searchContent
+   * @return
+   */
+  public List<Exam> getListExamByPage(String sortOrder, String sortTerm,
+      String searchContent);
 }

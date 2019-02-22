@@ -35,6 +35,7 @@ import com.cmcglobal.entity.User;
 import com.cmcglobal.service.ExamQuestionService;
 import com.cmcglobal.service.QuestionServices;
 import com.cmcglobal.utils.Helper;
+import com.cmcglobal.utils.Contants;
 
 @Service
 @Transactional
@@ -106,47 +107,26 @@ public class ExamServiceImpl implements ExamService {
 
   @Override
   public List<Exam> pageExam(String searchContent, Sort pageable) {
-    try {
       return examRepository.pageExam(searchContent, pageable);
-    } catch (Exception e) {
-      return new ArrayList<Exam>();
-    }
   }
-
   @Override
   public List<Exam> pageExamSortByUserCreatedByAsc(String searchContent) {
-    try {
       return examRepository.pageExamSortByUserCreatedByAsc(searchContent);
-    } catch (Exception e) {
-      return new ArrayList<Exam>();
-    }
   }
 
   @Override
   public List<Exam> pageExamSortByUserCreatedByDesc(String searchContent) {
-    try {
       return examRepository.pageExamSortByUserCreatedByDesc(searchContent);
-    } catch (Exception e) {
-      return new ArrayList<Exam>();
-    }
   }
 
   @Override
   public List<Exam> pageExamSortByCategoryAsc(String searchContent) {
-    try {
       return examRepository.pageExamSortByCategoryAsc(searchContent);
-    } catch (Exception e) {
-      return new ArrayList<Exam>();
-    }
   }
 
   @Override
   public List<Exam> pageExamSortByCategoryDesc(String searchContent) {
-    try {
       return examRepository.pageExamSortByCategoryDesc(searchContent);
-    } catch (Exception e) {
-      return new ArrayList<Exam>();
-    }
   }
 
   /*
@@ -480,5 +460,92 @@ public class ExamServiceImpl implements ExamService {
     }
     return false;
   }
-
+/*
+ * (non-Javadoc)
+ * @see com.cmcglobal.service.ExamService#getListExamByPage(java.lang.String, java.lang.String, java.lang.String)
+ * Author: ntmduyen.
+ * Created date: Feb 22, 2019
+ * Created time: 5:53:05 PM
+ */
+  @Override
+  public List<Exam> getListExamByPage(String sortOrder, String sortTerm, String searchContent) {
+    Sort sortable = null;
+    switch (sortTerm) {
+    case (Contants.Exam.COLUMN_TITLE):
+      if ((Contants.Exam.STATUS_IS_ASCENDING).equals(sortOrder.toLowerCase())) {
+        sortable = Sort.by(Contants.Exam.COLUMN_TITLE).ascending();
+      }
+      if ((Contants.Exam.STATUS_IS_DESCENDING)
+          .equals(sortOrder.toLowerCase())) {
+        sortable = Sort.by(Contants.Exam.COLUMN_TITLE).descending();
+      }
+      break;
+    case (Contants.Exam.COLUMN_ID):
+      if ((Contants.Exam.STATUS_IS_ASCENDING).equals(sortOrder.toLowerCase())) {
+        sortable = Sort.by(Contants.Exam.COLUMN_ID).ascending();
+      }
+      if ((Contants.Exam.STATUS_IS_DESCENDING)
+          .equals(sortOrder.toLowerCase())) {
+        sortable = Sort.by(Contants.Exam.COLUMN_ID).descending();
+      }
+      break;
+    case (Contants.Exam.COLUMN_DURATION):
+      if ((Contants.Exam.STATUS_IS_ASCENDING).equals(sortOrder.toLowerCase())) {
+        sortable = Sort.by(Contants.Exam.COLUMN_DURATION).ascending();
+      }
+      if ((Contants.Exam.STATUS_IS_DESCENDING)
+          .equals(sortOrder.toLowerCase())) {
+        sortable = Sort.by(Contants.Exam.COLUMN_DURATION).descending();
+      }
+      break;
+    case (Contants.Exam.COLUMN_NUMBER_OF_QUESTION):
+      if ((Contants.Exam.STATUS_IS_ASCENDING).equals(sortOrder.toLowerCase())) {
+        sortable = Sort.by(Contants.Exam.COLUMN_NUMBER_OF_QUESTION).ascending();
+      }
+      if ((Contants.Exam.STATUS_IS_DESCENDING)
+          .equals(sortOrder.toLowerCase())) {
+        sortable = Sort.by(Contants.Exam.COLUMN_NUMBER_OF_QUESTION).descending();
+      }
+      break;
+    case (Contants.Exam.COLUMN_STATUS):
+      if ((Contants.Exam.STATUS_IS_ASCENDING).equals(sortOrder.toLowerCase())) {
+        sortable = Sort.by(Contants.Exam.COLUMN_STATUS).ascending();
+      }
+    if ((Contants.Exam.STATUS_IS_DESCENDING)
+        .equals(sortOrder.toLowerCase())) {
+        sortable = Sort.by(Contants.Exam.COLUMN_STATUS).descending();
+      }
+      break;
+    case (Contants.Exam.COLUMN_CREATE_AT):
+      if ((Contants.Exam.STATUS_IS_ASCENDING).equals(sortOrder.toLowerCase())) {
+        sortable = Sort.by(Contants.Exam.COLUMN_CREATE_AT).ascending();
+      }
+    if ((Contants.Exam.STATUS_IS_DESCENDING)
+        .equals(sortOrder.toLowerCase())) {
+        sortable = Sort.by(Contants.Exam.COLUMN_CREATE_AT).descending();
+      }
+      break;
+    // sort theo trường fullname của user create_by
+    case (Contants.Exam.COLUMN_USER_CREATED):
+      if ((Contants.Exam.STATUS_IS_ASCENDING).equals(sortOrder.toLowerCase())) {
+        return examService.pageExamSortByUserCreatedByAsc(searchContent);
+      }
+    if ((Contants.Exam.STATUS_IS_DESCENDING)
+        .equals(sortOrder.toLowerCase())) {
+        return examService.pageExamSortByUserCreatedByDesc(searchContent);
+      }
+      break;
+    // sort theo trường category của category category_name
+    case (Contants.Exam.COLUMN_CATEGORY):
+      if ((Contants.Exam.STATUS_IS_ASCENDING).equals(sortOrder.toLowerCase())) {
+        return examService.pageExamSortByCategoryAsc(searchContent);
+      }
+    if ((Contants.Exam.STATUS_IS_DESCENDING)
+        .equals(sortOrder.toLowerCase())) {
+        return examService.pageExamSortByCategoryDesc(searchContent);
+      }
+      break;
+    }
+    return examService.pageExam(searchContent, sortable);
+  }
 }
