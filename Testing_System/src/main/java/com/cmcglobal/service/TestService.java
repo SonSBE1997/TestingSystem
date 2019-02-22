@@ -3,6 +3,7 @@ package com.cmcglobal.service;
 import java.util.List;
 
 import com.cmcglobal.entity.Test;
+import com.cmcglobal.entity.TestDetail;
 
 /**
  * @author User
@@ -67,5 +68,6 @@ public interface TestService {
      */
     List<Test> findBySemesterID(String id);
     
+    List<TestDetail> getTestDetail(String userId, String semesterId);
     
 }

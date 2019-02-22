@@ -207,12 +207,32 @@
           </mat-paginator>
         </div>
 
-          <div style="margin-top: 10px">
-            <a style="margin-right: 10px" class="btn btn-primary" [routerLink]="['/exam', 'create']">Create Exam</a>
-            <button type="Delete" class="btn btn-danger" (click)="deleteAllExam()">Delete</button>
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body" style="text-align: center">
+                You may want to delete
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="Delete" class="btn btn-danger" (click)="deleteAllExam()" data-dismiss="modal" >Delete</button>
+              </div>
+            </div>
           </div>
-          <!-- /.box -->
         </div>
-        <!-- /.col -->
+        <a style="margin-right: 10px" class="btn btn-primary" [routerLink]="['/exam', 'create']">Create Exam</a>
+        <button type="Delete" class="btn btn-danger"  data-toggle="modal" data-target="#exampleModalCenter">Delete</button>
       </div>
-      <!-- /.row -->
+
+    </div>
+    <!-- /.box-body -->
+  </div>
+  <!-- /.box -->
+</div>
+<!-- /.col -->
+</div>

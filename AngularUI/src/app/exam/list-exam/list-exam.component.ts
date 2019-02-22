@@ -210,8 +210,7 @@ export class ListExamComponent implements OnInit, AfterViewInit {
   }
 
   deleteAllExam() {
-    let r = confirm('Are you sure you want to Permanently delete this exam?');
-    if (r == true) {
+
       if (this.listId.length > 0) {
         this.listId.forEach(element => {
           this.http
@@ -229,8 +228,7 @@ export class ListExamComponent implements OnInit, AfterViewInit {
             });
         });
       }
-    } else {
-    }
+
   }
   // end
 
