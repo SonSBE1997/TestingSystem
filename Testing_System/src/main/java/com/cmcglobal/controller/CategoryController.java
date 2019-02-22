@@ -41,6 +41,7 @@
 //=======
 
 package com.cmcglobal.controller;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,26 +65,48 @@ import com.cmcglobal.service.CategoryService;
 @RequestMapping("/category")
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 public class CategoryController {
-    
-    @Autowired
-    CategoryService categoryService;
 
-    @GetMapping(value = "/listCategories")
-    public List<Category> listCategories() {
-      /*
-       * cate.delete(cate.getOne(1)); cate.deleteAll();
-       */
+  @Autowired
+  CategoryService categoryService;
 
-      return categoryService.findAll();
-    }
-	
-	@GetMapping("/{categoryName}")
-	public Category getOne(@PathVariable String categoryName) {
-		return categoryService.getOne(categoryName);
-	}
-	
-	@GetMapping("/list-category")
-	public List<Category> getAll() {
-		return categoryService.getAll();
-	}
+  /**
+   * Author: ptphuong.
+   * Created date: Feb 22, 2019
+   * Created time: 2:25:24 PM
+   * Description: TODO - .
+   * @return
+   */
+  @GetMapping(value = "/listCategories")
+  public List<Category> listCategories() {
+    /*
+     * cate.delete(cate.getOne(1)); cate.deleteAll();
+     */
+
+    return categoryService.findAll();
+  }
+
+  /**
+   * Author: ptphuong.
+   * Created date: Feb 22, 2019
+   * Created time: 2:25:30 PM
+   * Description: TODO - .
+   * @param categoryName
+   * @return
+   */
+  @GetMapping("/{categoryName}")
+  public Category getOne(@PathVariable String categoryName) {
+    return categoryService.getOne(categoryName);
+  }
+
+  /**
+   * Author: ptphuong.
+   * Created date: Feb 22, 2019
+   * Created time: 2:25:34 PM
+   * Description: TODO - .
+   * @return
+   */
+  @GetMapping("/list-category")
+  public List<Category> getAll() {
+    return categoryService.getAll();
+  }
 }

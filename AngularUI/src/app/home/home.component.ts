@@ -31,7 +31,7 @@ export class HomeComponent implements OnInit {
 
     setTimeout(() => {
       this.changeSlide()
-    }, 1500);
+    }, 800);
   }
 
   showSemesterTest() {
