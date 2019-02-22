@@ -92,4 +92,8 @@ export class ExamService {
       )
       .pipe(tap(resp => console.log(resp.headers.get('CountSearchQuestion'))));
   }
+
+  isEmptyQuestion(examId) {
+    return this.http.get(this.url + `exam/is-empty/${examId}`);
+  }
 }

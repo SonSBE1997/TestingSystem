@@ -33,6 +33,7 @@ public interface Api {
     public static final String REMOVE_QUESTION = "/remove-question";
     public static final String ADD_QUESTION = "/add-question";
     public static final String RANDOM_QUESTION = "/random-question";
+    public static final String IS_EMPTY_QUESTION = "/is-empty/{examId}";
 
     // Status
     public static final String OK = "Ok";
