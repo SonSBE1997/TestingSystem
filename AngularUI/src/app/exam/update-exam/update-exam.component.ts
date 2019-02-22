@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { mergeMap } from 'rxjs/operators';
 import { ExamService } from 'src/app/service/examService.service';
 import { Exam } from 'src/app/entity/Exam.interface';
@@ -17,7 +17,8 @@ export class UpdateExamComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private http: HttpClient,
     private examService: ExamService,
-    private notifierService: NotifierService
+    private notifierService: NotifierService,
+    private router: Router,
   ) { }
 
   ngOnInit() {
@@ -43,6 +44,7 @@ export class UpdateExamComponent implements OnInit {
           if (error.error.text === 'Ok') {
             this.detailExam.status = 'Public';
             this.notifierService.notify('success', 'Approve exam successfully', '');
+            setTimeout(() => { this.router.navigateByUrl('/exam'); }, 2000);
           } else {
             this.notifierService.notify('warning', 'Can not approve this exam: No question in this exam', '');
           }

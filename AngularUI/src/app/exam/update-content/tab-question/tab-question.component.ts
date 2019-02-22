@@ -92,6 +92,7 @@ export class TabQuestionComponent implements OnInit {
   changePageSizeTabAllQuestion(e) {
     this.tabAllQuestion.sizeOfPage = e.value;
     this.tabAllQuestion.currentPage = 0;
+    this.isCheckAll = false;
     this.loadDataByPage();
   }
 
