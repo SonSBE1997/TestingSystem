@@ -64,6 +64,7 @@ public interface ExamService {
    * @param searchContent
    * @return
    */
+
   public List<Exam> pageExamSortByCategoryDesc(String searchContent);
 
   public Exam findByID(String id);
@@ -138,5 +139,15 @@ public interface ExamService {
 
   Exam update(Exam exam);
 
-  List<Exam> readExcel(String exelFilePath);
+  List<Exam> readExcel(String exelFilePath) throws Exception;
+
+  /**
+   * Author: Sanero.
+   * Created date: Feb 22, 2019
+   * Created time: 11:13:23 AM
+   * Description: TODO - check empty question. if true. change status to draft.
+   * @param examId
+   * @return
+   */
+  public boolean isEmptyQuestionOfExam(String examId);
 }

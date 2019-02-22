@@ -1,8 +1,10 @@
 package com.cmcglobal.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,16 +28,24 @@ public class UploadFileController {
 	List<String> files = new ArrayList<>();
 
 	@PostMapping(value="/uploadfile")
-	public ResponseEntity<String> handleFileUpload(@RequestParam("files") MultipartFile file) {
+	public ResponseEntity<String> handleFileUpload(@RequestParam("files") MultipartFile file) throws IOException {
+		String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+		System.out.println("Extension: " +extension);
+		System.out.println( !(("xlsx".equals(extension)) || ("xls".equals(extension))) );
+		
+		if( !(("xlsx".equals(extension)) || ("xls".equals(extension))) ) {
+			String mess = "Not matching extension file";
+			return ResponseEntity.status(HttpStatus.OK).body(mess);
+		}
 		String message = "";
 		try {
 			uploadFileService.saveFile(file);
 			files.add(file.getOriginalFilename());
 			message = "successfully uploaded" + file.getOriginalFilename() + "!";
-			return ResponseEntity.status(HttpStatus.OK).body(message);
+			return ResponseEntity.status(HttpStatus.OK).body("OK");
 		} catch (Exception e) {
 			message = "ERROR! can't upload " + file.getOriginalFilename() + "!";
-			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(message);
+			return ResponseEntity.status(HttpStatus.OK).body(message);
 		}
 	}
 }

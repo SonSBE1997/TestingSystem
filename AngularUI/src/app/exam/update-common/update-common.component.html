@@ -26,57 +26,37 @@
       <!-- /.box-header -->
       <div class="box-body">
         <div class="row">
-          <form novalidate (ngSubmit)="onSubmit()" [formGroup]="examFrm"
-                  class="form-horizontal col-xs-10">
+          <form novalidate (ngSubmit)="onSubmit()" [formGroup]="examFrm" class="form-horizontal col-xs-10">
             <div class="box-body">
               <div class="form-group">
-                <label for="inputEmail3" class="col-sm-2 control-label"
-                  >Title</label
-                >
+                <label for="inputEmail3" class="col-sm-2 control-label">Title</label>
 
                 <div class="col-sm-10">
-                  <input
-                    type="email"
-                    class="form-control row-1"
-                    id="inputEmail3"
-                    name="title"
-                    placeholder="Email"
-                    value="SQL Exam Final"
-                    formControlName="title"
-                    [ngClass]="{
+                  <input type="email" class="form-control row-1" id="inputEmail3" name="title" placeholder="Email"
+                    value="SQL Exam Final" formControlName="title" [ngClass]="{
                       'is-valid': examFrm.get('title').valid,
                       'is-invalid': examFrm.get('title').invalid && examFrm.get('title').touched
-                    }"
-                    pattern="^[A-Za-z-_0123456789]{1,}$"
-                  />
+                    }" pattern="^[A-Za-z-_0123456789# ]{1,}$" />
                   <!-- validator Title -->
                   <ng-container *ngIf="examFrm.get('title').hasError('required')">
-                      <p style="color: red; margin-bottom: -10px; font-family: unset">
-                        *Title is required!*</p>
+                    <p style="color: #c73535; margin-bottom: -10px; font-family: inherit">
+                      *Title is required!*</p>
                   </ng-container>
                   <ng-container *ngIf="examFrm.get('title').hasError('pattern')">
-                      <p style="color: red; margin-bottom: -10px; font-family: unset">
-                        *Title is invalid!*</p>
+                    <p style="color: #c73535; margin-bottom: -10px; font-family: inherit">
+                      *These special characters of Title include '-', '_', '#' but aren't limited to other:
+                    </p>
                   </ng-container>
                   <!-- end of validator Title -->
                 </div>
               </div>
               <div class="form-group">
-                <label for="inputPassword3" class="col-sm-2 control-label"
-                  >Exam Category</label
-                >
+                <label for="inputPassword3" class="col-sm-2 control-label">Exam Category</label>
                 <div class="col-sm-10">
-                  <select
-                    id="category"
-                    class="form-control select2 select2-hidden-accessible"
-                    style="width: 100%;"
-                    tabindex="-1"
-                    aria-hidden="true"
-                    formControlName="category"
-
-                  >
-                    <option *ngFor="let category of categories" [selected]="category.categoryId === exam?.category.categoryId"
-                     [value]="category.categoryId">
+                  <select id="category" class="form-control select2 select2-hidden-accessible" style="width: 100%;"
+                    tabindex="-1" aria-hidden="true" formControlName="category">
+                    <option *ngFor="let category of categories"
+                      [selected]="category.categoryId === exam?.category.categoryId" [value]="category.categoryId">
                       {{category.categoryName}}
                     </option>
                   </select>
@@ -84,100 +64,77 @@
               </div>
 
               <div class="form-group">
-                <label for="iNumQues" class="col-sm-2 control-label"
-                  >Number Question</label
-                >
+                <label for="iNumQues" class="col-sm-2 control-label">Number Question</label>
 
                 <div class="col-sm-10">
-                  <input
-                    type="number"
-                    class="form-control"
-                    id="iNumQues"
-                    placeholder="Number question"
-                    formControlName="numberOfQuestion"
-                    [ngClass]="{
+                  <input type="number" class="form-control" id="iNumQues" placeholder="Number question"
+                    formControlName="numberOfQuestion" [ngClass]="{
                       'is-valid': examFrm.get('numberOfQuestion').valid,
                       'is-invalid': examFrm.get('numberOfQuestion').invalid && examFrm.get('numberOfQuestion').touched
-                    }"
-                    pattern="^\d+$"
-                  />
+                    }" pattern="^\d+$" />
                   <!-- validator numberOfQuestion -->
                   <ng-container *ngIf="examFrm.get('numberOfQuestion').hasError('required')">
-                      <p style="color: red; margin-bottom: -10px; font-family: unset">
-                        *NumberOfQuestion is required!*</p>
+                    <p style="color: #c73535; margin-bottom: -10px; font-family: inherit">
+                      *NumberOfQuestion is required!*</p>
                   </ng-container>
                   <ng-container *ngIf="examFrm.get('numberOfQuestion').hasError('pattern')">
-                      <p style="color: red; margin-bottom: -10px; font-family: unset">
-                        *NumberOfQuestion must be positive number!*</p>
+                    <p style="color: #c73535; margin-bottom: -10px; font-family: inherit">
+                      *NumberOfQuestion must be positive number!*</p>
                   </ng-container>
                   <!-- end of validator numberOfQuestion -->
                 </div>
               </div>
 
               <div class="form-group">
-                <label for="iDuration" class="col-sm-2 control-label"
-                  >Duration</label
-                >
+                <label for="iDuration" class="col-sm-2 control-label">Duration</label>
 
                 <div class="col-sm-10">
-                  <input
-                    type="number"
-                    class="form-control"
-                    id="iDuration"
-                    placeholder="Duration"
-                    formControlName="duration"
-                    [ngClass]="{
+                  <input type="number" class="form-control" id="iDuration" placeholder="Duration"
+                    formControlName="duration" [ngClass]="{
                       'is-valid': examFrm.get('duration').valid,
                       'is-invalid': examFrm.get('duration').invalid && examFrm.get('duration').touched
-                    }"
-                    pattern="^\d+$"
-                  />
+                    }" pattern="^\d+$" />
                   <!-- validator duration -->
                   <ng-container *ngIf="examFrm.get('duration').hasError('required')">
-                      <p style="color: red; margin-bottom: -10px; font-family: unset">
-                        *Duration is required!*</p>
+                    <p style="color: #c73535; margin-bottom: -10px; font-family: inherit">
+                      *Duration is required!*</p>
                   </ng-container>
                   <ng-container *ngIf="examFrm.get('duration').hasError('pattern')">
-                      <p style="color: red; margin-bottom: -10px; font-family: unset">
-                        *Duration must be positive number!*</p>
+                    <p style="color: #c73535; margin-bottom: -10px; font-family: inherit">
+                      *Duration must be positive number!*</p>
                   </ng-container>
                   <!-- end of validator duration -->
                 </div>
               </div>
 
               <div class="form-group">
-                <label for="inputPassword3" class="col-sm-2 control-label"
-                  >Status</label
-                >
+                <label for="inputPassword3" class="col-sm-2 control-label">Status</label>
                 <div class="col-sm-10">
-                  <select
-                    class="form-control select2 select2-hidden-accessible"
-                    style="width: 100%;"
-                    tabindex="-1"
-                    aria-hidden="true"
-                    formControlName="status"
-                  >
+                  <select class="form-control select2 select2-hidden-accessible" style="width: 100%;" tabindex="-1"
+                    aria-hidden="true" formControlName="status">
                     <option selected="selected">Draft</option>
-                    <option>Public</option>
+                    <option [disabled]='this.checkStatus'>Public</option>
                   </select>
+                  <ng-container *ngIf="this.checkStatus">
+                    <p style="color: #c73535; margin-bottom: -10px; font-family: inherit">
+                      *No questions in this exam so can't selected to Public status*</p>
+                  </ng-container>
                 </div>
+
               </div>
 
               <div class="form-group">
                 <label for="iNote" class="col-sm-2 control-label">Note</label>
                 <div class="col-sm-10">
                   <!-- <textarea id="editor1" name="editor1" rows="10" cols="130"></textarea> -->
-                  <ckeditor
-                    [editor]="Editor"
-                    formControlName="note"
-                  ></ckeditor>
+                  <ckeditor [editor]="Editor" formControlName="note"></ckeditor>
                 </div>
               </div>
 
               <div class="form-group">
                 <div class="col-sm-2"></div>
                 <div class="col-sm-10">
-                  <button class="btn btn-primary mr-3">Update</button>
+                  <button class="btn btn-primary mr-3" [disabled]='this.examFrm.invalid'>Update</button>
                   <button class="btn btn-default" (click)="reset($event)">Reset</button>
                 </div>
               </div>

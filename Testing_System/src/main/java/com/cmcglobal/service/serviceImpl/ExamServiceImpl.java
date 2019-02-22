@@ -301,7 +301,7 @@ public class ExamServiceImpl implements ExamService {
   }
 
   @Override
-  public List<Exam> readExcel(final String exelFilePath) {
+  public List<Exam> readExcel(final String exelFilePath) throws Exception {
     final int COLUMN_INDEX_TITLE = 0;
     final int COLUMN_INDEX_DURATION = 1;
     final int COLUMN_INDEX_CATEGORYID = 2;
@@ -315,9 +315,6 @@ public class ExamServiceImpl implements ExamService {
 
       Workbook workbook = getWorkbook(fileInput, exelFilePath);
       Sheet sheet = workbook.getSheetAt(0);
-
-//			Row rowFirst = sheet.getRow(0);
-//			Iterator<Cell> cellrowFirst = rowFirst.cellIterator();
 
       for (int rowNum = 1; rowNum <= sheet.getLastRowNum(); rowNum++) {
         Exam exam = new Exam();
@@ -335,7 +332,7 @@ public class ExamServiceImpl implements ExamService {
           }
           System.out.println(cell.toString());
 
-//					SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+//		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
           int columnIndex = cell.getColumnIndex();
 
           switch (columnIndex) {
@@ -465,6 +462,23 @@ public class ExamServiceImpl implements ExamService {
         id = ("Exam") + id1;
       return id;
     }
+  }
+
+  /* (non-Javadoc)
+   * @see com.cmcglobal.service.ExamService#isEmptyQuestionOfExam(java.lang.String)
+   * Author: Sanero.
+   * Created date: Feb 22, 2019
+   * Created time: 11:14:11 AM
+   */
+  @Override
+  public boolean isEmptyQuestionOfExam(String examId) {
+    Exam exam = examRepository.findById(examId).get();
+    if (exam.getExamQuestions().size() == 0) {
+      exam.setStatus("Draft");
+      exam = examRepository.save(exam);
+      return true;
+    }
+    return false;
   }
 
 }

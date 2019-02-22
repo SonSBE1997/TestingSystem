@@ -7,8 +7,9 @@ import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { mergeMap } from 'rxjs/operators';
 
-import { Exam } from '../exam.interface';
+//import { Exam } from '../exam.interface';
 import { Category } from 'src/app/category/category.interface';
+import { Exam } from 'src/app/entity/Exam.interface';
 
 
 @Component({
@@ -22,6 +23,7 @@ export class UpdateCommonComponent implements OnInit {
   exam: Exam;
   category: Category;
   categories: Category[] = [];
+  checkStatus: boolean;
 
   inputCategory: string;
 
@@ -64,7 +66,14 @@ export class UpdateCommonComponent implements OnInit {
           note: exam.note
         }
       );
-      console.log(this.exam);
+      console.log("Exam1: " + this.exam.title );
+      // console.log("Exam1: " + (this.exam.examQuestions.length == 0?true:false) );
+      if(this.exam.examQuestions.length == 0){
+        this.checkStatus = true;
+      }else{
+        this.checkStatus = false;
+      }
+      console.log("check: " + this.checkStatus);
     })
 
   }
