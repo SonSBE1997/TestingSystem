@@ -2,13 +2,12 @@ package com.cmcglobal.service.serviceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.cmcglobal.entity.Exam;
-import com.cmcglobal.entity.User;
-import com.cmcglobal.repository.UserRepository;
-import com.cmcglobal.service.UserService;
+
 import com.cmcglobal.entity.Candidate;
 import com.cmcglobal.entity.Exam;
 import com.cmcglobal.entity.SemesterExam;

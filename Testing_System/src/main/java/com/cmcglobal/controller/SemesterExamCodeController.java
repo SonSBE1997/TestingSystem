@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cmcglobal.entity.SemesterExam;
 import com.cmcglobal.entity.SemesterExamCode;
 import com.cmcglobal.service.ServiceResult;
 import com.cmcglobal.service.UserService;

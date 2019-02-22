@@ -15,13 +15,12 @@ import com.cmcglobal.entity.TestDetail;
 import com.cmcglobal.entity.User;
 import com.cmcglobal.repository.CandidateRepository;
 import com.cmcglobal.repository.CandidateTestRepository;
-import com.cmcglobal.repository.SemesterExamCodeRepository;
 import com.cmcglobal.repository.SemesterExamRepository;
 import com.cmcglobal.repository.TestRepository;
 import com.cmcglobal.repository.UserRepository;
 import com.cmcglobal.service.ServiceResult;
-import com.cmcglobal.service.TestService;
 import com.cmcglobal.service.ServiceResult.Status;
+import com.cmcglobal.service.TestService;
 
 @Service
 @Transactional

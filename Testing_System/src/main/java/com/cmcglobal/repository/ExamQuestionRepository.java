@@ -18,7 +18,7 @@ import com.cmcglobal.entity.ExamQuestion;
  * @author Sanero.
  * Created date: Feb 13, 2019
  * Created time: 5:34:04 PM
- * Description: TODO - 
+ * Description: TODO - exam-question repository. 
  */
 @Repository
 public interface ExamQuestionRepository

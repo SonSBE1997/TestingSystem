@@ -5,12 +5,15 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
+
 import javax.persistence.EntityManager;
+
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
@@ -19,27 +22,37 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import com.cmcglobal.entity.Category;
-import com.cmcglobal.builder.FilterBuilder;
-import com.cmcglobal.entity.Exam;
-import com.cmcglobal.repository.ExamRepository;
-import com.cmcglobal.service.CategoryService;
-import com.cmcglobal.service.ExamService;
-import java.util.Random;
 import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.cmcglobal.builder.FilterBuilder;
+import com.cmcglobal.entity.Category;
+import com.cmcglobal.entity.Exam;
 import com.cmcglobal.entity.ExamQuestion;
 import com.cmcglobal.entity.Question;
 import com.cmcglobal.entity.User;
+import com.cmcglobal.repository.ExamRepository;
+import com.cmcglobal.service.CategoryService;
 import com.cmcglobal.service.ExamQuestionService;
+import com.cmcglobal.service.ExamService;
 import com.cmcglobal.service.QuestionServices;
 import com.cmcglobal.utils.Helper;
 
+/*
+ * @author Sanero.
+ * Created date: Feb 22, 2019
+ * Created time: 2:10:49 PM
+ * Description: TODO - Exam service implementation.
+ */
 @Service
 @Transactional
 public class ExamServiceImpl implements ExamService {
+  static final Logger LOGGER = LoggerFactory.getLogger(ExamServiceImpl.class);
+  
   @Autowired
   ExamRepository examRepository;
 
@@ -55,6 +68,12 @@ public class ExamServiceImpl implements ExamService {
   @Autowired
   ExamService examService;
 
+  /* (non-Javadoc)
+   * @see com.cmcglobal.service.ExamService#createExam(com.cmcglobal.entity.Exam)
+   * Author: ptphuong.
+   * Created date: Feb 22, 2019
+   * Created time: 2:11:47 PM
+   */
   @Override
   public void createExam(Exam ex) {
     User user = new User();
@@ -68,11 +87,23 @@ public class ExamServiceImpl implements ExamService {
     examRepository.save(ex);
   }
 
+  /* (non-Javadoc)
+   * @see com.cmcglobal.service.ExamService#findAll()
+   * Author: ntmduyen.
+   * Created date: Feb 22, 2019
+   * Created time: 2:12:30 PM
+   */
   @Override
   public List<Exam> findAll() {
     return examRepository.findAll();
   }
 
+  /* (non-Javadoc)
+   * @see com.cmcglobal.service.ExamService#findByID(java.lang.String)
+   * Author: vvdong.
+   * Created date: Feb 22, 2019
+   * Created time: 2:12:39 PM
+   */
   @Override
   public Exam findByID(String id) {
     return examRepository.findById(id).get();
@@ -101,26 +132,56 @@ public class ExamServiceImpl implements ExamService {
     }
   }
 
+  /* (non-Javadoc)
+   * @see com.cmcglobal.service.ExamService#pageExam(java.lang.String, org.springframework.data.domain.Sort)
+   * Author: ntmduyen.
+   * Created date: Feb 22, 2019
+   * Created time: 2:12:50 PM
+   */
   @Override
   public List<Exam> pageExam(String searchContent, Sort pageable) {
     return examRepository.pageExam(searchContent, pageable);
   }
 
+  /* (non-Javadoc)
+   * @see com.cmcglobal.service.ExamService#pageExamSortByUserCreatedByAsc(java.lang.String)
+   * Author: ntmduyen.
+   * Created date: Feb 22, 2019
+   * Created time: 2:12:59 PM
+   */
   @Override
   public List<Exam> pageExamSortByUserCreatedByAsc(String searchContent) {
     return examRepository.pageExamSortByUserCreatedByAsc(searchContent);
   }
 
+  /* (non-Javadoc)
+   * @see com.cmcglobal.service.ExamService#pageExamSortByUserCreatedByDesc(java.lang.String)
+   * Author: ntmduyen.
+   * Created date: Feb 22, 2019
+   * Created time: 2:13:03 PM
+   */
   @Override
   public List<Exam> pageExamSortByUserCreatedByDesc(String searchContent) {
     return examRepository.pageExamSortByUserCreatedByDesc(searchContent);
   }
 
+  /* (non-Javadoc)
+   * @see com.cmcglobal.service.ExamService#pageExamSortByCategoryAsc(java.lang.String)
+   * Author: ntmduyen.
+   * Created date: Feb 22, 2019
+   * Created time: 2:13:08 PM
+   */
   @Override
   public List<Exam> pageExamSortByCategoryAsc(String searchContent) {
     return examRepository.pageExamSortByCategoryAsc(searchContent);
   }
 
+  /* (non-Javadoc)
+   * @see com.cmcglobal.service.ExamService#pageExamSortByCategoryDesc(java.lang.String)
+   * Author: ntmduyen.
+   * Created date: Feb 22, 2019
+   * Created time: 2:13:12 PM
+   */
   @Override
   public List<Exam> pageExamSortByCategoryDesc(String searchContent) {
     return examRepository.pageExamSortByCategoryDesc(searchContent);
@@ -207,6 +268,12 @@ public class ExamServiceImpl implements ExamService {
 
   }
 
+  /* (non-Javadoc)
+   * @see com.cmcglobal.service.ExamService#createId()
+   * Author: ptphuong.
+   * Created date: Feb 22, 2019
+   * Created time: 2:13:31 PM
+   */
   @Override
   public String createId() {
     String id;
@@ -235,6 +302,12 @@ public class ExamServiceImpl implements ExamService {
     return id;
   }
 
+  /* (non-Javadoc)
+   * @see com.cmcglobal.service.ExamService#deleteExam(java.lang.String)
+   * Author: ndvan.
+   * Created date: Feb 22, 2019
+   * Created time: 2:14:02 PM
+   */
   @Override
   public void deleteExam(String examId) {
     ;
@@ -242,12 +315,26 @@ public class ExamServiceImpl implements ExamService {
 
   }
 
+  /* (non-Javadoc)
+   * @see com.cmcglobal.service.ExamService#FilterExam(com.cmcglobal.entity.Exam)
+   * Author: ndvan.
+   * Created date: Feb 22, 2019
+   * Created time: 2:14:08 PM
+   */
   @Override
   public List<Exam> FilterExam(Exam exam) {
     List<Exam> exams = examRepository.findAll(getFilterBuilder(exam));
     return exams;
   }
 
+  /**
+   * Author: ndvan.
+   * Created date: Feb 22, 2019
+   * Created time: 2:14:15 PM
+   * Description: TODO - .
+   * @param exam
+   * @return
+   */
   public FilterBuilder getFilterBuilder(Exam exam) {
     return new FilterBuilder.Builder()
         .setNumberOfQuestion(exam.getNumberOfQuestion())
@@ -259,24 +346,48 @@ public class ExamServiceImpl implements ExamService {
   @Autowired
   CategoryService categoryService;
 
+  /* (non-Javadoc)
+   * @see com.cmcglobal.service.ExamService#getOne(java.lang.String)
+   * Author: hai95.
+   * Created date: Feb 22, 2019
+   * Created time: 2:14:29 PM
+   */
   @Override
   public Exam getOne(String examId) {
     // TODO Auto-generated method stub
     return entityManager.find(Exam.class, examId);
   }
 
+  /* (non-Javadoc)
+   * @see com.cmcglobal.service.ExamService#insert(com.cmcglobal.entity.Exam)
+   * Author: hai95.
+   * Created date: Feb 22, 2019
+   * Created time: 2:14:41 PM
+   */
   @Override
   public Exam insert(Exam exam) {
     // TODO Auto-generated method stub
     return examRepository.save(exam);
   }
 
+  /* (non-Javadoc)
+   * @see com.cmcglobal.service.ExamService#update(com.cmcglobal.entity.Exam)
+   * Author: hai95.
+   * Created date: Feb 22, 2019
+   * Created time: 2:14:52 PM
+   */
   @Override
   public Exam update(Exam exam) {
     // TODO Auto-generated method stub
     return examRepository.save(exam);
   }
 
+  /* (non-Javadoc)
+   * @see com.cmcglobal.service.ExamService#readExcel(java.lang.String)
+   * Author: ahi95.
+   * Created date: Feb 22, 2019
+   * Created time: 2:14:59 PM
+   */
   @Override
   public List<Exam> readExcel(final String exelFilePath) throws Exception {
     final int COLUMN_INDEX_TITLE = 0;
@@ -372,6 +483,14 @@ public class ExamServiceImpl implements ExamService {
   }
 
   // Get Cell's value
+  /**
+   * Author: hai95.
+   * Created date: Feb 22, 2019
+   * Created time: 2:15:16 PM
+   * Description: TODO - .
+   * @param cell
+   * @return
+   */
   private static Object getCellValue(Cell cell) {
     CellType cellType = cell.getCellTypeEnum();
     Object cellValue = null;
@@ -403,6 +522,16 @@ public class ExamServiceImpl implements ExamService {
   }
 
   // Get Workbook
+  /**
+   * Author: Sanero.
+   * Created date: Feb 22, 2019
+   * Created time: 2:15:25 PM
+   * Description: TODO - hai95.
+   * @param inputStream
+   * @param excelFilePath
+   * @return
+   * @throws IOException
+   */
   private static Workbook getWorkbook(InputStream inputStream,
       String excelFilePath) throws IOException {
     Workbook workbook = null;
@@ -418,6 +547,12 @@ public class ExamServiceImpl implements ExamService {
     return workbook;
   }
 
+  /* (non-Javadoc)
+   * @see com.cmcglobal.service.ExamService#createId1()
+   * Author: hai95.
+   * Created date: Feb 22, 2019
+   * Created time: 2:15:32 PM
+   */
   @Override
   public String createId1() {
     String id;

@@ -1,31 +1,66 @@
 package com.cmcglobal.service;
 
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-
 import java.util.List;
+
+import org.springframework.data.domain.Sort;
 
 import com.cmcglobal.entity.Exam;
 
 public interface ExamService {
   /**
    * Author: ntmduyen. Created date: Feb 20, 2019 Created time: 12:41:55 PM
-   * Description: TODO - .
+   * Description: TODO - find all exam.
    * 
    * @return
    */
   public List<Exam> findAll();
 
+  /**
+   * Author: ntmduyen. Created date: Feb 20, 2019 Created time: 12:41:55 PM
+   * Description: TODO - get list exam by page.
+   * 
+   * @return
+   */
   public List<Exam> pageExam(String searchContent, Sort pageable);
 
+  /**
+   * Author: ntmduyen. Created date: Feb 20, 2019 Created time: 12:41:55 PM
+   * Description: TODO - get list exam by page sort by created user.
+   * 
+   * @return
+   */
   public List<Exam> pageExamSortByUserCreatedByAsc(String searchContent);
 
+  /**
+   * Author: ntmduyen. Created date: Feb 20, 2019 Created time: 12:41:55 PM
+   * Description: TODO - get list exam by page sort by created user.
+   * 
+   * @return
+   */
   public List<Exam> pageExamSortByUserCreatedByDesc(String searchContent);
 
+  /**
+   * Author: ntmduyen. Created date: Feb 20, 2019 Created time: 12:41:55 PM
+   * Description: TODO - get list exam by page sort by category.
+   * 
+   * @return
+   */
   public List<Exam> pageExamSortByCategoryAsc(String searchContent);
 
+  /**
+   * Author: ntmduyen. Created date: Feb 20, 2019 Created time: 12:41:55 PM
+   * Description: TODO - get list exam by page sort by category.
+   * 
+   * @return
+   */
   public List<Exam> pageExamSortByCategoryDesc(String searchContent);
 
+  /**
+   * Author: vvdong. Created date: Feb 20, 2019 Created time: 12:41:55 PM
+   * Description: TODO - find exam by exam-id.
+   * 
+   * @return
+   */
   public Exam findByID(String id);
 
   /**
@@ -66,7 +101,7 @@ public interface ExamService {
 
   /**
    * Author: ptphuong. Created date: Feb 15, 2019 Created time: 5:22:39 AM
-   * Description: TODO - .
+   * Description: TODO - create exam.
    * 
    * @param ex
    */
@@ -74,7 +109,7 @@ public interface ExamService {
 
   /**
    * Author: ptphuong. Created date: Feb 15, 2019 Created time: 7:55:39 PM
-   * Description: TODO - .
+   * Description: TODO - create id - generate id.
    * 
    * @return
    */
@@ -82,22 +117,58 @@ public interface ExamService {
 
   /**
    * Author: ndvan. Created date: Feb 15, 2019 Created time: 5:22:39 AM
-   * Description: TODO - .
+   * Description: TODO - delete exam.
    * 
    * @param ex
    */
   public void deleteExam(String examId);
 
+  /**
+   * Author: ndvan. Created date: Feb 20, 2019 Created time: 12:41:55 PM
+   * Description: TODO - filter exam.
+   * 
+   * @return
+   */
   public List<Exam> FilterExam(Exam exam);
 
+  /**
+   * Author: hai95. Created date: Feb 20, 2019 Created time: 12:41:55 PM
+   * Description: TODO - generate id.
+   * 
+   * @return
+   */
   public String createId1();
 
+  /**
+   * Author: hai95. Created date: Feb 20, 2019 Created time: 12:41:55 PM
+   * Description: TODO - get exam by id.
+   * 
+   * @return
+   */
   Exam getOne(String examId);
 
+  /**
+   * Author: hai95. Created date: Feb 20, 2019 Created time: 12:41:55 PM
+   * Description: TODO - insert exam to db.
+   * 
+   * @return
+   */
   Exam insert(Exam exam);
 
+  /**
+   * Author: hai95. Created date: Feb 20, 2019 Created time: 12:41:55 PM
+   * Description: TODO - update exam.
+   * 
+   * @return
+   */
   Exam update(Exam exam);
 
+  /**
+   * Author: hai95. Created date: Feb 20, 2019 Created time: 12:41:55 PM
+   * Description: TODO - read file excel.
+   * 
+   * @return
+   */
   List<Exam> readExcel(String exelFilePath) throws Exception;
 
   /**
