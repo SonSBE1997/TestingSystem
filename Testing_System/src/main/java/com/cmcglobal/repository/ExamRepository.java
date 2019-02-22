@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.cmcglobal.custorm.FilterCustorm;
 import com.cmcglobal.entity.Exam;
+import com.cmcglobal.utils.Contants;
 
 /*
  * @author ntmduyen.
@@ -26,13 +27,7 @@ public interface ExamRepository
    * @param pageable
    * @return
    */
-  @Query("Select e FROM Exam e, User u, Category c WHERE e.userCreated = u and e.category = c and "
-      + "(e.title like %:searchInput% " + "OR u.fullName like %:searchInput% "
-      + "OR c.categoryName like %:searchInput% "
-      + "OR e.duration like %:searchInput% "
-      + "OR e.numberOfQuestion like %:searchInput% "
-      + "OR e.status like %:searchInput%) " + "GROUP BY e.examId")
-
+  @Query(Contants.Exam.QUERY_PAGE_ALL)
   List<Exam> pageExam(@Param("searchInput") String searchContent,
       Sort pageable);
 
@@ -44,33 +39,19 @@ public interface ExamRepository
    * @param pageable
    * @return
    */
-  @Query("Select e FROM Exam e, User u, Category c "
-      + "WHERE e.userCreated = u and e.category = c and "
-      + "(e.title like %:searchInput% " + "OR u.fullName like %:searchInput% "
-      + "OR c.categoryName like %:searchInput% "
-      + "OR e.duration like %:searchInput% "
-      + "OR e.numberOfQuestion like %:searchInput% "
-      + "OR e.status like %:searchInput%) "
-      + "GROUP BY e.examId ORDER BY u.fullName asc")
+  @Query(Contants.Exam.QUERY_PAGE_ALL_SORT_BY_USER_CREATED_ASC)
   List<Exam> pageExamSortByUserCreatedByAsc(
       @Param("searchInput") String searchContent);
 
   /**
    * Author: ntmduyen
    * Created date: Feb 17, 2019
-   * Created time: 12:51:17 AM
-   * Description: TODO - select list exam sort by created user descending.
+   * Created time: 12:51:10 AM
+   * Description: TODO - select exam sort by created user descending.
    * @param pageable
    * @return
    */
-  @Query("Select e FROM Exam e, User u, Category c "
-      + "WHERE e.userCreated = u and e.category = c and "
-      + "(e.title like %:searchInput% " + "OR u.fullName like %:searchInput% "
-      + "OR c.categoryName like %:searchInput% "
-      + "OR e.duration like %:searchInput% "
-      + "OR e.numberOfQuestion like %:searchInput% "
-      + "OR e.status like %:searchInput%) " + "GROUP BY e.examId "
-      + "ORDER BY u.fullName desc")
+  @Query(Contants.Exam.QUERY_PAGE_ALL_SORT_BY_USER_CREATED_DESC)
   List<Exam> pageExamSortByUserCreatedByDesc(
       @Param("searchInput") String searchContent);
 
@@ -82,14 +63,7 @@ public interface ExamRepository
    * @param pageable
    * @return
    */
-  @Query("Select e FROM Exam e, User u, Category c "
-      + "WHERE e.userCreated = u and e.category = c and "
-      + "(e.title like %:searchInput% " + "OR u.fullName like %:searchInput% "
-      + "OR c.categoryName like %:searchInput% "
-      + "OR e.duration like %:searchInput% "
-      + "OR e.numberOfQuestion like %:searchInput% "
-      + "OR e.status like %:searchInput%) " + "GROUP BY e.examId "
-      + "ORDER BY c.categoryName asc")
+  @Query(Contants.Exam.QUERY_PAGE_ALL_SORT_BY_CATEGORY_NAME_ASC)
   List<Exam> pageExamSortByCategoryAsc(
       @Param("searchInput") String searchContent);
 
@@ -101,14 +75,7 @@ public interface ExamRepository
    * @param pageable
    * @return
    */
-  @Query("Select e FROM Exam e, User u, Category c "
-      + "WHERE e.userCreated = u and e.category = c and "
-      + "(e.title like %:searchInput% " + "OR u.fullName like %:searchInput% "
-      + "OR c.categoryName like %:searchInput% "
-      + "OR e.duration like %:searchInput% "
-      + "OR e.numberOfQuestion like %:searchInput% "
-      + "OR e.status like %:searchInput%) " + "GROUP BY e.examId "
-      + "ORDER BY c.categoryName desc")
+  @Query(Contants.Exam.QUERY_PAGE_ALL_SORT_BY_CATEGORY_NAME_DESC)
   List<Exam> pageExamSortByCategoryDesc(
       @Param("searchInput") String searchContent);
 }

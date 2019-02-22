@@ -85,7 +85,6 @@ public class ExamController {
       @RequestParam(name = "sortOrder", required = false, defaultValue = "ASC") String sortOrder,
       @RequestParam(name = "sortTerm", required = false, defaultValue = "title") String sortTerm,
       @RequestParam(name = "searchContent", required = false, defaultValue = "") String searchContent) {
-//    Pageable sortedBy = null;
     Sort sortable = null;
     switch (sortTerm) {
     case ("title"):
@@ -362,7 +361,8 @@ public class ExamController {
   public ResponseEntity<String> isEmptyQuestion(@PathVariable String examId) {
     boolean success = examService.isEmptyQuestionOfExam(examId);
     System.out.println(examId);
-    if (success) return ResponseEntity.ok(Api.Exam.OK);
+    if (success)
+      return ResponseEntity.ok(Api.Exam.OK);
     return ResponseEntity.ok(Api.Exam.NOT_OK);
   }
 }

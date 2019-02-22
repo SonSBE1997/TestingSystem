@@ -99,7 +99,11 @@ public class ExamServiceImpl implements ExamService {
    */
   @Override
   public List<Exam> findAll() {
-    return examRepository.findAll();
+    try {
+      return examRepository.findAll();
+    } catch (Exception e) {
+      return new ArrayList<Exam>();
+    }
   }
 
   /* (non-Javadoc)
@@ -149,7 +153,11 @@ public class ExamServiceImpl implements ExamService {
    */
   @Override
   public List<Exam> pageExam(String searchContent, Sort pageable) {
-    return examRepository.pageExam(searchContent, pageable);
+    try {
+      return examRepository.pageExam(searchContent, pageable);
+    } catch (Exception e) {
+      return new ArrayList<Exam>();
+    }
   }
 
   /* (non-Javadoc)
@@ -160,7 +168,11 @@ public class ExamServiceImpl implements ExamService {
    */
   @Override
   public List<Exam> pageExamSortByUserCreatedByAsc(String searchContent) {
-    return examRepository.pageExamSortByUserCreatedByAsc(searchContent);
+    try {
+      return examRepository.pageExamSortByUserCreatedByAsc(searchContent);
+    } catch (Exception e) {
+      return new ArrayList<Exam>();
+    }
   }
 
   /* (non-Javadoc)
@@ -171,7 +183,11 @@ public class ExamServiceImpl implements ExamService {
    */
   @Override
   public List<Exam> pageExamSortByUserCreatedByDesc(String searchContent) {
-    return examRepository.pageExamSortByUserCreatedByDesc(searchContent);
+    try {
+      return examRepository.pageExamSortByUserCreatedByDesc(searchContent);
+    } catch (Exception e) {
+      return new ArrayList<Exam>();
+    }
   }
 
   /* (non-Javadoc)
@@ -182,7 +198,11 @@ public class ExamServiceImpl implements ExamService {
    */
   @Override
   public List<Exam> pageExamSortByCategoryAsc(String searchContent) {
-    return examRepository.pageExamSortByCategoryAsc(searchContent);
+    try {
+      return examRepository.pageExamSortByCategoryAsc(searchContent);
+    } catch (Exception e) {
+      return new ArrayList<Exam>();
+    }
   }
 
   /* (non-Javadoc)
@@ -193,7 +213,11 @@ public class ExamServiceImpl implements ExamService {
    */
   @Override
   public List<Exam> pageExamSortByCategoryDesc(String searchContent) {
-    return examRepository.pageExamSortByCategoryDesc(searchContent);
+    try {
+      return examRepository.pageExamSortByCategoryDesc(searchContent);
+    } catch (Exception e) {
+      return new ArrayList<Exam>();
+    }
   }
 
   /*

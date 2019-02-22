@@ -6,6 +6,12 @@ import org.springframework.data.domain.Sort;
 
 import com.cmcglobal.entity.Exam;
 
+/*
+ * @author Sanero.
+ * Created date: Feb 22, 2019
+ * Created time: 4:59:58 PM
+ * Description: TODO - Exam service.
+ */
 public interface ExamService {
   /**
    * Author: ntmduyen. Created date: Feb 20, 2019 Created time: 12:41:55 PM
@@ -16,41 +22,52 @@ public interface ExamService {
   public List<Exam> findAll();
 
   /**
-   * Author: ntmduyen. Created date: Feb 20, 2019 Created time: 12:41:55 PM
-   * Description: TODO - get list exam by page.
-   * 
+   * Author: ntmduyen.
+   * Created date: Feb 22, 2019
+   * Created time: 1:51:45 PM
+   * Description: TODO - show list exam.
+   * @param searchContent
+   * @param pageable
    * @return
    */
   public List<Exam> pageExam(String searchContent, Sort pageable);
 
   /**
-   * Author: ntmduyen. Created date: Feb 20, 2019 Created time: 12:41:55 PM
-   * Description: TODO - get list exam by page sort by created user.
-   * 
+   * Author: ntmduyen.
+   * Created date: Feb 22, 2019
+   * Created time: 1:51:50 PM
+   * Description: TODO - sort exam by user created ascending.
+   * @param searchContent
    * @return
    */
   public List<Exam> pageExamSortByUserCreatedByAsc(String searchContent);
 
   /**
-   * Author: ntmduyen. Created date: Feb 20, 2019 Created time: 12:41:55 PM
-   * Description: TODO - get list exam by page sort by created user.
-   * 
+   * Author: ntmduyen.
+   * Created date: Feb 22, 2019
+   * Created time: 1:51:54 PM
+   * Description: TODO - sort exam by user created descending.
+   * @param searchContent
    * @return
    */
   public List<Exam> pageExamSortByUserCreatedByDesc(String searchContent);
 
   /**
-   * Author: ntmduyen. Created date: Feb 20, 2019 Created time: 12:41:55 PM
-   * Description: TODO - get list exam by page sort by category.
-   * 
+   * Author: ntmduyen.
+   * Created date: Feb 22, 2019
+   * Created time: 1:51:58 PM
+   * Description: TODO - Sort exam by category ascending.
+   * @param searchContent
    * @return
    */
   public List<Exam> pageExamSortByCategoryAsc(String searchContent);
 
   /**
-   * Author: ntmduyen. Created date: Feb 20, 2019 Created time: 12:41:55 PM
-   * Description: TODO - get list exam by page sort by category.
-   * 
+   * Author: ntmduyen.
+   * Created date: Feb 22, 2019
+   * Created time: 1:52:03 PM
+   * Description: TODO - ort exam by category descendingly .
+   * @param searchContent
    * @return
    */
   public List<Exam> pageExamSortByCategoryDesc(String searchContent);
