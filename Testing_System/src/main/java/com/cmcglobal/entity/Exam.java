@@ -35,7 +35,7 @@ public class Exam implements Serializable {
   @Column(name = "is_enable")
   private boolean isEnable;
   @Column(name = "create_at")
-  @JsonFormat(pattern="yyyy-MM-dd")
+  @JsonFormat(pattern = "yyyy-MM-dd")
   private Date createAt;
   @Column(name = "modified_at")
   private Date modifiedAt;
@@ -53,8 +53,10 @@ public class Exam implements Serializable {
   @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   @JoinColumn(name = "exam_id")
   private Set<ExamQuestion> examQuestions;
-  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL,mappedBy="exam",orphanRemoval=true)
+  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, 
+      mappedBy = "exam", orphanRemoval = true)
   private List<Test> tests;
+
   public String getExamId() {
     return examId;
   }

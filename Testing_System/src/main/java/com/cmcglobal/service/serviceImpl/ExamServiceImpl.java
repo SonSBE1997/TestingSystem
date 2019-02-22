@@ -52,7 +52,7 @@ import com.cmcglobal.utils.Helper;
 @Transactional
 public class ExamServiceImpl implements ExamService {
   static final Logger LOGGER = LoggerFactory.getLogger(ExamServiceImpl.class);
-  
+
   @Autowired
   ExamRepository examRepository;
 
@@ -76,15 +76,19 @@ public class ExamServiceImpl implements ExamService {
    */
   @Override
   public void createExam(Exam ex) {
-    User user = new User();
-    user.setUserId(1);
-    ex.setExamId(this.createId());
-    ex.setTitle(ex.getTitle().trim());
-    ex.setNote(ex.getNote().substring(3, ex.getNote().length() - 4));
-    ex.setUserCreated(user);
-    ex.setCreateAt(new Date());
-    ex.setEnable(true);
-    examRepository.save(ex);
+    try {
+      User user = new User();
+      user.setUserId(1);
+      ex.setExamId(this.createId());
+      ex.setTitle(ex.getTitle().trim());
+      ex.setNote(ex.getNote().substring(3, ex.getNote().length() - 4));
+      ex.setUserCreated(user);
+      ex.setCreateAt(new Date());
+      ex.setEnable(true);
+      examRepository.save(ex);
+    } catch (Exception e) {
+      LOGGER.error("create failed: " + e.getMessage());
+    }
   }
 
   /* (non-Javadoc)
@@ -106,7 +110,12 @@ public class ExamServiceImpl implements ExamService {
    */
   @Override
   public Exam findByID(String id) {
-    return examRepository.findById(id).get();
+    try {
+      return examRepository.findById(id).get();
+    } catch (Exception e) {
+      LOGGER.error("find exam by id failed");
+      return null;
+    }
   }
 
   /*
@@ -212,7 +221,8 @@ public class ExamServiceImpl implements ExamService {
       }
       return true;
     } catch (Exception e) {
-      return true;
+      LOGGER.error("random question failed");
+      return false;
     }
   }
 
@@ -234,7 +244,8 @@ public class ExamServiceImpl implements ExamService {
       }
       return true;
     } catch (Exception e) {
-      return true;
+      LOGGER.error("remove question failed failed");
+      return false;
     }
   }
 
@@ -263,6 +274,7 @@ public class ExamServiceImpl implements ExamService {
       }
       return true;
     } catch (Exception e) {
+      LOGGER.error("add list failed");
       return false;
     }
 
@@ -276,30 +288,35 @@ public class ExamServiceImpl implements ExamService {
    */
   @Override
   public String createId() {
-    String id;
-    List<Exam> exam = examRepository.findAll();
-    if (exam.size() == 0)
-      id = "exam001";
-    else {
-      Collections.sort(exam, new Comparator<Exam>() {
-        @Override
-        public int compare(Exam o1, Exam o2) {
-          return o1.getExamId().compareTo(o2.getExamId());
-        }
-      });
+    try {
+      String id;
+      List<Exam> exam = examRepository.findAll();
+      if (exam.size() == 0)
+        id = "exam001";
+      else {
+        Collections.sort(exam, new Comparator<Exam>() {
+          @Override
+          public int compare(Exam o1, Exam o2) {
+            return o1.getExamId().compareTo(o2.getExamId());
+          }
+        });
 
-      int ids = exam.size() - 1;
-      String tmp = exam.get(ids).getExamId();
-      tmp = tmp.substring(tmp.length() - 3, tmp.length());
-      int id1 = Integer.parseInt(tmp) + 1;
-      if (id1 < 10)
-        id = ("Exam00") + id1;
-      else if (id1 > 9 && id1 < 100)
-        id = ("Exam0") + id1;
-      else
-        id = ("Exam") + id1;
+        int ids = exam.size() - 1;
+        String tmp = exam.get(ids).getExamId();
+        tmp = tmp.substring(tmp.length() - 3, tmp.length());
+        int id1 = Integer.parseInt(tmp) + 1;
+        if (id1 < 10)
+          id = ("Exam00") + id1;
+        else if (id1 > 9 && id1 < 100)
+          id = ("Exam0") + id1;
+        else
+          id = ("Exam") + id1;
+      }
+      return id;
+    } catch (Exception e) {
+      LOGGER.error("generate exam id failed");
+      return "";
     }
-    return id;
   }
 
   /* (non-Javadoc)
@@ -310,9 +327,11 @@ public class ExamServiceImpl implements ExamService {
    */
   @Override
   public void deleteExam(String examId) {
-    ;
-    examRepository.deleteById(examId);
-
+    try {
+      examRepository.deleteById(examId);
+    } catch (Exception e) {
+      LOGGER.error("delete exam failed");
+    }
   }
 
   /* (non-Javadoc)
@@ -323,8 +342,13 @@ public class ExamServiceImpl implements ExamService {
    */
   @Override
   public List<Exam> FilterExam(Exam exam) {
-    List<Exam> exams = examRepository.findAll(getFilterBuilder(exam));
-    return exams;
+    try {
+      List<Exam> exams = examRepository.findAll(getFilterBuilder(exam));
+      return exams;
+    } catch (Exception e) {
+      LOGGER.error("filter exam failed");
+      return new ArrayList<Exam>();
+    }
   }
 
   /**
@@ -354,8 +378,13 @@ public class ExamServiceImpl implements ExamService {
    */
   @Override
   public Exam getOne(String examId) {
-    // TODO Auto-generated method stub
-    return entityManager.find(Exam.class, examId);
+    try {
+      // TODO Auto-generated method stub
+      return entityManager.find(Exam.class, examId);
+    } catch (Exception e) {
+      LOGGER.error("get exam failed");
+      return null;
+    }
   }
 
   /* (non-Javadoc)
@@ -366,8 +395,14 @@ public class ExamServiceImpl implements ExamService {
    */
   @Override
   public Exam insert(Exam exam) {
-    // TODO Auto-generated method stub
-    return examRepository.save(exam);
+    try {
+      // TODO Auto-generated method stub
+      return examRepository.save(exam);
+    } catch (Exception e) {
+      // TODO: handle exception
+      LOGGER.error("insert exam failed");
+      return null;
+    }
   }
 
   /* (non-Javadoc)
@@ -378,8 +413,14 @@ public class ExamServiceImpl implements ExamService {
    */
   @Override
   public Exam update(Exam exam) {
-    // TODO Auto-generated method stub
-    return examRepository.save(exam);
+    try {
+      // TODO Auto-generated method stub
+      return examRepository.save(exam);
+    } catch (Exception e) {
+      // TODO: handle exception
+      LOGGER.error("update exam failed");
+      return null;
+    }
   }
 
   /* (non-Javadoc)
@@ -584,13 +625,18 @@ public class ExamServiceImpl implements ExamService {
    */
   @Override
   public boolean isEmptyQuestionOfExam(String examId) {
-    Exam exam = examRepository.findById(examId).get();
-    if (exam.getExamQuestions().size() == 0) {
-      exam.setStatus("Draft");
-      exam = examRepository.save(exam);
-      return true;
+    try {
+      Exam exam = examRepository.findById(examId).get();
+      if (exam.getExamQuestions().size() == 0) {
+        exam.setStatus("Draft");
+        exam = examRepository.save(exam);
+        return true;
+      }
+      return false;
+    } catch (Exception e) {
+      // TODO: handle exception
+      return false;
     }
-    return false;
   }
 
 }
