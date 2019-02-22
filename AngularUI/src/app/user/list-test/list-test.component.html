@@ -31,9 +31,9 @@
             <div class="box-body box-profile">
               <img class="profile-user-img img-responsive img-circle" src="../../../assets/image/user3-128x128.jpg"
                 alt="User profile picture">
-              <div *ngIf="semester">
-                <h3 class="profile-username text-center">{{ user?.fullName }}</h3>
-              </div>
+              <!-- <div *ngIf="listTest"> -->
+              <h3 class="profile-username text-center">{{ user?.fullName }}</h3>
+              <!-- </div> -->
               <ul class="list-group list-group-unbordered text-center">
                 <li class="list-group-item">
                   <a [routerLink]="['/user']">Profile</a>
@@ -54,7 +54,11 @@
           <div class="box box-primary">
             <div class="box-header with-border">
               <i class="fa fa-book"></i>
-              <h3 class="box-title">List Semester Exam</h3>
+              <h3 class="box-title">List Test of <span class="">{{ listTest?.data[0].test.semesterExam.name }}</span>
+              </h3>
+              <span class="pull-right"><a class="btn btn-default" [routerLink]="['/user/list-semester']"><span><i
+                      class="fas fa-arrow-left"></i></span>
+                  Back</a></span>
             </div>
             <!-- /.box-header -->
             <div class="form-test">
@@ -67,22 +71,27 @@
                       <table class="table table-bordered table-hover">
                         <thead>
                           <tr class="info">
-                            <th style="width: 30% !important">Semester Exam Title</th>
-                            <th style="width: 20%">Description</th>
-                            <th style="width: 20%">Date Start</th>
-                            <th style="width: 20%">Date Finish</th>
+                            <th style="width: 30% !important">Test name</th>
+                            <th style="width: 20%">Duration</th>
+                            <th style="width: 20%">Category test</th>
                             <th style="width: 10%"></th>
                           </tr>
                         </thead>
-                        <tbody *ngFor="let s of semester?.data">
+                        <tbody *ngFor="let s of listTest?.data">
                           <tr>
-                            <td style="width: 30% !important">{{ s.name }}</td>
-                            <td style="width: 20%">{{ s.description }}</td>
-                            <td style="width: 20%">{{ s.startTime | date:'dd/MM/yyyy'}}</td>
-                            <td style="width: 20%">{{ s.startTime | date:'dd/MM/yyyy'}}</td>
-                            <td style="width: 10%">
-                              <button class="btn btn-info" [routerLink]="['/user/list-semester', s.id, 'list-test']">View Detail</button>
-                            </td>
+                            <td style="width: 30% !important">{{ s.test.testName }}</td>
+                            <td style="width: 20%">{{ s.test.exam.duration }} minutes</td>
+                            <td style="width: 20%">{{ s.test.exam.category.categoryName }}</td>
+                            <ng-container *ngIf="s.isTest===0">
+                              <td style="width: 10%">
+                                <button class="btn btn-info">Test</button>
+                              </td>
+                            </ng-container>
+                            <ng-container *ngIf="s.isTest!==0">
+                              <td style="width: 10%">
+                                <button class="btn btn-success">Result</button>
+                              </td>
+                            </ng-container>
                           </tr>
                         </tbody>
                       </table>
