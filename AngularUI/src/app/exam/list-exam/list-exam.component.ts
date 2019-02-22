@@ -162,8 +162,8 @@ export class ListExamComponent implements OnInit, AfterViewInit {
     this.searchStr = value;
     this.paginator.pageIndex = 0;
     this.findExams(
-      this.paginator.pageIndex,
-      this.paginator.pageSize,
+      // this.paginator.pageIndex,
+      // this.paginator.pageSize,
       this.sort.active,
       this.sort.direction,
       value
