@@ -68,43 +68,44 @@
                           </mat-panel-title>
                         </mat-expansion-panel-header>
                             <div class="col col-lg-11 col-sm-11">
-                                <mat-form-field>
+                                <mat-form-field class="filter">
                                     <mat-select placeholder="Category Name" formControlName="categoryName">
                                       <mat-option *ngFor="let categoryName of caterogyNames " value="{{categoryName}}">{{categoryName}}  </mat-option>
                                     </mat-select>
                                   </mat-form-field>
 
-                                  <mat-form-field>
+                                  <mat-form-field class="filter">
                                     <mat-select placeholder="Duration" formControlName="duration">
                                       <mat-option *ngFor="let duration of listDuration " value="{{duration}}">{{duration}}</mat-option>
                                     </mat-select>
                                   </mat-form-field>
 
-                                  <mat-form-field>
+                                  <mat-form-field class="filter">
                                     <mat-select placeholder="Number of Question" formControlName="numberOfQuestion">
                                       <mat-option *ngFor="let numberOfQuestion of numberOfQuestions " value="{{numberOfQuestion}}">{{numberOfQuestion}}</mat-option>
                                     </mat-select>
                                   </mat-form-field>
 
-                                  <mat-form-field>
+                                  <mat-form-field class="filter">
                                     <mat-select  placeholder="Creator">
                                       <mat-option value="manager">Manager</mat-option>
                                       <mat-option value="admin">Admin</mat-option>
                                     </mat-select>
                                   </mat-form-field>
 
-                                  <mat-form-field>
+                                  <mat-form-field class="filter">
                                     <mat-select  placeholder="Status" formControlName="status">
                                       <mat-option *ngFor="let status of statuss " value="{{status}}">{{status}}</mat-option>
                                     </mat-select>
                                   </mat-form-field>
-                                  <mat-form-field>
+                                  <mat-form-field class="filter">
                                     <input  matInput type="date" value="createAt"  formControlName="createAt">
                                   </mat-form-field>
+
+                                    <input  style="width:100px" type="submit" value="Submit" class="btn btn-primary " (click)="onSubmit()">
+
                             </div>
-                            <div class="col col-lg-1 col-sm-1">
-                                <input  style="width:100px" type="submit" value="Submit" class="btn btn-primary btn-block btn-flat right-side" (click)="onSubmit()">
-                            </div>
+
                      </mat-expansion-panel>
                   </mat-accordion>
               </div>
