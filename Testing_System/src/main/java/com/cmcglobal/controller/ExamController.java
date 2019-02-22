@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,7 +55,6 @@ public class ExamController {
       @RequestParam(name = "sortOrder", required = false, defaultValue = "ASC") String sortOrder,
       @RequestParam(name = "sortTerm", required = false, defaultValue = "title") String sortTerm,
       @RequestParam(name = "searchContent", required = false, defaultValue = "") String searchContent) {
-    Pageable sortedBy = null;
     Sort sortable = null;
     switch (sortTerm) {
     case ("title"):

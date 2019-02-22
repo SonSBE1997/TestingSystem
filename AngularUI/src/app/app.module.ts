@@ -17,6 +17,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
 import { UserModule } from './user/user.module';
 import { HomeModule } from './home/home.module';
+import { HighlightPipe } from './exam/list-exam/highlight.pipe';
 
 @NgModule({
   declarations: [AppComponent],
@@ -36,7 +37,8 @@ import { HomeModule } from './home/home.module';
     ListExamModule,
     HttpModule,
     UserModule,
-    HomeModule
+    HomeModule,
+
   ],
   providers: [],
   bootstrap: [AppComponent]

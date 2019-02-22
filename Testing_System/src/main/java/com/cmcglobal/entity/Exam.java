@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -36,6 +37,7 @@ public class Exam implements Serializable {
   private boolean isEnable;
   @Column(name = "create_at")
   @JsonFormat(pattern="yyyy-MM-dd")
+  
   private Date createAt;
   @Column(name = "modified_at")
   private Date modifiedAt;
@@ -46,6 +48,7 @@ public class Exam implements Serializable {
   private Category category;
   @ManyToOne
   @JoinColumn(name = "create_by")
+  
   private User userCreated;
   @ManyToOne
   @JoinColumn(name = "modified_by")
@@ -114,7 +117,7 @@ public class Exam implements Serializable {
   public Date getCreateAt() {
     return createAt;
   }
-
+  
   public void setCreateAt(Date createAt) {
     this.createAt = createAt;
   }
@@ -165,5 +168,9 @@ public class Exam implements Serializable {
 
   public void setCategoryName(String categoryName) {
     this.categoryName = categoryName;
+  }
+  @PrePersist
+  protected void onCreate() {
+    this.createAt=new Date();
   }
 }
