@@ -1,6 +1,8 @@
 package com.cmcglobal.service;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+
 import java.util.List;
 
 import com.cmcglobal.entity.Exam;
@@ -14,15 +16,15 @@ public interface ExamService {
 	 */
 	public List<Exam> findAll();
 
-	public List<Exam> pageExam(String searchContent, Pageable pageable);
+	public List<Exam> pageExam(String searchContent, Sort pageable);
 
-	public List<Exam> pageExamSortByUserCreatedByAsc(String searchContent, Pageable pageable);
+	public List<Exam> pageExamSortByUserCreatedByAsc(String searchContent);
 
-	public List<Exam> pageExamSortByUserCreatedByDesc(String searchContent, Pageable pageable);
+	public List<Exam> pageExamSortByUserCreatedByDesc(String searchContent);
 
-	public List<Exam> pageExamSortByCategoryAsc(String searchContent, Pageable pageable);
+	public List<Exam> pageExamSortByCategoryAsc(String searchContent);
 
-	public List<Exam> pageExamSortByCategoryDesc(String searchContent, Pageable pageable);
+	public List<Exam> pageExamSortByCategoryDesc(String searchContent);
 
 	public Exam findByID(String id);
 

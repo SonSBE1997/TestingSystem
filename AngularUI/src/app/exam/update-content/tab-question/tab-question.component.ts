@@ -183,12 +183,13 @@ export class TabQuestionComponent implements OnInit {
   }
 
   sortTableByContent() {
+    console.log(this.isSort);
     if (this.isSort === 0) {
-      this.backupSort = this.questions;
-      this.questions = this.questions.sort(function(a, b) {
-        return a.questionId > b.questionId ? 1 : 0;
-      });
       this.isSort = 1;
+      this.backupSort = this.questions;
+      this.questions = this.backupSort.sort(function(a, b) {
+        return a.content > b.content ? 1 : 0;
+      });
       return;
     }
 
