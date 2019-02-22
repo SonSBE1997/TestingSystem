@@ -283,33 +283,37 @@ export class ListExamComponent implements OnInit, AfterViewInit {
 
   upload() {
     this.currentFileUpload = this.selectedFiles.item(0);
-    this.uploadService.pushFileToStorage(this.currentFileUpload).subscribe(event => {
-      if (event instanceof HttpResponse) {
-        this.notifierService.notify('error', 'Upload failed!')
-        console.log('upload is failed!')
-        console.log("sfsff: " + event.type)
+    this.uploadService.pushFileToStorage(this.currentFileUpload).subscribe(
+      success => {
+        console.log("upload succesfully!")
+      },
+      error => {
+        console.log("error: " + error.error.text);
+        if (error.error.text === 'Not matching extension file') {
+          this.notifierService.notify('error', 'Not matching extension file');
+        } else if (error.error.text === 'OK') {
+          this.notifierService.notify('success', 'successfully uploaded ' + this.currentFileUpload.name + '!');
+          this.uploadService.importToServer(this.currentFileUpload)
+            .subscribe(
+              success => {
+              },
+              error => {
+                console.log("error: " + error.error.text);
+                if (error.error.text === 'Ok') {
+                  this.notifierService.notify('success', 'Import exam successfully');
+                  this.loadExamsPage();
+                  //window.location.reload();
+                  //this.router.navigate(['']);
+                } else if (error.error.text === 'not Ok') {
+                  this.notifierService.notify('error', 'Import exam Failed');
+                }
+              }
+            );
+        } else if (error.error.text === ("ERROR! can't upload " + this.selectFile + "!")) {
+          this.notifierService.notify('error', '"ERROR! cant upload "' + this.selectFile + "!");
+        }
       }
-
-      this.notifierService.notify('success', 'File is completely uploaded!');
-      console.log('File is completely uploaded!')
-
-      this.uploadService.importToServer(this.currentFileUpload)
-        .subscribe(
-
-          success => {
-          },
-          error => {
-            console.log("error: " + error.error.text);
-            if (error.error.text === 'Ok') {
-
-              this.notifierService.notify('success', 'Import exam successfully');
-              setTimeout(() => { this.router.navigateByUrl('/exam'); }, 2000);
-            } else if (error.error.text === 'not Ok') {
-              this.notifierService.notify('error', 'Import exam Failed');
-            }
-          }
-        );
-    });
+    )
     //end
   }
 }
