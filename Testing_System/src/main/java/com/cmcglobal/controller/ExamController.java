@@ -51,8 +51,6 @@ public class ExamController {
 
   @RequestMapping(value = "listExams/pagination", method = RequestMethod.GET)
   private List<Exam> getPageExam(
-      @RequestParam(name = "pageNumber", required = false, defaultValue = "0") Integer page,
-      @RequestParam(name = "pageSize", required = false, defaultValue = "5") Integer size,
       @RequestParam(name = "sortOrder", required = false, defaultValue = "ASC") String sortOrder,
       @RequestParam(name = "sortTerm", required = false, defaultValue = "title") String sortTerm,
       @RequestParam(name = "searchContent", required = false, defaultValue = "") String searchContent) {
@@ -110,28 +108,23 @@ public class ExamController {
     // sort theo trường fullname của user create_by
     case ("userCreated"):
       if (("asc").equals(sortOrder.toLowerCase())) {
-        sortedBy = PageRequest.of(page, size);
-        return examService.pageExamSortByUserCreatedByAsc(searchContent, sortedBy);
+        return examService.pageExamSortByUserCreatedByAsc(searchContent);
       }
       if (("desc").equals(sortOrder.toLowerCase())) {
-        sortedBy = PageRequest.of(page, size);
-        return examService.pageExamSortByUserCreatedByDesc(searchContent, sortedBy);
+        return examService.pageExamSortByUserCreatedByDesc(searchContent);
       }
       break;
     // sort theo trường category của category category_name
     case ("category"):
       if (("asc").equals(sortOrder.toLowerCase())) {
-        sortedBy = PageRequest.of(page, size);
-        return examService.pageExamSortByCategoryAsc(searchContent, sortedBy);
+        return examService.pageExamSortByCategoryAsc(searchContent);
       }
       if (("desc").equals(sortOrder.toLowerCase())) {
-        sortedBy = PageRequest.of(page, size);
-        return examService.pageExamSortByCategoryDesc(searchContent, sortedBy);
+        return examService.pageExamSortByCategoryDesc(searchContent);
       }
       break;
     }
-    sortedBy = PageRequest.of(page, size, sortable);
-    return examService.pageExam(searchContent, sortedBy);
+    return examService.pageExam(searchContent, sortable);
   }
 
   @GetMapping(value = "/export/{id}")
