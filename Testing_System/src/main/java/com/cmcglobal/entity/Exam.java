@@ -22,148 +22,164 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 //@Where(clause = "is_enable = true")
 public class Exam implements Serializable {
 
-  private static final long serialVersionUID = 1L;
-  @Id
-  @Column(name = "exam_Id")
-  private String examId;
-  private String title;
-  private float duration;
-  private String note;
-  private String status;
-  @Transient
-  private String categoryName;
-  @Column(name = "is_enable")
-  private boolean isEnable;
-  @Column(name = "create_at")
-  @JsonFormat(pattern="yyyy-MM-dd")
-  private Date createAt;
-  @Column(name = "modified_at")
-  private Date modifiedAt;
-  @Column(name = "number_of_question")
-  private int numberOfQuestion;
-  @ManyToOne
-  @JoinColumn(name = "category_id")
-  private Category category;
-  @ManyToOne
-  @JoinColumn(name = "create_by")
-  private User userCreated;
-  @ManyToOne
-  @JoinColumn(name = "modified_by")
-  private User modifiedBy;
-  @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-  @JoinColumn(name = "exam_id")
-  private Set<ExamQuestion> examQuestions;
-  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL,mappedBy="exam",orphanRemoval=true)
-  private List<Test> tests;
-  public String getExamId() {
-    return examId;
-  }
+	private static final long serialVersionUID = 1L;
+	@Id
+	@Column(name = "exam_Id")
+	private String examId;
+	private String title;
+	private float duration;
+	private String note;
+	private String status;
+	@Transient
+	private String categoryName;
+	@Column(name = "is_enable")
+	private boolean isEnable;
+	@Column(name = "create_at")
+	@JsonFormat(pattern = "yyyy-MM-dd")
+	private Date createAt;
+	@Column(name = "modified_at")
+	private Date modifiedAt;
+	@Column(name = "number_of_question")
+	private int numberOfQuestion;
+	@ManyToOne
+	@JoinColumn(name = "category_id")
+	private Category category;
+	@ManyToOne
+	@JoinColumn(name = "create_by")
+	private User userCreated;
+	@ManyToOne
+	@JoinColumn(name = "modified_by")
+	private User modifiedBy;
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "exam_id")
+	private Set<ExamQuestion> examQuestions;
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "exam", orphanRemoval = true)
+	private List<Test> tests;
 
-  public Set<ExamQuestion> getExamQuestions() {
-    return examQuestions;
-  }
+	public Exam() {
+	}
+	
+	public Exam(String examId, String title, float duration, Category category, String note,
+					String status, int numberOfQuestion) {
+		super();
+		this.examId = examId;
+		this.title = title;
+		this.duration = duration;
+		this.category = category;
+		this.note = note;
+		this.status = status;
+		this.numberOfQuestion = numberOfQuestion;
+	}
 
-  public void setExamQuestions(Set<ExamQuestion> examQuestions) {
-    this.examQuestions = examQuestions;
-  }
+	public String getExamId() {
+		return examId;
+	}
 
-  public void setExamId(String examId) {
-    this.examId = examId;
-  }
+	public Set<ExamQuestion> getExamQuestions() {
+		return examQuestions;
+	}
 
-  public String getTitle() {
-    return title;
-  }
+	public void setExamQuestions(Set<ExamQuestion> examQuestions) {
+		this.examQuestions = examQuestions;
+	}
 
-  public void setTitle(String title) {
-    this.title = title;
-  }
+	public void setExamId(String examId) {
+		this.examId = examId;
+	}
 
-  public float getDuration() {
-    return duration;
-  }
+	public String getTitle() {
+		return title;
+	}
 
-  public void setDuration(float duration) {
-    this.duration = duration;
-  }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-  public String getNote() {
-    return note;
-  }
+	public float getDuration() {
+		return duration;
+	}
 
-  public void setNote(String note) {
-    this.note = note;
-  }
+	public void setDuration(float duration) {
+		this.duration = duration;
+	}
 
-  public String getStatus() {
-    return status;
-  }
+	public String getNote() {
+		return note;
+	}
 
-  public void setStatus(String status) {
-    this.status = status;
-  }
+	public void setNote(String note) {
+		this.note = note;
+	}
 
-  public boolean isEnable() {
-    return isEnable;
-  }
+	public String getStatus() {
+		return status;
+	}
 
-  public void setEnable(boolean isEnable) {
-    this.isEnable = isEnable;
-  }
+	public void setStatus(String status) {
+		this.status = status;
+	}
 
-  public Date getCreateAt() {
-    return createAt;
-  }
+	public boolean isEnable() {
+		return isEnable;
+	}
 
-  public void setCreateAt(Date createAt) {
-    this.createAt = createAt;
-  }
+	public void setEnable(boolean isEnable) {
+		this.isEnable = isEnable;
+	}
 
-  public Date getModifiedAt() {
-    return modifiedAt;
-  }
+	public Date getCreateAt() {
+		return createAt;
+	}
 
-  public void setModifiedAt(Date modifiedAt) {
-    this.modifiedAt = modifiedAt;
-  }
+	public void setCreateAt(Date createAt) {
+		this.createAt = createAt;
+	}
 
-  public User getUserCreated() {
-    return userCreated;
-  }
+	public Date getModifiedAt() {
+		return modifiedAt;
+	}
 
-  public void setUserCreated(User userCreated) {
-    this.userCreated = userCreated;
-  }
+	public void setModifiedAt(Date modifiedAt) {
+		this.modifiedAt = modifiedAt;
+	}
 
-  public User getModifiedBy() {
-    return modifiedBy;
-  }
+	public User getUserCreated() {
+		return userCreated;
+	}
 
-  public void setModifiedBy(User modifiedBy) {
-    this.modifiedBy = modifiedBy;
-  }
+	public void setUserCreated(User userCreated) {
+		this.userCreated = userCreated;
+	}
 
-  public int getNumberOfQuestion() {
-    return numberOfQuestion;
-  }
+	public User getModifiedBy() {
+		return modifiedBy;
+	}
 
-  public void setNumberOfQuestion(int numberOfQuestion) {
-    this.numberOfQuestion = numberOfQuestion;
-  }
+	public void setModifiedBy(User modifiedBy) {
+		this.modifiedBy = modifiedBy;
+	}
 
-  public Category getCategory() {
-    return category;
-  }
+	public int getNumberOfQuestion() {
+		return numberOfQuestion;
+	}
 
-  public void setCategory(Category category) {
-    this.category = category;
-  }
+	public void setNumberOfQuestion(int numberOfQuestion) {
+		this.numberOfQuestion = numberOfQuestion;
+	}
 
-  public String getCategoryName() {
-    return categoryName;
-  }
+	public Category getCategory() {
+		return category;
+	}
 
-  public void setCategoryName(String categoryName) {
-    this.categoryName = categoryName;
-  }
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+
+	public String getCategoryName() {
+		return categoryName;
+	}
+
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
+	}
 }

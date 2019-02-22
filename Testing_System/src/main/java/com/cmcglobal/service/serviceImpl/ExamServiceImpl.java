@@ -292,7 +292,7 @@ public class ExamServiceImpl implements ExamService {
 				Exam exam = new Exam();
 
 				Row row = sheet.getRow(rowNum);
-				if (row == null) {
+				if (checkIfRowIsEmpty(row)) {
 					break;
 				}
 				Iterator<Cell> cellIt = row.cellIterator();
@@ -357,13 +357,30 @@ public class ExamServiceImpl implements ExamService {
 						break;
 					}
 				}
-				listExam.add(exam);
+					User user = new User();
+					user.setUserId(1);
+					exam.setUserCreated(user);
+					exam.setStatus("Draft");
+					exam.setCreateAt(new Date());
+					listExam.add(exam);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return listExam;
 	}
+	
+	// check if row of excel file is empty
+	private static boolean checkIfRowIsEmpty(Row row) {
+        if (row == null || row.getLastCellNum() <= 0) {
+            return true;
+        }
+        Cell cell = row.getCell((int)row.getFirstCellNum());
+        if (cell == null || "".equals(cell.getRichStringCellValue().getString())) {
+            return true;
+        }
+        return false;
+    }
 
 	// Get Cell's value
 	private static Object getCellValue(Cell cell) {

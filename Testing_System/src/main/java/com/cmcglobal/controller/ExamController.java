@@ -24,6 +24,7 @@ import com.cmcglobal.entity.Exam;
 import com.cmcglobal.entity.User;
 import com.cmcglobal.repository.CategoryRepository;
 import com.cmcglobal.service.ExamService;
+import com.cmcglobal.service.UploadFileService;
 import com.cmcglobal.utils.ExportExamPDF;
 import java.io.File;
 import java.io.IOException;
@@ -38,6 +39,8 @@ public class ExamController {
 	ExamService examService;
 	@Autowired
 	CategoryRepository cate;
+	@Autowired
+	UploadFileService uploadFileService;
 
 	@PostMapping(value = "/create")
 	public void postExam(@RequestBody Exam exam) {
@@ -226,30 +229,22 @@ public class ExamController {
 			ex.setNumberOfQuestion(exam.getNumberOfQuestion());
 			ex.setNote(exam.getNote());
 			ex.setStatus(exam.getStatus());
+			
 			examService.update(ex);
-			System.out.println(exam.getCategory().getCategoryName());
 		}
 		return ex;
 	}
 
 	@PostMapping("/import-excel-file")
 	public ResponseEntity<String> readExcelFile(@RequestParam("multipartFile") MultipartFile multipartFile) {
-
-		File file = new File("files");
-		String pathToSave = file.getAbsolutePath();
-		System.out.println(pathToSave);
-
-		File fileTranfer = new File(pathToSave + "/" + multipartFile.getOriginalFilename());
-		try {
-			multipartFile.transferTo(fileTranfer);
-		} catch (IllegalStateException e) {
-		} catch (IOException e) {
-		}
-		System.out.println(multipartFile.getOriginalFilename());
+		
+		final String pathFile = uploadFileService.getPathFile(multipartFile);
+		System.out.println(pathFile);
 		List<Exam> listExam = new ArrayList<>();
 		try {
-			listExam = examService.readExcel(fileTranfer.toString());
+			listExam = examService.readExcel(pathFile);
 		} catch (Exception e) {
+			System.out.println(e.toString());
 			return ResponseEntity.status(HttpStatus.OK).body("not Ok");
 		}
 		if (listExam.size() == 0) {
@@ -257,11 +252,6 @@ public class ExamController {
 		}
 		for (Exam exam : listExam) {
 			exam.setExamId(examService.createId1());
-			User user = new User();
-			user.setUserId(1);
-			exam.setUserCreated(user);
-			exam.setStatus("Draft");
-			exam.setCreateAt(new Date());
 			examService.insert(exam);
 		}
 		return ResponseEntity.status(HttpStatus.OK).body("Ok");

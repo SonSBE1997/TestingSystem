@@ -90,7 +90,7 @@ public interface ExamService {
 
 	public List<Exam> FilterExam(Exam exam);
 
-	public String createId1();
+	String createId1();
 
 	Exam getOne(String examId);
 
