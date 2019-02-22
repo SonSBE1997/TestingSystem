@@ -23,7 +23,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -105,34 +105,28 @@ public class ExamServiceImpl implements ExamService {
   }
 
   @Override
-  public List<Exam> pageExam(String searchContent, Pageable pageable) {
+  public List<Exam> pageExam(String searchContent, Sort pageable) {
     return examRepository.pageExam(searchContent, pageable);
   }
 
   @Override
-  public List<Exam> pageExamSortByUserCreatedByAsc(String searchContent,
-      Pageable pageable) {
-    return examRepository.pageExamSortByUserCreatedByAsc(searchContent,
-        pageable);
+  public List<Exam> pageExamSortByUserCreatedByAsc(String searchContent) {
+    return examRepository.pageExamSortByUserCreatedByAsc(searchContent);
   }
 
   @Override
-  public List<Exam> pageExamSortByUserCreatedByDesc(String searchContent,
-      Pageable pageable) {
-    return examRepository.pageExamSortByUserCreatedByDesc(searchContent,
-        pageable);
+  public List<Exam> pageExamSortByUserCreatedByDesc(String searchContent) {
+    return examRepository.pageExamSortByUserCreatedByDesc(searchContent);
   }
 
   @Override
-  public List<Exam> pageExamSortByCategoryAsc(String searchContent,
-      Pageable pageable) {
-    return examRepository.pageExamSortByCategoryAsc(searchContent, pageable);
+  public List<Exam> pageExamSortByCategoryAsc(String searchContent) {
+    return examRepository.pageExamSortByCategoryAsc(searchContent);
   }
 
   @Override
-  public List<Exam> pageExamSortByCategoryDesc(String searchContent,
-      Pageable pageable) {
-    return examRepository.pageExamSortByCategoryDesc(searchContent, pageable);
+  public List<Exam> pageExamSortByCategoryDesc(String searchContent) {
+    return examRepository.pageExamSortByCategoryDesc(searchContent);
   }
 
   /*
@@ -451,8 +445,4 @@ public class ExamServiceImpl implements ExamService {
       return id;
     }
   }
-  
-  public int countExam() {
-    return examRepository.countExam();
-  };
 }

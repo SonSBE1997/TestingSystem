@@ -13,7 +13,7 @@ import {
   MatSort,
   PageEvent
 } from '@angular/material';
-import { Exam } from 'src/app/entity/Exam.interface';
+import { Exam, lengthPagi } from 'src/app/entity/Exam.interface';
 import { merge } from 'rxjs/observable/merge';
 import { mergeMap, debounceTime } from 'rxjs/operators';
 import { FormGroup, FormBuilder } from '@angular/forms';
@@ -33,7 +33,8 @@ import { Category } from 'src/app/entity/Category.interface';
 import { NgModule } from '@angular/core';
 import { UploadserviceService } from 'src/app/service/upload/uploadservice.service';
 import { NotifierService } from 'angular-notifier';
-
+import {Http, Response} from '@angular/http';
+import 'rxjs/add/operator/map';
 @Component({
   selector: 'app-list-exam',
   templateUrl: './list-exam.component.html',
@@ -65,7 +66,7 @@ export class ListExamComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('input') input: ElementRef;
-
+  lengthPagi: lengthPagi;
   listExam: Exam[] = [];
   listId: string[] = [];
   listDuration: number[] = [];
@@ -74,7 +75,6 @@ export class ListExamComponent implements OnInit, AfterViewInit {
   caterogyNames: String[] = [];
   isCheckALL = false;
   examFrm: FormGroup;
-
   pageEvent: PageEvent;
   searchStr = '';
 
@@ -90,7 +90,8 @@ export class ListExamComponent implements OnInit, AfterViewInit {
 
   }
   ngOnInit() {
-    this.findExams(0, 5, 'title', 'ASC', '');
+    this.findExams( 'title', 'ASC', '');
+
     this.examFrm = this.fb.group({
       duration: [''],
       numberOfQuestion: [''],
@@ -99,9 +100,11 @@ export class ListExamComponent implements OnInit, AfterViewInit {
       categoryName: ['']
     });
     this.getDuration();
+
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
+    //this.dataSource.paginator = this.paginator;
     fromEvent(this.input.nativeElement, 'keyup')
       .pipe(
         debounceTime(150),
@@ -121,15 +124,12 @@ export class ListExamComponent implements OnInit, AfterViewInit {
       .subscribe();
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-    // console.log(this.paginator._length);
-    // console.log(this.dataSource.paginator.getNumberOfPages());
-    // console.log(this.dataSource.paginator.page);
   }
 
   // This function is to find Exams from the API backend
   public findExams = (
-    pageNumber = 0,
-    pageSize = 5,
+    //pageNumber = 0,
+    //pageSize = 5,
     sortTerm = 'title',
     sortOrder = 'ASC',
     searchContent = ''
@@ -137,8 +137,8 @@ export class ListExamComponent implements OnInit, AfterViewInit {
     this.http
       .get<Exam[]>('http://localhost:8080/exam/listExams/pagination', {
         params: new HttpParams()
-          .set('pageNumber', pageNumber.toString())
-          .set('pageSize', pageSize.toString())
+         // .set('pageNumber', pageNumber.toString())
+         // .set('pageSize', pageSize.toString())
           .set('sortTerm', sortTerm)
           .set('sortOrder', sortOrder)
           .set('searchContent', searchContent)
@@ -147,35 +147,40 @@ export class ListExamComponent implements OnInit, AfterViewInit {
         this.listExam = listExam;
         this.dataSource.data = listExam;
       });
+      console.log("length find exam " + this.listExam.length);
+      console.log("pageIndex findExam exam " + this.listExam.length);
+
   }
 
   public loadExamsPage() {
     this.findExams(
-      this.paginator.pageIndex,
-      this.paginator.pageSize,
+     // this.paginator.pageIndex,
+     // this.paginator.pageSize,
       this.sort.active,
       this.sort.direction,
       this.input.nativeElement.value
     );
+    console.log("length load exam " + this.listExam.length);
+    console.log("pageIndex load exam " + this.listExam.length);
+
   }
+
   public doFilter = (value: string) => {
     this.searchStr = value;
     this.paginator.pageIndex = 0;
     this.findExams(
-      this.paginator.pageIndex,
-      this.paginator.pageSize,
+   //   this.paginator.pageIndex,
+   //   this.paginator.pageSize,
       this.sort.active,
       this.sort.direction,
       value
     );
+    console.log("length doFilter exam " + this.listExam.length);
+    console.log("pageIndex doFilter exam " + this.listExam.length);
+
   }
 
-  onPageEvent(e) {
-    console.log(e);
-    this.paginator.pageIndex = e.pageIndex;
-    this.paginator.pageSize = e.pageSize;
-    this.loadExamsPage();
-  }
+
 
   // Start Delete
   onCheck(event) {

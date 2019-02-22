@@ -202,8 +202,10 @@
                 of {{ tabListExam?.entities }} entries
               </div>
             </div> -->
-          <mat-paginator [length]="15" [pageSize]="5" [pageSizeOptions]="[5, 10, 15, 25]" (page)="pageEvent= $event; onPageEvent($event)" >
-          </mat-paginator>
+
+                <mat-paginator  [pageIndex]="5" [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
+
+
         </div>
 
           <div style="margin-top: 10px">
