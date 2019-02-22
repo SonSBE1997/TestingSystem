@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.Random;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceException;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -86,6 +89,8 @@ public class ExamServiceImpl implements ExamService {
       ex.setCreateAt(new Date());
       ex.setEnable(true);
       examRepository.save(ex);
+    } catch (PersistenceException exception) {
+      LOGGER.error("create failed: " + exception.getMessage());
     } catch (Exception e) {
       LOGGER.error("create failed: " + e.getMessage());
     }
@@ -101,8 +106,15 @@ public class ExamServiceImpl implements ExamService {
   public List<Exam> findAll() {
     try {
       return examRepository.findAll();
+    } catch (NoResultException exception) {
+      LOGGER.error("get all exam failed: " + exception.getMessage());
+      return null;
+    } catch (PersistenceException exception) {
+      LOGGER.error("get all exam failed: " + exception.getMessage());
+      return null;
     } catch (Exception e) {
-      return new ArrayList<Exam>();
+      LOGGER.error("get all exam failed: " + e.getMessage());
+      return null;
     }
   }
 
@@ -116,8 +128,14 @@ public class ExamServiceImpl implements ExamService {
   public Exam findByID(String id) {
     try {
       return examRepository.findById(id).get();
+    } catch (EntityNotFoundException exception) {
+      LOGGER.error("get one exam by id failed: " + exception.getMessage());
+      return null;
+    } catch (PersistenceException exception) {
+      LOGGER.error("get one exam by id failed: " + exception.getMessage());
+      return null;
     } catch (Exception e) {
-      LOGGER.error("find exam by id failed");
+      LOGGER.error("get one exam by id failed: " + e.getMessage());
       return null;
     }
   }
@@ -140,7 +158,14 @@ public class ExamServiceImpl implements ExamService {
         return true;
       }
       return false;
+    } catch (EntityNotFoundException exception) {
+      LOGGER.error("approve exam failed: " + exception.getMessage());
+      return false;
+    } catch (PersistenceException exception) {
+      LOGGER.error("approve exam failed: " + exception.getMessage());
+      return false;
     } catch (Exception e) {
+      LOGGER.error("approve exam failed: " + e.getMessage());
       return false;
     }
   }
@@ -155,8 +180,15 @@ public class ExamServiceImpl implements ExamService {
   public List<Exam> pageExam(String searchContent, Sort pageable) {
     try {
       return examRepository.pageExam(searchContent, pageable);
+    } catch (NoResultException exception) {
+      LOGGER.error("get page exam failed: " + exception.getMessage());
+      return null;
+    } catch (PersistenceException exception) {
+      LOGGER.error("get page exam failed: " + exception.getMessage());
+      return null;
     } catch (Exception e) {
-      return new ArrayList<Exam>();
+      LOGGER.error("get page exam failed: " + e.getMessage());
+      return null;
     }
   }
 
@@ -170,8 +202,18 @@ public class ExamServiceImpl implements ExamService {
   public List<Exam> pageExamSortByUserCreatedByAsc(String searchContent) {
     try {
       return examRepository.pageExamSortByUserCreatedByAsc(searchContent);
+    } catch (NoResultException exception) {
+      LOGGER.error("get exam sort by user created asc failed: "
+          + exception.getMessage());
+      return null;
+    } catch (PersistenceException exception) {
+      LOGGER.error("get exam sort by user created asc failed: "
+          + exception.getMessage());
+      return null;
     } catch (Exception e) {
-      return new ArrayList<Exam>();
+      LOGGER
+          .error("get exam sort by user created asc failed: " + e.getMessage());
+      return null;
     }
   }
 
@@ -185,8 +227,18 @@ public class ExamServiceImpl implements ExamService {
   public List<Exam> pageExamSortByUserCreatedByDesc(String searchContent) {
     try {
       return examRepository.pageExamSortByUserCreatedByDesc(searchContent);
+    } catch (NoResultException exception) {
+      LOGGER.error("get exam sort by user created desc failed: "
+          + exception.getMessage());
+      return null;
+    } catch (PersistenceException exception) {
+      LOGGER.error("get exam sort by user created desc failed: "
+          + exception.getMessage());
+      return null;
     } catch (Exception e) {
-      return new ArrayList<Exam>();
+      LOGGER.error(
+          "get exam sort by user created desc failed: " + e.getMessage());
+      return null;
     }
   }
 
@@ -200,8 +252,17 @@ public class ExamServiceImpl implements ExamService {
   public List<Exam> pageExamSortByCategoryAsc(String searchContent) {
     try {
       return examRepository.pageExamSortByCategoryAsc(searchContent);
+    } catch (NoResultException exception) {
+      LOGGER.error(
+          "get exam sort by category asc failed: " + exception.getMessage());
+      return null;
+    } catch (PersistenceException exception) {
+      LOGGER.error(
+          "get exam sort by category asc failed: " + exception.getMessage());
+      return null;
     } catch (Exception e) {
-      return new ArrayList<Exam>();
+      LOGGER.error("get exam sort by category asc failed: " + e.getMessage());
+      return null;
     }
   }
 
@@ -215,8 +276,17 @@ public class ExamServiceImpl implements ExamService {
   public List<Exam> pageExamSortByCategoryDesc(String searchContent) {
     try {
       return examRepository.pageExamSortByCategoryDesc(searchContent);
+    } catch (NoResultException exception) {
+      LOGGER.error(
+          "get exam sort by category desc failed: " + exception.getMessage());
+      return null;
+    } catch (PersistenceException exception) {
+      LOGGER.error(
+          "get exam sort by category desc failed: " + exception.getMessage());
+      return null;
     } catch (Exception e) {
-      return new ArrayList<Exam>();
+      LOGGER.error("get exam sort by category desc failed: " + e.getMessage());
+      return null;
     }
   }
 
@@ -244,8 +314,14 @@ public class ExamServiceImpl implements ExamService {
         examQuestionService.insert(examQuestion);
       }
       return true;
+    } catch (NoResultException exception) {
+      LOGGER.error("random exam failed: " + exception.getMessage());
+      return false;
+    } catch (PersistenceException exception) {
+      LOGGER.error("random exam failed: " + exception.getMessage());
+      return false;
     } catch (Exception e) {
-      LOGGER.error("random question failed");
+      LOGGER.error("random exam failed: " + e.getMessage());
       return false;
     }
   }
@@ -267,8 +343,12 @@ public class ExamServiceImpl implements ExamService {
         examQuestionService.deleteById(examQuestion.getId());
       }
       return true;
+    } catch (PersistenceException exception) {
+      LOGGER
+          .error("remove question from exam failed: " + exception.getMessage());
+      return false;
     } catch (Exception e) {
-      LOGGER.error("remove question failed failed");
+      LOGGER.error("remove question from exam failed: " + e.getMessage());
       return false;
     }
   }
@@ -297,8 +377,11 @@ public class ExamServiceImpl implements ExamService {
         examQuestionService.insert(examQuestion);
       }
       return true;
+    } catch (PersistenceException exception) {
+      LOGGER.error("add question to exam failed: " + exception.getMessage());
+      return false;
     } catch (Exception e) {
-      LOGGER.error("add list failed");
+      LOGGER.error("add question to exam failed: " + e.getMessage());
       return false;
     }
 
@@ -337,9 +420,15 @@ public class ExamServiceImpl implements ExamService {
           id = ("Exam") + id1;
       }
       return id;
+    } catch (NoResultException exception) {
+      LOGGER.error("generate exam id failed: " + exception.getMessage());
+      return "Exam001";
+    } catch (PersistenceException exception) {
+      LOGGER.error("generate exam id failed: " + exception.getMessage());
+      return "Exam001";
     } catch (Exception e) {
-      LOGGER.error("generate exam id failed");
-      return "";
+      LOGGER.error("generate exam id failed: " + e.getMessage());
+      return "Exam001";
     }
   }
 
@@ -440,9 +529,11 @@ public class ExamServiceImpl implements ExamService {
     try {
       // TODO Auto-generated method stub
       return examRepository.save(exam);
+    } catch (PersistenceException exception) {
+      LOGGER.error("update failed: " + exception.getMessage());
+      return null;
     } catch (Exception e) {
-      // TODO: handle exception
-      LOGGER.error("update exam failed");
+      LOGGER.error("update failed: " + e.getMessage());
       return null;
     }
   }
@@ -658,9 +749,7 @@ public class ExamServiceImpl implements ExamService {
       }
       return false;
     } catch (Exception e) {
-      // TODO: handle exception
       return false;
     }
   }
-
 }
