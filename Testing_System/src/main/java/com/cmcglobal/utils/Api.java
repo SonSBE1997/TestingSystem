@@ -37,5 +37,8 @@ public interface Api {
     // Status
     public static final String OK = "Ok";
     public static final String NOT_OK = "Not ok";
+    
+
+ 
   }
 }

@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -27,9 +26,7 @@ import com.cmcglobal.entity.Exam;
 import com.cmcglobal.repository.ExamRepository;
 import com.cmcglobal.service.CategoryService;
 import com.cmcglobal.service.ExamService;
-import java.util.Date;
 import java.util.Random;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 import com.cmcglobal.entity.ExamQuestion;
@@ -65,14 +62,18 @@ public class ExamServiceImpl implements ExamService {
     ex.setTitle(ex.getTitle().trim());
     ex.setNote(ex.getNote().substring(3, ex.getNote().length() - 4));
     ex.setUserCreated(user);
-    ex.setCreateAt(new Date());
+    // ex.setCreateAt(new Date());
     ex.setEnable(true);
     examRepository.save(ex);
   }
 
   @Override
   public List<Exam> findAll() {
-    return examRepository.findAll();
+    try {
+      return examRepository.findAll();
+    } catch (Exception e) {
+      return new ArrayList<Exam>();
+    }
   }
 
   @Override
@@ -105,27 +106,47 @@ public class ExamServiceImpl implements ExamService {
 
   @Override
   public List<Exam> pageExam(String searchContent, Sort pageable) {
-    return examRepository.pageExam(searchContent, pageable);
+    try {
+      return examRepository.pageExam(searchContent, pageable);
+    } catch (Exception e) {
+      return new ArrayList<Exam>();
+    }
   }
 
   @Override
   public List<Exam> pageExamSortByUserCreatedByAsc(String searchContent) {
-    return examRepository.pageExamSortByUserCreatedByAsc(searchContent);
+    try {
+      return examRepository.pageExamSortByUserCreatedByAsc(searchContent);
+    } catch (Exception e) {
+      return new ArrayList<Exam>();
+    }
   }
 
   @Override
   public List<Exam> pageExamSortByUserCreatedByDesc(String searchContent) {
-    return examRepository.pageExamSortByUserCreatedByDesc(searchContent);
+    try {
+      return examRepository.pageExamSortByUserCreatedByDesc(searchContent);
+    } catch (Exception e) {
+      return new ArrayList<Exam>();
+    }
   }
 
   @Override
   public List<Exam> pageExamSortByCategoryAsc(String searchContent) {
-    return examRepository.pageExamSortByCategoryAsc(searchContent);
+    try {
+      return examRepository.pageExamSortByCategoryAsc(searchContent);
+    } catch (Exception e) {
+      return new ArrayList<Exam>();
+    }
   }
 
   @Override
   public List<Exam> pageExamSortByCategoryDesc(String searchContent) {
-    return examRepository.pageExamSortByCategoryDesc(searchContent);
+    try {
+      return examRepository.pageExamSortByCategoryDesc(searchContent);
+    } catch (Exception e) {
+      return new ArrayList<Exam>();
+    }
   }
 
   /*

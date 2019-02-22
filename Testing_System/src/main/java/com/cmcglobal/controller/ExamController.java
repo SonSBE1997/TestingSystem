@@ -3,9 +3,7 @@ package com.cmcglobal.controller;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -54,7 +52,6 @@ public class ExamController {
       @RequestParam(name = "sortOrder", required = false, defaultValue = "ASC") String sortOrder,
       @RequestParam(name = "sortTerm", required = false, defaultValue = "title") String sortTerm,
       @RequestParam(name = "searchContent", required = false, defaultValue = "") String searchContent) {
-    Pageable sortedBy = null;
     Sort sortable = null;
     switch (sortTerm) {
     case ("title"):
@@ -254,7 +251,7 @@ public class ExamController {
     List<Exam> list = examService.findAll();
     int x = list.size() + 1;
     for (Exam exam : listExam) {
-      String id = "Exam" + String.valueOf(x);
+      String.valueOf(x);
 
       exam.setExamId(examService.createId1());
       ++x;

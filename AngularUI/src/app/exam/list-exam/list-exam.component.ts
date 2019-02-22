@@ -76,7 +76,7 @@ export class ListExamComponent implements OnInit, AfterViewInit {
   examFrm: FormGroup;
 
   pageEvent: PageEvent;
-  searchStr = '';
+  searchTerm: string;
 
   public duration: number;
   public numberOfQuestion: number;
@@ -121,11 +121,11 @@ export class ListExamComponent implements OnInit, AfterViewInit {
       .subscribe();
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-    // console.log(this.paginator._length);
-    // console.log(this.dataSource.paginator.getNumberOfPages());
-    // console.log(this.dataSource.paginator.page);
   }
-
+  public getSearch(e) {
+    this.searchTerm = e.target.value;
+    console.log(this.searchTerm);
+  }
   // This function is to find Exams from the API backend
   public findExams = (
    // pageNumber = 0,
@@ -159,7 +159,7 @@ export class ListExamComponent implements OnInit, AfterViewInit {
     );
   }
   public doFilter = (value: string) => {
-    this.searchStr = value;
+
     this.paginator.pageIndex = 0;
     this.findExams(
       // this.paginator.pageIndex,
