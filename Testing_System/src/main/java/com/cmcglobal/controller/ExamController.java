@@ -30,6 +30,12 @@ import com.cmcglobal.service.ExamService;
 import com.cmcglobal.utils.Api;
 import com.cmcglobal.utils.ExportExamPDF;
 
+/*
+ * @author Sanero.
+ * Created date: Feb 22, 2019
+ * Created time: 2:16:44 PM
+ * Description: TODO - exam controller.
+ */
 @RestController
 @RequestMapping(Api.Exam.BASE_URL)
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
@@ -39,16 +45,40 @@ public class ExamController {
   @Autowired
   CategoryRepository cate;
 
+  /**
+   * Author: ptphuong.
+   * Created date: Feb 22, 2019
+   * Created time: 2:16:32 PM
+   * Description: TODO - create exam.
+   * @param exam
+   */
   @PostMapping(value = "/create")
   public void postExam(@RequestBody Exam exam) {
     examService.createExam(exam);
   }
 
+  /**
+   * Author: ntmduyen.
+   * Created date: Feb 22, 2019
+   * Created time: 2:16:55 PM
+   * Description: TODO - get all exam.
+   * @return
+   */
   @GetMapping(value = "/listExams")
   public List<Exam> listExam() {
     return examService.findAll();
   }
 
+  /**
+   * Author: Sanero.
+   * Created date: Feb 22, 2019
+   * Created time: 2:17:15 PM
+   * Description: TODO - get list exam by page.
+   * @param sortOrder
+   * @param sortTerm
+   * @param searchContent
+   * @return
+   */
   @RequestMapping(value = "listExams/pagination", method = RequestMethod.GET)
   private List<Exam> getPageExam(
       @RequestParam(name = "sortOrder", required = false, defaultValue = "ASC") String sortOrder,
@@ -57,6 +87,14 @@ public class ExamController {
     return examService.getListExamByPage(sortOrder, sortTerm, searchContent);
   }
 
+  /**
+   * Author: nthung.
+   * Created date: Feb 22, 2019
+   * Created time: 2:17:43 PM
+   * Description: TODO - export exam to pdf.
+   * @param id
+   * @return
+   */
   @GetMapping(value = "/export/{id}")
   public ModelAndView handlereport(@PathVariable("id") String id) {
     try {
@@ -67,6 +105,14 @@ public class ExamController {
     }
   }
 
+  /**
+   * Author: vvdong.
+   * Created date: Feb 22, 2019
+   * Created time: 2:18:08 PM
+   * Description: TODO - get exam by id.
+   * @param id
+   * @return
+   */
   @GetMapping(value = "/{id}")
   public Exam getExam(@PathVariable("id") String id) {
     /*
@@ -136,17 +182,41 @@ public class ExamController {
     return ResponseEntity.ok(Api.Exam.NOT_OK);
   }
 
+  /**
+   * Author: ndvan.
+   * Created date: Feb 22, 2019
+   * Created time: 2:18:47 PM
+   * Description: TODO - controller hand delete exam.
+   * @param examId
+   */
   @DeleteMapping(value = "/{examId}")
   public void deleteExam(@PathVariable String examId) {
     examService.deleteExam(examId);
   }
 
+  /**
+   * Author: ndvan.
+   * Created date: Feb 22, 2019
+   * Created time: 2:21:11 PM
+   * Description: TODO - controller handle filter exam.
+   * @param exam
+   * @return
+   */
   @PostMapping(value = "/filter")
   public ResponseEntity<List<Exam>> findAll(@RequestBody Exam exam) {
     List<Exam> exams = examService.FilterExam(exam);
     return ResponseEntity.ok(exams);
   }
 
+  /**
+   * Author: hai95.
+   * Created date: Feb 22, 2019
+   * Created time: 2:21:47 PM
+   * Description: TODO - controller handle update common.
+   * @param exam
+   * @param examId
+   * @return
+   */
   @PutMapping("/update/update-common/{examId}")
   public Exam updateCommon(@RequestBody Exam exam,
       @PathVariable String examId) {
@@ -164,6 +234,14 @@ public class ExamController {
     return ex;
   }
 
+  /**
+   * Author: hai95.
+   * Created date: Feb 22, 2019
+   * Created time: 2:22:29 PM
+   * Description: TODO - import excel file.
+   * @param multipartFile
+   * @return
+   */
   @PostMapping("/import-excel-file")
   public ResponseEntity<String> readExcelFile(
       @RequestParam("multipartFile") MultipartFile multipartFile) {
@@ -202,6 +280,14 @@ public class ExamController {
     return ResponseEntity.status(HttpStatus.OK).body("Ok");
   }
 
+  /**
+   * Author: Sanero.
+   * Created date: Feb 22, 2019
+   * Created time: 2:22:44 PM
+   * Description: TODO - check empty question in exam.
+   * @param examId
+   * @return
+   */
   @GetMapping(value = Api.Exam.IS_EMPTY_QUESTION)
   public ResponseEntity<String> isEmptyQuestion(@PathVariable String examId) {
     boolean success = examService.isEmptyQuestionOfExam(examId);
