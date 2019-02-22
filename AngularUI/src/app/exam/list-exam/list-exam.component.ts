@@ -90,7 +90,7 @@ export class ListExamComponent implements OnInit, AfterViewInit {
 
   }
   ngOnInit() {
-    this.findExams(0, 5, 'title', 'ASC', '');
+    this.findExams('title', 'ASC', '');
     this.examFrm = this.fb.group({
       duration: [''],
       numberOfQuestion: [''],
@@ -128,8 +128,8 @@ export class ListExamComponent implements OnInit, AfterViewInit {
 
   // This function is to find Exams from the API backend
   public findExams = (
-    pageNumber = 0,
-    pageSize = 5,
+   // pageNumber = 0,
+   // pageSize = 5,
     sortTerm = 'title',
     sortOrder = 'ASC',
     searchContent = ''
@@ -137,8 +137,8 @@ export class ListExamComponent implements OnInit, AfterViewInit {
     this.http
       .get<Exam[]>('http://localhost:8080/exam/listExams/pagination', {
         params: new HttpParams()
-          .set('pageNumber', pageNumber.toString())
-          .set('pageSize', pageSize.toString())
+         // .set('pageNumber', pageNumber.toString())
+         // .set('pageSize', pageSize.toString())
           .set('sortTerm', sortTerm)
           .set('sortOrder', sortOrder)
           .set('searchContent', searchContent)
@@ -151,8 +151,8 @@ export class ListExamComponent implements OnInit, AfterViewInit {
 
   public loadExamsPage() {
     this.findExams(
-      this.paginator.pageIndex,
-      this.paginator.pageSize,
+      //this.paginator.pageIndex,
+      //this.paginator.pageSize,
       this.sort.active,
       this.sort.direction,
       this.input.nativeElement.value
@@ -162,19 +162,12 @@ export class ListExamComponent implements OnInit, AfterViewInit {
     this.searchStr = value;
     this.paginator.pageIndex = 0;
     this.findExams(
-      this.paginator.pageIndex,
-      this.paginator.pageSize,
+      // this.paginator.pageIndex,
+      // this.paginator.pageSize,
       this.sort.active,
       this.sort.direction,
       value
     );
-  }
-
-  onPageEvent(e) {
-    console.log(e);
-    this.paginator.pageIndex = e.pageIndex;
-    this.paginator.pageSize = e.pageSize;
-    this.loadExamsPage;
   }
 
   // Start Delete
@@ -210,7 +203,6 @@ export class ListExamComponent implements OnInit, AfterViewInit {
   }
 
   deleteAllExam() {
-
       if (this.listId.length > 0) {
         this.listId.forEach(element => {
           this.http
@@ -228,7 +220,6 @@ export class ListExamComponent implements OnInit, AfterViewInit {
             });
         });
       }
-
   }
   // end
 
