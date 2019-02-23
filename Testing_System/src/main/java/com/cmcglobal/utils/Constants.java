@@ -87,11 +87,17 @@ public interface Constants {
   }
 
   // Static for read excel
-  interface ReadExcel {
+  interface ExcelTemplate {
     public static final int COLUMN_INDEX_TITLE = 0;
     public static final int COLUMN_INDEX_DURATION = 1;
     public static final int COLUMN_INDEX_CATEGORYID = 2;
     public static final int COLUMN_INDEX_NOTE = 3;
     public static final int COLUMN_INDEX_NUMBEROFQUES = 4;
+
+    public static final String COLUMN_0 = "title";
+    public static final String COLUMN_1 = "duration";
+    public static final String COLUMN_2 = "categoryId";
+    public static final String COLUMN_3 = "note";
+    public static final String COLUMN_4 = "numberOfQuestion";
   }
 }

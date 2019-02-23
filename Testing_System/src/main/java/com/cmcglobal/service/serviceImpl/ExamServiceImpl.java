@@ -11,8 +11,10 @@ import com.cmcglobal.service.CategoryService;
 import com.cmcglobal.service.ExamQuestionService;
 import com.cmcglobal.service.ExamService;
 import com.cmcglobal.service.QuestionServices;
+import com.cmcglobal.service.UploadFileService;
 import com.cmcglobal.utils.Constants;
 import com.cmcglobal.utils.Helper;
+import com.cmcglobal.utils.MyException;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -75,6 +77,9 @@ public class ExamServiceImpl implements ExamService {
 
   @Autowired
   ExamService examService;
+
+  @Autowired
+  UploadFileService uploadFileService;
 
   /* (non-Javadoc)
    * @see com.cmcglobal.service.ExamService#createExam(com.cmcglobal.entity.Exam)
@@ -601,7 +606,6 @@ public class ExamServiceImpl implements ExamService {
    */
   @Override
   public List<Exam> readExcel(final String exelFilePath) throws Exception {
-
     List<Exam> listExam = new ArrayList<Exam>();
     File file = new File(exelFilePath);
     try {
@@ -610,11 +614,21 @@ public class ExamServiceImpl implements ExamService {
       Workbook workbook = getWorkbook(fileInput, exelFilePath);
       Sheet sheet = workbook.getSheetAt(0);
 
+      Row rowFirst = sheet.getRow(0);
+      if (checkIfRowIsEmpty(rowFirst)) {
+        throw new MyException(1, "this excel file is empty");
+      }
+
+      if (!(examService.checkNotFormatedFile(rowFirst))) {
+        throw new MyException(2,
+            "this excel file is not formatted with one's template");
+      }
+
       for (int rowNum = 1; rowNum <= sheet.getLastRowNum(); rowNum++) {
         Exam exam = new Exam();
 
         Row row = sheet.getRow(rowNum);
-        if (row == null) {
+        if (checkIfRowIsEmpty(row)) {
           break;
         }
         Iterator<Cell> cellIt = row.cellIterator();
@@ -630,25 +644,25 @@ public class ExamServiceImpl implements ExamService {
           int columnIndex = cell.getColumnIndex();
 
           switch (columnIndex) {
-            case Constants.ReadExcel.COLUMN_INDEX_TITLE:
+            case Constants.ExcelTemplate.COLUMN_INDEX_TITLE:
               exam.setTitle((String) getCellValue(cell));
               break;
-            case Constants.ReadExcel.COLUMN_INDEX_DURATION:
+            case Constants.ExcelTemplate.COLUMN_INDEX_DURATION:
               float duration = Float.parseFloat(getCellValue(cell).toString());
               exam.setDuration(duration);
               break;
-            case Constants.ReadExcel.COLUMN_INDEX_CATEGORYID:
+            case Constants.ExcelTemplate.COLUMN_INDEX_CATEGORYID:
               Category category = categoryService
                   .getOne(getCellValue(cell).toString());
               exam.setCategory(category);
               break;
-            case Constants.ReadExcel.COLUMN_INDEX_NOTE:
+            case Constants.ExcelTemplate.COLUMN_INDEX_NOTE:
               exam.setNote((String) getCellValue(cell));
               break;
             // case COLUMN_INDEX_STATUS:
             // exam.setStatus((String) getCellValue(cell));
             // break;
-            case Constants.ReadExcel.COLUMN_INDEX_NUMBEROFQUES:
+            case Constants.ExcelTemplate.COLUMN_INDEX_NUMBEROFQUES:
               float x = Float.parseFloat(getCellValue(cell).toString());
               int numberQues = (int) x;
               exam.setNumberOfQuestion(numberQues);
@@ -680,15 +694,50 @@ public class ExamServiceImpl implements ExamService {
               break;
           }
         }
+        User user = new User();
+        user.setUserId(1);
+        exam.setUserCreated(user);
+        exam.setStatus("Draft");
+        exam.setCreateAt(new Date());
         listExam.add(exam);
       }
     } catch (IOException e) {
+      LOGGER.error(e.toString());
       e.printStackTrace();
     }
     return listExam;
   }
 
-  // Get Cell's value
+  // check if row of excel file is empty
+  private static boolean checkIfRowIsEmpty(Row row) {
+    if (row == null || row.getLastCellNum() <= 0) {
+      return true;
+    }
+    Cell cell = row.getCell((int) row.getFirstCellNum());
+    if (cell == null || "".equals(cell.getRichStringCellValue().getString())) {
+      return true;
+    }
+    return false;
+  }
+
+  @Override
+  public boolean checkNotFormatedFile(Row row) {
+    boolean checkCell0 = Constants.ExcelTemplate.COLUMN_0
+        .equals(row.getCell(0).toString()) ? true : false;
+    boolean checkCell1 = Constants.ExcelTemplate.COLUMN_1
+        .equals(row.getCell(1).toString()) ? true : false;
+    boolean checkCell2 = Constants.ExcelTemplate.COLUMN_2
+        .equals(row.getCell(2).toString()) ? true : false;
+    boolean checkCell3 = Constants.ExcelTemplate.COLUMN_3
+        .equals(row.getCell(3).toString()) ? true : false;
+    boolean checkCell4 = Constants.ExcelTemplate.COLUMN_4
+        .equals(row.getCell(4).toString()) ? true : false;
+    if (!(checkCell0 && checkCell1 && checkCell2 && checkCell3 && checkCell4)) {
+      return false;
+    }
+    return true;
+  }
+
   /**
    * Author: hai95.
    * Created date: Feb 22, 2019
@@ -733,10 +782,9 @@ public class ExamServiceImpl implements ExamService {
    * Created date: Feb 22, 2019
    * Created time: 2:15:25 PM
    * Description: TODO - hai95.
-   * @param inputStream
-   * @param excelFilePath
+   * @param inputStream - input stream.
+   * @param excelFilePath - excel path file.
    * @return
-   * @throws IOException
    */
   private static Workbook getWorkbook(InputStream inputStream,
       String excelFilePath) throws IOException {
@@ -876,36 +924,21 @@ public class ExamServiceImpl implements ExamService {
    */
   @Override
   public ResponseEntity<String> readFileExcel(MultipartFile multipartFile) {
-    File file = new File("files");
-    String pathToSave = file.getAbsolutePath();
-    System.out.println(pathToSave);
-
-    File fileTranfer = new File(
-        pathToSave + "/" + multipartFile.getOriginalFilename());
-    try {
-      multipartFile.transferTo(fileTranfer);
-    } catch (IllegalStateException e) {
-      System.out.println(e.getMessage());
-    } catch (IOException e) {
-      System.out.println(e.getMessage());
-    }
-    System.out.println(multipartFile.getOriginalFilename());
+    final String pathFile = uploadFileService.getPathFile(multipartFile);
+    System.out.println(pathFile);
     List<Exam> listExam = new ArrayList<>();
     try {
-      listExam = examService.readExcel(fileTranfer.toString());
-    } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.OK).body(Constants.Exam.NOT_OK);
-    }
-    if (listExam.size() == 0) {
+      listExam = examService.readExcel(pathFile);
+    } catch (MyException e) {
+      System.out.println("Error: " + e.getMessException());
+      LOGGER.info(e.getIdException() + ": " + e.getMessException());
+      return ResponseEntity.status(HttpStatus.OK).body(e.getMessException());
+    } catch (Exception e1) {
+      LOGGER.info(e1.toString());
       return ResponseEntity.status(HttpStatus.OK).body(Constants.Exam.NOT_OK);
     }
     for (Exam exam : listExam) {
       exam.setExamId(examService.createId());
-      User user = new User();
-      user.setUserId(1);
-      exam.setUserCreated(user);
-      exam.setStatus(Constants.Exam.STATUS_DRAFT);
-      exam.setCreateAt(new Date());
       examService.insert(exam);
     }
     return ResponseEntity.status(HttpStatus.OK).body(Constants.Exam.OK);

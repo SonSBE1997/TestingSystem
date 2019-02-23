@@ -3,7 +3,8 @@ import {
   OnInit,
   AfterViewInit,
   ViewChild,
-  ElementRef
+  ElementRef,
+  Input
 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
@@ -74,6 +75,9 @@ export class ListExamComponent implements OnInit, AfterViewInit {
   caterogyNames: String[] = [];
   isCheckALL = false;
   examFrm: FormGroup;
+
+  showFile = false
+  fileUploads: Observable<string[]>
 
   pageEvent: PageEvent;
   searchTerm: string;
@@ -291,8 +295,9 @@ export class ListExamComponent implements OnInit, AfterViewInit {
         console.log("error: " + error.error.text);
         if (error.error.text === 'Not matching extension file') {
           this.notifierService.notify('error', 'Not matching extension file');
-        } else if (error.error.text === 'OK') {
+        }else if (error.error.text === 'OK') {
           this.notifierService.notify('success', 'successfully uploaded ' + this.currentFileUpload.name + '!');
+          this.showFiles(false);
           this.uploadService.importToServer(this.currentFileUpload)
             .subscribe(
               success => {
@@ -306,6 +311,10 @@ export class ListExamComponent implements OnInit, AfterViewInit {
                   //this.router.navigate(['']);
                 } else if (error.error.text === 'not Ok') {
                   this.notifierService.notify('error', 'Import exam Failed');
+                }else if(error.error.text === 'this excel file is empty'){
+                  this.notifierService.notify('warning', 'this excel file is empty');
+                }else if(error.error.text === "this excel file is not formatted with one's template"){
+                  this.notifierService.notify('warning', "this excel file is not formatted with one's template");
                 }
               }
             );
@@ -315,5 +324,12 @@ export class ListExamComponent implements OnInit, AfterViewInit {
       }
     )
     //end
+  }
+
+  showFiles(enable: boolean) {
+    this.showFile = enable
+    if (enable) {
+      this.fileUploads = this.uploadService.getFiles();
+    }
   }
 }

@@ -7,6 +7,10 @@ import com.cmcglobal.utils.Api;
 import com.cmcglobal.utils.Constants;
 import com.cmcglobal.utils.ExportExamPdf;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -33,6 +37,8 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping(Api.Exam.BASE_URL)
 @CrossOrigin(origins = Api.BASE_URL_CORS, maxAge = 3600)
 public class ExamController {
+  static final Logger LOGGER = LoggerFactory.getLogger(ExamController.class);
+
   @Autowired
   ExamService examService;
   @Autowired
@@ -76,8 +82,8 @@ public class ExamController {
   private List<Exam> getPageExam(
       @RequestParam(name = "sortOrder", required = false, defaultValue = "ASC") String sortOrder,
       @RequestParam(name = "sortTerm", required = false, defaultValue = "title") String sortTerm,
-      @RequestParam(name = "searchContent", required = false, 
-      defaultValue = "") String searchContent) {
+      @RequestParam(name = "searchContent", required = false, defaultValue = "")
+      String searchContent) {
     return examService.getListExamByPage(sortOrder, sortTerm, searchContent);
   }
 

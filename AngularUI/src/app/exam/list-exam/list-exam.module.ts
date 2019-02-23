@@ -10,9 +10,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { MatNativeDateModule, MatFormFieldModule, MatInputModule } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { FileUploadComponent } from './file-upload/file-upload.component';
+
 
 @NgModule({
-  declarations: [],
+  declarations: [FileUploadComponent],
   imports: [
     CommonModule,
     MatTableModule,
@@ -26,14 +28,15 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    FlexLayoutModule
+    FlexLayoutModule,
   ],
   exports: [
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    FileUploadComponent
   ]
 })
 export class ListExamModule { }

@@ -2,6 +2,7 @@ package com.cmcglobal.service;
 
 import com.cmcglobal.entity.Exam;
 import java.util.List;
+import org.apache.poi.ss.usermodel.Row;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
  * Description: TODO - Exam service.
  */
 public interface ExamService {
+
   /**
    * Author: ntmduyen. Created date: Feb 20, 2019 Created time: 12:41:55 PM
    * Description: TODO - find all exam.
@@ -181,6 +183,17 @@ public interface ExamService {
    * @return
    */
   List<Exam> readExcel(String exelFilePath) throws Exception;
+  
+  
+  /**
+   * Author: Hai95.
+   * Created date: Feb 22, 2019
+   * Created time: 11:13:23 AM
+   * Description: TODO - check empty question. if true. change status to draft.
+   * @param examId - exam Id.
+   * @return
+   */
+  	boolean checkNotFormatedFile(Row row);
 
   /**
    * Author: Sanero.
