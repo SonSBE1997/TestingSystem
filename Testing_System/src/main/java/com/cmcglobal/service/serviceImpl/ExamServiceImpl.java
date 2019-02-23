@@ -11,6 +11,7 @@ import com.cmcglobal.service.CategoryService;
 import com.cmcglobal.service.ExamQuestionService;
 import com.cmcglobal.service.ExamService;
 import com.cmcglobal.service.QuestionServices;
+import com.cmcglobal.utils.Contants;
 import com.cmcglobal.utils.Helper;
 import java.io.File;
 import java.io.FileInputStream;
@@ -37,12 +38,14 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.tomcat.util.bcel.classfile.Constant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.cmcglobal.utils.MyException;
 
 /*
  * @author Sanero.
@@ -548,100 +551,138 @@ public class ExamServiceImpl implements ExamService {
    * Created time: 2:14:59 PM
    */
   @Override
-  public List<Exam> readExcel(final String exelFilePath) throws Exception {
-    final int COLUMN_INDEX_TITLE = 0;
-    final int COLUMN_INDEX_DURATION = 1;
-    final int COLUMN_INDEX_CATEGORYID = 2;
-    final int COLUMN_INDEX_NOTE = 3;
-    final int COLUMN_INDEX_NUMBEROFQUES = 4;
+	public List<Exam> readExcel(final String exelFilePath) throws Exception {
+		final int COLUMN_INDEX_TITLE = 0;
+		final int COLUMN_INDEX_DURATION = 1;
+		final int COLUMN_INDEX_CATEGORYID = 2;
+		final int COLUMN_INDEX_NOTE = 3;
+		final int COLUMN_INDEX_NUMBEROFQUES = 4;
 
-    List<Exam> listExam = new ArrayList<Exam>();
-    File file = new File(exelFilePath);
-    try {
-      FileInputStream fileInput = new FileInputStream(file);
+		List<Exam> listExam = new ArrayList<Exam>();
+		File file = new File(exelFilePath);
+		try {
+			FileInputStream fileInput = new FileInputStream(file);
 
-      Workbook workbook = getWorkbook(fileInput, exelFilePath);
-      Sheet sheet = workbook.getSheetAt(0);
+			Workbook workbook = getWorkbook(fileInput, exelFilePath);
+			Sheet sheet = workbook.getSheetAt(0);
 
-      for (int rowNum = 1; rowNum <= sheet.getLastRowNum(); rowNum++) {
-        Exam exam = new Exam();
+			Row rowFirst = sheet.getRow(0);
+			if (checkIfRowIsEmpty(rowFirst)) {
+				throw new MyException(1, "this excel file is empty");
+			}
 
-        Row row = sheet.getRow(rowNum);
-        if (row == null) {
-          break;
-        }
-        Iterator<Cell> cellIt = row.cellIterator();
-        while (cellIt.hasNext()) {
-          Cell cell = cellIt.next();
-          Object cellValue = getCellValue(cell);
-          if (cellValue == null || cellValue.toString().isEmpty()) {
-            continue;
-          }
-          System.out.println(cell.toString());
+			if (!(examService.checkNotFormatedFile(rowFirst))) {
+				throw new MyException(2, "this excel file is not formatted with one's template");
+			}
 
-          // SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-          int columnIndex = cell.getColumnIndex();
+			for (int rowNum = 1; rowNum <= sheet.getLastRowNum(); rowNum++) {
+				Exam exam = new Exam();
 
-          switch (columnIndex) {
-            case COLUMN_INDEX_TITLE:
-              exam.setTitle((String) getCellValue(cell));
-              break;
-            case COLUMN_INDEX_DURATION:
-              float duration = Float.parseFloat(getCellValue(cell).toString());
-              exam.setDuration(duration);
-              break;
-            case COLUMN_INDEX_CATEGORYID:
-              Category category = categoryService
-                  .getOne(getCellValue(cell).toString());
-              exam.setCategory(category);
-              break;
-            case COLUMN_INDEX_NOTE:
-              exam.setNote((String) getCellValue(cell));
-              break;
-            // case COLUMN_INDEX_STATUS:
-            // exam.setStatus((String) getCellValue(cell));
-            // break;
-            case COLUMN_INDEX_NUMBEROFQUES:
-              float x = Float.parseFloat(getCellValue(cell).toString());
-              int numberQues = (int) x;
-              exam.setNumberOfQuestion(numberQues);
-              break;
-            // case COLUMN_INDEX_ENABLE:
-            // exam.setEnable(Boolean.parseBoolean(getCellValue(cell).toString()));
-            // break;
-            // case COLUMN_INDEX_CREATE_AT:
-            // try {
-            // exam.setCreateAt(formatter.parse(getCellValue(cell).toString()));
-            // } catch (ParseException e) {
-            // e.printStackTrace();
-            // }
-            // break;
-            // case COLUMN_INDEX_CREATED_BY:
-            //
-            // break;
-            // case COLUMN_INDEX_MODIFIED_AT:
-            // try {
-            // exam.setModifiedAt(formatter.parse((String) getCellValue(cell)));
-            // } catch (ParseException e) {
-            // e.printStackTrace();
-            // }
-            // break;
-            // case COLUMN_INDEX_MODIFIED_BY:
-            //
-            // break;
-            default:
-              break;
-          }
-        }
-        listExam.add(exam);
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    return listExam;
-  }
+				Row row = sheet.getRow(rowNum);
+				if (checkIfRowIsEmpty(row)) {
+					break;
+				}
+				Iterator<Cell> cellIt = row.cellIterator();
+				while (cellIt.hasNext()) {
+					Cell cell = cellIt.next();
+					Object cellValue = getCellValue(cell);
+					if (cellValue == null || cellValue.toString().isEmpty()) {
+						continue;
+					}
+					System.out.println(cell.toString());
 
-  // Get Cell's value
+//					SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+					int columnIndex = cell.getColumnIndex();
+
+					switch (columnIndex) {
+					case COLUMN_INDEX_TITLE:
+						exam.setTitle((String) getCellValue(cell));
+						break;
+					case COLUMN_INDEX_DURATION:
+						float duration = Float.parseFloat(getCellValue(cell).toString());
+						exam.setDuration(duration);
+						break;
+					case COLUMN_INDEX_CATEGORYID:
+						Category category = categoryService.getOne(getCellValue(cell).toString());
+						exam.setCategory(category);
+						break;
+					case COLUMN_INDEX_NOTE:
+						exam.setNote((String) getCellValue(cell));
+						break;
+//					case COLUMN_INDEX_STATUS:
+//						exam.setStatus((String) getCellValue(cell));
+//						break;
+					case COLUMN_INDEX_NUMBEROFQUES:
+						float x = Float.parseFloat(getCellValue(cell).toString());
+						int numberQues = (int) x;
+						exam.setNumberOfQuestion(numberQues);
+						break;
+//					case COLUMN_INDEX_ENABLE:
+//						exam.setEnable(Boolean.parseBoolean(getCellValue(cell).toString()));
+//						break;
+//					case COLUMN_INDEX_CREATE_AT:
+//						try {
+//							exam.setCreateAt(formatter.parse(getCellValue(cell).toString()));
+//						} catch (ParseException e) {
+//							e.printStackTrace();
+//						}
+//						break;
+//					case COLUMN_INDEX_CREATED_BY:
+//
+//						break;
+//					case COLUMN_INDEX_MODIFIED_AT:
+//						try {
+//							exam.setModifiedAt(formatter.parse((String) getCellValue(cell)));
+//						} catch (ParseException e) {
+//							e.printStackTrace();
+//						}
+//						break;
+//					case COLUMN_INDEX_MODIFIED_BY:
+//
+//						break;
+					default:
+						break;
+					}
+				}
+				User user = new User();
+				user.setUserId(1);
+				exam.setUserCreated(user);
+				exam.setStatus("Draft");
+				exam.setCreateAt(new Date());
+				listExam.add(exam);
+			}
+		} catch (IOException e) {
+			LOGGER.error(e.toString());
+			e.printStackTrace();
+		}
+		return listExam;
+	}
+	
+	// check if row of excel file is empty
+	private static boolean checkIfRowIsEmpty(Row row) {
+		if (row == null || row.getLastCellNum() <= 0) {
+			return true;
+		}
+		Cell cell = row.getCell((int) row.getFirstCellNum());
+		if (cell == null || "".equals(cell.getRichStringCellValue().getString())) {
+			return true;
+		}
+		return false;
+	}
+	
+	
+	@Override
+	public boolean checkNotFormatedFile(Row row) {
+		boolean checkCell0 = Contants.ExcelTemplate.COLUMN_0.equals(row.getCell(0).toString()) ? true : false;
+		boolean checkCell1 = Contants.ExcelTemplate.COLUMN_1.equals(row.getCell(1).toString()) ? true : false;
+		boolean checkCell2 = Contants.ExcelTemplate.COLUMN_2.equals(row.getCell(2).toString()) ? true : false;
+		boolean checkCell3 = Contants.ExcelTemplate.COLUMN_3.equals(row.getCell(3).toString()) ? true : false;
+		boolean checkCell4 = Contants.ExcelTemplate.COLUMN_4.equals(row.getCell(4).toString()) ? true : false;
+		if (!(checkCell0 && checkCell1 && checkCell2 && checkCell3 && checkCell4)) {
+			return false;
+		}
+		return true;
+	}
   /**
    * Author: hai95.
    * Created date: Feb 22, 2019
@@ -650,35 +691,34 @@ public class ExamServiceImpl implements ExamService {
    * @param cell - cell.
    * @return
    */
-  private static Object getCellValue(Cell cell) {
-    CellType cellType = cell.getCellTypeEnum();
-    Object cellValue = null;
-    switch (cellType) {
-      case BOOLEAN:
-        cellValue = cell.getBooleanCellValue();
-        break;
-      case FORMULA:
-        Workbook workbook = cell.getSheet().getWorkbook();
-        FormulaEvaluator evaluator = workbook.getCreationHelper()
-            .createFormulaEvaluator();
-        cellValue = evaluator.evaluate(cell).getNumberValue();
-        break;
-      case NUMERIC:
-        cellValue = cell.getNumericCellValue();
-        break;
-      case STRING:
-        cellValue = cell.getStringCellValue();
-        break;
-      case _NONE:
-      case BLANK:
-      case ERROR:
-        break;
-      default:
-        break;
-    }
+	private static Object getCellValue(Cell cell) {
+		CellType cellType = cell.getCellTypeEnum();
+		Object cellValue = null;
+		switch (cellType) {
+		case BOOLEAN:
+			cellValue = cell.getBooleanCellValue();
+			break;
+		case FORMULA:
+			Workbook workbook = cell.getSheet().getWorkbook();
+			FormulaEvaluator evaluator = workbook.getCreationHelper().createFormulaEvaluator();
+			cellValue = evaluator.evaluate(cell).getNumberValue();
+			break;
+		case NUMERIC:
+			cellValue = cell.getNumericCellValue();
+			break;
+		case STRING:
+			cellValue = cell.getStringCellValue();
+			break;
+		case _NONE:
+		case BLANK:
+		case ERROR:
+			break;
+		default:
+			break;
+		}
 
-    return cellValue;
-  }
+		return cellValue;
+	}
 
   // Get Workbook
   /**
@@ -691,20 +731,18 @@ public class ExamServiceImpl implements ExamService {
    * @return
    * @throws IOException
    */
-  private static Workbook getWorkbook(InputStream inputStream,
-      String excelFilePath) throws IOException {
-    Workbook workbook = null;
-    if (excelFilePath.endsWith("xlsx")) {
-      workbook = new XSSFWorkbook(inputStream);
-    } else if (excelFilePath.endsWith("xls")) {
-      workbook = new HSSFWorkbook(inputStream);
-    } else {
-      throw new IllegalArgumentException(
-          "The specified file is not Excel file");
-    }
+	private static Workbook getWorkbook(InputStream inputStream, String excelFilePath) throws IOException {
+		Workbook workbook = null;
+		if (excelFilePath.endsWith("xlsx")) {
+			workbook = new XSSFWorkbook(inputStream);
+		} else if (excelFilePath.endsWith("xls")) {
+			workbook = new HSSFWorkbook(inputStream);
+		} else {
+			throw new IllegalArgumentException("The specified file is not Excel file");
+		}
 
-    return workbook;
-  }
+		return workbook;
+	}
 
   /* (non-Javadoc)
    * @see com.cmcglobal.service.ExamService#createId1()
@@ -712,28 +750,28 @@ public class ExamServiceImpl implements ExamService {
    * Created date: Feb 22, 2019
    * Created time: 2:15:32 PM
    */
-  @Override
-  public String createId1() {
-    String id;
-    List<Exam> findAll = examService.findAll();
-    int ids = findAll.size() - 1;
-    if (ids < 0) {
-      ids = 0;
-      return "Exam001";
-    } else {
-      String tmp = findAll.get(ids).getExamId();
-      tmp = tmp.substring(tmp.length() - 3, tmp.length());
+	@Override
+	public String createId1() {
+		String id;
+		List<Exam> findAll = examService.findAll();
+		int ids = findAll.size() - 1;
+		if (ids < 0) {
+			ids = 0;
+			return "Exam001";
+		} else {
+			String tmp = findAll.get(ids).getExamId();
+			tmp = tmp.substring(tmp.length() - 3, tmp.length());
 
-      int id1 = Integer.parseInt(tmp) + 1;
-      if (id1 < 10)
-        id = ("Exam00") + id1;
-      else if (id1 > 9 && id1 < 100)
-        id = ("Exam0") + id1;
-      else
-        id = ("Exam") + id1;
-      return id;
-    }
-  }
+			int id1 = Integer.parseInt(tmp) + 1;
+			if (id1 < 10)
+				id = ("Exam00") + id1;
+			else if (id1 > 9 && id1 < 100)
+				id = ("Exam0") + id1;
+			else
+				id = ("Exam") + id1;
+			return id;
+		}
+	}
 
   /* (non-Javadoc)
    * @see com.cmcglobal.service.ExamService#isEmptyQuestionOfExam(java.lang.String)

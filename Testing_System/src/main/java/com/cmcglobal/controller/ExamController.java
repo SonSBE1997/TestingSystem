@@ -1,18 +1,17 @@
 package com.cmcglobal.controller;
 
+
 import com.cmcglobal.entity.Exam;
-import com.cmcglobal.entity.User;
 import com.cmcglobal.repository.CategoryRepository;
 import com.cmcglobal.service.ExamService;
 import com.cmcglobal.utils.Api;
 import com.cmcglobal.utils.ExportExamPDF;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -30,6 +29,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import com.cmcglobal.utils.MyException;
+import com.cmcglobal.service.UploadFileService;
 
 /*
  * @author Sanero.
@@ -41,10 +42,14 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping(Api.Exam.BASE_URL)
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 public class ExamController {
-  @Autowired
-  ExamService examService;
-  @Autowired
-  CategoryRepository cate;
+	static final Logger LOGGER = LoggerFactory.getLogger(ExamController.class);
+	
+	@Autowired
+	ExamService examService;
+	@Autowired
+	CategoryRepository cate;
+	@Autowired
+	UploadFileService uploadFileService;
 
   /**
    * Author: ptphuong.
@@ -316,42 +321,28 @@ public class ExamController {
    * @param multipartFile - multipart file.
    * @return
    */
-  @PostMapping("/import-excel-file")
-  public ResponseEntity<String> readExcelFile(
-      @RequestParam("multipartFile") MultipartFile multipartFile) {
+	@PostMapping("/import-excel-file")
+	public ResponseEntity<String> readExcelFile(@RequestParam("multipartFile") MultipartFile multipartFile) {
 
-    File file = new File("files");
-    String pathToSave = file.getAbsolutePath();
-    System.out.println(pathToSave);
-
-    File fileTranfer = new File(
-        pathToSave + "/" + multipartFile.getOriginalFilename());
-    try {
-      multipartFile.transferTo(fileTranfer);
-    } catch (IllegalStateException e) {
-    } catch (IOException e) {
-    }
-    System.out.println(multipartFile.getOriginalFilename());
-    List<Exam> listExam = new ArrayList<>();
-    try {
-      listExam = examService.readExcel(fileTranfer.toString());
-    } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.OK).body("not Ok");
-    }
-    if (listExam.size() == 0) {
-      return ResponseEntity.status(HttpStatus.OK).body("not Ok");
-    }
-    for (Exam exam : listExam) {
-      exam.setExamId(examService.createId1());
-      User user = new User();
-      user.setUserId(1);
-      exam.setUserCreated(user);
-      exam.setStatus("Draft");
-      exam.setCreateAt(new Date());
-      examService.insert(exam);
-    }
-    return ResponseEntity.status(HttpStatus.OK).body("Ok");
-  }
+		final String pathFile = uploadFileService.getPathFile(multipartFile);
+		System.out.println(pathFile);
+		List<Exam> listExam = new ArrayList<>();
+		try {
+			listExam = examService.readExcel(pathFile);
+		} catch (MyException e) {
+			System.out.println("Error: " + e.getMessException());
+			LOGGER.info(e.getIdException() + ": " + e.getMessException());
+			return ResponseEntity.status(HttpStatus.OK).body(e.getMessException());
+		} catch (Exception e1) {
+			LOGGER.info(e1.toString());
+			return ResponseEntity.status(HttpStatus.OK).body("not Ok");
+		}
+		for (Exam exam : listExam) {
+			exam.setExamId(examService.createId1());
+			examService.insert(exam);
+		}
+		return ResponseEntity.status(HttpStatus.OK).body("Ok");
+	}
 
   /**
    * Author: Sanero.

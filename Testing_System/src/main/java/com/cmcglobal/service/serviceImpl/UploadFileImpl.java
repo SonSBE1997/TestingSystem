@@ -5,13 +5,17 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.scheduling.annotation.Async;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.cmcglobal.service.UploadFileService;
+
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import java.net.MalformedURLException;
 
 @Service
 public class UploadFileImpl implements UploadFileService {
@@ -27,6 +31,47 @@ public class UploadFileImpl implements UploadFileService {
 			Files.copy(file.getInputStream(), this.rootLocation.resolve(file.getOriginalFilename()));
 			return "Success";
 		} catch (Exception e) {
+			throw new RuntimeException("FAIL!");
+		}
+	}
+
+	@Override
+	public String getPathFile(MultipartFile file) {
+		File filePath = new File("files");
+		String pathToSave = filePath.getAbsolutePath();
+		System.out.println(pathToSave);
+
+		File fileTranfer = new File(pathToSave + "/" + file.getOriginalFilename());
+//		try {
+//			file.transferTo(fileTranfer);
+//		} catch (IllegalStateException e) {
+//			return null;
+//		} catch (IOException e) {
+//			return null;
+//		}
+		System.out.println(file.getOriginalFilename());
+		return fileTranfer.toString();
+	}
+
+	@Override
+	public boolean checkExtension(MultipartFile file) {
+		String extension = FilenameUtils.getExtension(file.getOriginalFilename());
+		if( !(("xlsx".equals(extension)) || ("xls".equals(extension))) ) {
+			return false;
+		}
+		return true;
+	}
+	
+	public Resource loadFile(String filename) {
+		try {
+			Path file = rootLocation.resolve(filename);
+			Resource resource = new UrlResource(file.toUri());
+			if (resource.exists() || resource.isReadable()) {
+				return resource;
+			} else {
+				throw new RuntimeException("FAIL!");
+			}
+		} catch (MalformedURLException e) {
 			throw new RuntimeException("FAIL!");
 		}
 	}

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpRequest, HttpEvent } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs//Observable';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -14,8 +14,7 @@ export class UploadserviceService {
     const formdata: FormData = new FormData();
     formdata.append('files', file);
     const req = new HttpRequest('POST', 'http://localhost:8080/uploadfile', formdata, {
-      //reportProgress: true,
-      //responseType: 'text'
+
     }
     );
     return this.http.request(req);
@@ -25,10 +24,13 @@ export class UploadserviceService {
     const formdata: FormData = new FormData();
     formdata.append('multipartFile', file);
     const req = new HttpRequest('POST', 'http://localhost:8080/exam/import-excel-file', formdata, {
-      //reportProgress: true,
-      //responseType: 'text'
+
     });
     return this.http.request(req);
+  }
+
+  getFiles(): Observable<any> {
+    return this.http.get('http://localhost:8080/getallfiles');
   }
 
 }
