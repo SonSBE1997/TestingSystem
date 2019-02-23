@@ -1,20 +1,17 @@
 package com.cmcglobal.controller;
 
-
 import com.cmcglobal.entity.Exam;
 import com.cmcglobal.repository.CategoryRepository;
 import com.cmcglobal.service.ExamService;
 import com.cmcglobal.utils.Api;
-import com.cmcglobal.utils.ExportExamPDF;
-
-import java.util.ArrayList;
+import com.cmcglobal.utils.Constants;
+import com.cmcglobal.utils.ExportExamPdf;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,8 +26,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-import com.cmcglobal.utils.MyException;
-import com.cmcglobal.service.UploadFileService;
 
 /*
  * @author Sanero.
@@ -40,16 +35,14 @@ import com.cmcglobal.service.UploadFileService;
  */
 @RestController
 @RequestMapping(Api.Exam.BASE_URL)
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
+@CrossOrigin(origins = Api.BASE_URL_CORS, maxAge = 3600)
 public class ExamController {
-	static final Logger LOGGER = LoggerFactory.getLogger(ExamController.class);
-	
-	@Autowired
-	ExamService examService;
-	@Autowired
-	CategoryRepository cate;
-	@Autowired
-	UploadFileService uploadFileService;
+  static final Logger LOGGER = LoggerFactory.getLogger(ExamController.class);
+
+  @Autowired
+  ExamService examService;
+  @Autowired
+  CategoryRepository cate;
 
   /**
    * Author: ptphuong.
@@ -58,7 +51,7 @@ public class ExamController {
    * Description: TODO - create exam.
    * @param exam - exam.
    */
-  @PostMapping(value = "/create")
+  @PostMapping(value = Api.Exam.CREATE)
   public void postExam(@RequestBody Exam exam) {
     examService.createExam(exam);
   }
@@ -70,7 +63,7 @@ public class ExamController {
    * Description: TODO - get all exam.
    * @return
    */
-  @GetMapping(value = "/listExams")
+  @GetMapping(value = Api.Exam.GET_ALL)
   public List<Exam> listExam() {
     return examService.findAll();
   }
@@ -80,86 +73,18 @@ public class ExamController {
    * Created date: Feb 22, 2019
    * Created time: 2:17:15 PM
    * Description: TODO - get list exam by page.
-   * @param sortOrder
-   * @param sortTerm
-   * @param searchContent
+   * @param sortOrder - sort order.
+   * @param sortTerm - sort term.
+   * @param searchContent - search content.
    * @return
    */
-  @RequestMapping(value = "listExams/pagination", method = RequestMethod.GET)
+  @RequestMapping(value = Api.Exam.GET_BY_PAGE, method = RequestMethod.GET)
   private List<Exam> getPageExam(
       @RequestParam(name = "sortOrder", required = false, defaultValue = "ASC") String sortOrder,
       @RequestParam(name = "sortTerm", required = false, defaultValue = "title") String sortTerm,
-      @RequestParam(name = "searchContent", required = false, defaultValue = "") String searchContent) {
-    Sort sortable = null;
-    switch (sortTerm) {
-    case ("title"):
-      if (("asc").equals(sortOrder.toLowerCase())) {
-        sortable = Sort.by("title").ascending();
-      }
-      if (("desc").equals(sortOrder.toLowerCase())) {
-        sortable = Sort.by("title").descending();
-      }
-      break;
-    case ("examId"):
-      if (("asc").equals(sortOrder.toLowerCase())) {
-        sortable = Sort.by("examId").ascending();
-      }
-      if (("desc").equals(sortOrder.toLowerCase())) {
-        sortable = Sort.by("examId").descending();
-      }
-      break;
-    case ("duration"):
-      if (("asc").equals(sortOrder.toLowerCase())) {
-        sortable = Sort.by("duration").ascending();
-      }
-      if (("desc").equals(sortOrder.toLowerCase())) {
-        sortable = Sort.by("duration").descending();
-      }
-      break;
-    case ("numberOfQuestion"):
-      if (("asc").equals(sortOrder.toLowerCase())) {
-        sortable = Sort.by("numberOfQuestion").ascending();
-      }
-      if (("desc").equals(sortOrder.toLowerCase())) {
-        sortable = Sort.by("numberOfQuestion").descending();
-      }
-      break;
-    case ("status"):
-      if (("asc").equals(sortOrder.toLowerCase())) {
-        sortable = Sort.by("status").ascending();
-      }
-      if (("desc").equals(sortOrder.toLowerCase())) {
-        sortable = Sort.by("status").descending();
-      }
-      break;
-    case ("createAt"):
-      if (("asc").equals(sortOrder.toLowerCase())) {
-        sortable = Sort.by("createAt").ascending();
-      }
-      if (("desc").equals(sortOrder.toLowerCase())) {
-        sortable = Sort.by("createAt").descending();
-      }
-      break;
-    // sort theo trường fullname của user create_by
-    case ("userCreated"):
-      if (("asc").equals(sortOrder.toLowerCase())) {
-        return examService.pageExamSortByUserCreatedByAsc(searchContent);
-      }
-      if (("desc").equals(sortOrder.toLowerCase())) {
-        return examService.pageExamSortByUserCreatedByDesc(searchContent);
-      }
-      break;
-    // sort theo trường category của category category_name
-    case ("category"):
-      if (("asc").equals(sortOrder.toLowerCase())) {
-        return examService.pageExamSortByCategoryAsc(searchContent);
-      }
-      if (("desc").equals(sortOrder.toLowerCase())) {
-        return examService.pageExamSortByCategoryDesc(searchContent);
-      }
-      break;
-    }
-    return examService.pageExam(searchContent, sortable);
+      @RequestParam(name = "searchContent", required = false, defaultValue = "")
+      String searchContent) {
+    return examService.getListExamByPage(sortOrder, sortTerm, searchContent);
   }
 
   /**
@@ -170,11 +95,11 @@ public class ExamController {
    * @param id - exam id.
    * @return
    */
-  @GetMapping(value = "/export/{id}")
+  @GetMapping(value = Api.Exam.EXPORT)
   public ModelAndView handlereport(@PathVariable("id") String id) {
     try {
-      Exam exam = examService.findByID(id);
-      return new ModelAndView(new ExportExamPDF(), "exam", exam);
+      Exam exam = examService.findById(id);
+      return new ModelAndView(new ExportExamPdf(), "exam", exam);
     } catch (Exception e) {
       return null;
     }
@@ -188,12 +113,12 @@ public class ExamController {
    * @param id - exam id.
    * @return
    */
-  @GetMapping(value = "/{id}")
-  public Exam getExam(@PathVariable("id") String id) {
+  @GetMapping(value = Api.Exam.GET_ONE)
+  public Exam getExam(@PathVariable String id) {
     /*
      * cate.delete(cate.getOne(1)); cate.deleteAll();
      */
-    return examService.findByID(id);
+    return examService.findById(id);
   }
 
   /**
@@ -207,9 +132,9 @@ public class ExamController {
   public ResponseEntity<String> approveExam(@RequestBody Exam exam) {
     boolean success = examService.approveExam(exam.getExamId());
     if (success) {
-      return ResponseEntity.ok(Api.Exam.OK);
+      return ResponseEntity.ok(Constants.Exam.OK);
     }
-    return ResponseEntity.ok(Api.Exam.NOT_OK);
+    return ResponseEntity.ok(Constants.Exam.NOT_OK);
   }
 
   /**
@@ -223,9 +148,9 @@ public class ExamController {
   public ResponseEntity<String> removeQuestion(@RequestBody Exam exam) {
     boolean success = examService.removeQuestion(exam);
     if (success) {
-      return ResponseEntity.ok(Api.Exam.OK);
+      return ResponseEntity.ok(Constants.Exam.OK);
     }
-    return ResponseEntity.ok(Api.Exam.NOT_OK);
+    return ResponseEntity.ok(Constants.Exam.NOT_OK);
   }
 
   /**
@@ -239,9 +164,9 @@ public class ExamController {
   public ResponseEntity<String> addQuestion(@RequestBody Exam exam) {
     boolean success = examService.addListQuestion(exam);
     if (success) {
-      return ResponseEntity.ok(Api.Exam.OK);
+      return ResponseEntity.ok(Constants.Exam.OK);
     }
-    return ResponseEntity.ok(Api.Exam.NOT_OK);
+    return ResponseEntity.ok(Constants.Exam.NOT_OK);
   }
 
   /**
@@ -256,9 +181,9 @@ public class ExamController {
     boolean success = examService.randomQuestion(exam.getExamId(),
         exam.getCategory().getCategoryId(), exam.getNumberOfQuestion());
     if (success) {
-      return ResponseEntity.ok(Api.Exam.OK);
+      return ResponseEntity.ok(Constants.Exam.OK);
     }
-    return ResponseEntity.ok(Api.Exam.NOT_OK);
+    return ResponseEntity.ok(Constants.Exam.NOT_OK);
   }
 
   /**
@@ -281,9 +206,9 @@ public class ExamController {
    * @param exam - exam.
    * @return
    */
-  @PostMapping(value = "/filter")
+  @PostMapping(value = Api.Exam.FILTER)
   public ResponseEntity<List<Exam>> findAll(@RequestBody Exam exam) {
-    List<Exam> exams = examService.FilterExam(exam);
+    List<Exam> exams = examService.filterExam(exam);
     return ResponseEntity.ok(exams);
   }
 
@@ -296,7 +221,7 @@ public class ExamController {
    * @param examId - exam id.
    * @return
    */
-  @PutMapping("/update/update-common/{examId}")
+  @PutMapping(Api.Exam.UPDATE_COMMON)
   public Exam updateCommon(@RequestBody Exam exam,
       @PathVariable String examId) {
     Exam ex = examService.getOne(examId);
@@ -321,28 +246,12 @@ public class ExamController {
    * @param multipartFile - multipart file.
    * @return
    */
-	@PostMapping("/import-excel-file")
-	public ResponseEntity<String> readExcelFile(@RequestParam("multipartFile") MultipartFile multipartFile) {
+  @PostMapping(Api.Exam.IMPORT_EXCEL)
+  public ResponseEntity<String> readExcelFile(
+      @RequestParam("multipartFile") MultipartFile multipartFile) {
 
-		final String pathFile = uploadFileService.getPathFile(multipartFile);
-		System.out.println(pathFile);
-		List<Exam> listExam = new ArrayList<>();
-		try {
-			listExam = examService.readExcel(pathFile);
-		} catch (MyException e) {
-			System.out.println("Error: " + e.getMessException());
-			LOGGER.info(e.getIdException() + ": " + e.getMessException());
-			return ResponseEntity.status(HttpStatus.OK).body(e.getMessException());
-		} catch (Exception e1) {
-			LOGGER.info(e1.toString());
-			return ResponseEntity.status(HttpStatus.OK).body("not Ok");
-		}
-		for (Exam exam : listExam) {
-			exam.setExamId(examService.createId1());
-			examService.insert(exam);
-		}
-		return ResponseEntity.status(HttpStatus.OK).body("Ok");
-	}
+    return examService.readFileExcel(multipartFile);
+  }
 
   /**
    * Author: Sanero.
@@ -357,8 +266,8 @@ public class ExamController {
     boolean success = examService.isEmptyQuestionOfExam(examId);
     System.out.println(examId);
     if (success) {
-      return ResponseEntity.ok(Api.Exam.OK);
+      return ResponseEntity.ok(Constants.Exam.OK);
     }
-    return ResponseEntity.ok(Api.Exam.NOT_OK);
+    return ResponseEntity.ok(Constants.Exam.NOT_OK);
   }
 }

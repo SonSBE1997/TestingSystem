@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.cmcglobal.custorm.FilterCustorm;
 import com.cmcglobal.entity.Exam;
-import com.cmcglobal.utils.Contants;
+import com.cmcglobal.utils.Constants;
 
 /*
  * @author ntmduyen.
@@ -27,7 +27,7 @@ public interface ExamRepository
    * @param pageable
    * @return
    */
-  @Query(Contants.Exam.QUERY_PAGE_ALL)
+  @Query(Constants.Exam.QUERY_PAGE_ALL)
   List<Exam> pageExam(@Param("searchInput") String searchContent,
       Sort pageable);
 
@@ -39,7 +39,7 @@ public interface ExamRepository
    * @param pageable
    * @return
    */
-  @Query(Contants.Exam.QUERY_PAGE_ALL_SORT_BY_USER_CREATED_ASC)
+  @Query(Constants.Exam.QUERY_PAGE_ALL_SORT_BY_USER_CREATED_ASC)
   List<Exam> pageExamSortByUserCreatedByAsc(
       @Param("searchInput") String searchContent);
 
@@ -51,7 +51,7 @@ public interface ExamRepository
    * @param pageable
    * @return
    */
-  @Query(Contants.Exam.QUERY_PAGE_ALL_SORT_BY_USER_CREATED_DESC)
+  @Query(Constants.Exam.QUERY_PAGE_ALL_SORT_BY_USER_CREATED_DESC)
   List<Exam> pageExamSortByUserCreatedByDesc(
       @Param("searchInput") String searchContent);
 
@@ -63,7 +63,7 @@ public interface ExamRepository
    * @param pageable
    * @return
    */
-  @Query(Contants.Exam.QUERY_PAGE_ALL_SORT_BY_CATEGORY_NAME_ASC)
+  @Query(Constants.Exam.QUERY_PAGE_ALL_SORT_BY_CATEGORY_NAME_ASC)
   List<Exam> pageExamSortByCategoryAsc(
       @Param("searchInput") String searchContent);
 
@@ -75,7 +75,7 @@ public interface ExamRepository
    * @param pageable
    * @return
    */
-  @Query(Contants.Exam.QUERY_PAGE_ALL_SORT_BY_CATEGORY_NAME_DESC)
+  @Query(Constants.Exam.QUERY_PAGE_ALL_SORT_BY_CATEGORY_NAME_DESC)
   List<Exam> pageExamSortByCategoryDesc(
       @Param("searchInput") String searchContent);
 }
