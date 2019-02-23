@@ -35,6 +35,7 @@ export interface Selection {
   id: string;
   checked: boolean;
   status: boolean;
+  categoryId: number;
 }
 
 export interface TabInfo {

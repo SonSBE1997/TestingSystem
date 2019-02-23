@@ -52,7 +52,7 @@
       </div>
     </ng-container> -->
     <ng-container *ngFor="let img of image; index as i">
-      <div class="mySlides fade" [ngStyle]="{'display': currentSlide === (i + 1) ? 'block' : 'none'}">
+      <div class="mySlides" [ngStyle]="{'display': currentSlide === (i + 1) ? 'block' : 'none'}">
         <div class="numbertext">{{ i + 1 }} / 3</div>
         <img [src]="img" style="width:100%">
       </div>

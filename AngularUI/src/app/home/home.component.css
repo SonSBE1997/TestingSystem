@@ -9,7 +9,7 @@
 
 /* Hide the images by default */
 .mySlides {
-  display: none;
+  display: block;
 }
 
 /* Caption text */
@@ -49,7 +49,7 @@
 }
 
 /* Fading animation */
-.fade {
+/* .fade {
   -webkit-animation-name: fade;
   -webkit-animation-duration: 1.5s;
   animation-name: fade;
@@ -64,7 +64,7 @@
 @keyframes fade {
   from {opacity: .4}
   to {opacity: 1}
-}
+} */
 
 body{
   padding: 0px;
