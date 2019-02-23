@@ -30,10 +30,10 @@ public interface QuestionServices {
   List<Question> searchByContent(String content, Pageable pageable);
 
   String countSearchQuestion(String content);
+
+  // Team01
+  List<Question> findByCategoryId(int categoryId);
   
-  String countQuestionByCategoryId(int categoryId);
-  
-  String countSearchQuestionByCategoryId(String content, int categoryId);
-  
-  List<Question> findByCategoryIdAndPage(int categoryId, Pageable pageable);
+  long countByCategoryId(int categoryId);
+  // End Team01
 }

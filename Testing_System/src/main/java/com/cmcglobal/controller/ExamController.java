@@ -1,5 +1,12 @@
 package com.cmcglobal.controller;
 
+import com.cmcglobal.entity.Exam;
+import com.cmcglobal.entity.User;
+import com.cmcglobal.repository.CategoryRepository;
+import com.cmcglobal.service.ExamService;
+import com.cmcglobal.utils.Api;
+import com.cmcglobal.utils.ExportExamPDF;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,13 +31,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.cmcglobal.entity.Exam;
-import com.cmcglobal.entity.User;
-import com.cmcglobal.repository.CategoryRepository;
-import com.cmcglobal.service.ExamService;
-import com.cmcglobal.utils.Api;
-import com.cmcglobal.utils.ExportExamPDF;
-
 /*
  * @author Sanero.
  * Created date: Feb 22, 2019
@@ -51,7 +51,7 @@ public class ExamController {
    * Created date: Feb 22, 2019
    * Created time: 2:16:32 PM
    * Description: TODO - create exam.
-   * @param exam
+   * @param exam - exam.
    */
   @PostMapping(value = "/create")
   public void postExam(@RequestBody Exam exam) {
@@ -162,7 +162,7 @@ public class ExamController {
    * Created date: Feb 22, 2019
    * Created time: 2:17:43 PM
    * Description: TODO - export exam to pdf.
-   * @param id
+   * @param id - exam id.
    * @return
    */
   @GetMapping(value = "/export/{id}")
@@ -180,7 +180,7 @@ public class ExamController {
    * Created date: Feb 22, 2019
    * Created time: 2:18:08 PM
    * Description: TODO - get exam by id.
-   * @param id
+   * @param id - exam id.
    * @return
    */
   @GetMapping(value = "/{id}")
@@ -195,14 +195,15 @@ public class ExamController {
    * Author: Sanero. Created date: Feb 19, 2019 Created time: 4:03:02 PM
    * Description: TODO - controller handle approve exam to public.
    * 
-   * @param exam
+   * @param exam - exam.
    * @return
    */
   @PutMapping(value = Api.Exam.APPROVE)
   public ResponseEntity<String> approveExam(@RequestBody Exam exam) {
     boolean success = examService.approveExam(exam.getExamId());
-    if (success)
+    if (success) {
       return ResponseEntity.ok(Api.Exam.OK);
+    }
     return ResponseEntity.ok(Api.Exam.NOT_OK);
   }
 
@@ -210,14 +211,15 @@ public class ExamController {
    * Author: Sanero. Created date: Feb 19, 2019 Created time: 4:02:52 PM
    * Description: TODO - controller handle remove question to exam.
    * 
-   * @param exam
+   * @param exam - exam.
    * @return
    */
   @PutMapping(value = Api.Exam.REMOVE_QUESTION)
   public ResponseEntity<String> removeQuestion(@RequestBody Exam exam) {
     boolean success = examService.removeQuestion(exam);
-    if (success)
+    if (success) {
       return ResponseEntity.ok(Api.Exam.OK);
+    }
     return ResponseEntity.ok(Api.Exam.NOT_OK);
   }
 
@@ -225,14 +227,15 @@ public class ExamController {
    * Author: Sanero. Created date: Feb 19, 2019 Created time: 4:02:45 PM
    * Description: TODO - controller handle add question to exam.
    * 
-   * @param exam
+   * @param exam - exam.
    * @return
    */
   @PostMapping(value = Api.Exam.ADD_QUESTION)
   public ResponseEntity<String> addQuestion(@RequestBody Exam exam) {
     boolean success = examService.addListQuestion(exam);
-    if (success)
+    if (success) {
       return ResponseEntity.ok(Api.Exam.OK);
+    }
     return ResponseEntity.ok(Api.Exam.NOT_OK);
   }
 
@@ -240,15 +243,16 @@ public class ExamController {
    * Author: Sanero. Created date: Feb 19, 2019 Created time: 4:02:29 PM
    * Description: TODO - controller handle random question to exam.
    * 
-   * @param exam
+   * @param exam - exam.
    * @return
    */
   @PostMapping(value = Api.Exam.RANDOM_QUESTION)
   public ResponseEntity<String> randomQuestion(@RequestBody Exam exam) {
     boolean success = examService.randomQuestion(exam.getExamId(),
-        exam.getNumberOfQuestion());
-    if (success)
+        exam.getCategory().getCategoryId(), exam.getNumberOfQuestion());
+    if (success) {
       return ResponseEntity.ok(Api.Exam.OK);
+    }
     return ResponseEntity.ok(Api.Exam.NOT_OK);
   }
 
@@ -257,7 +261,7 @@ public class ExamController {
    * Created date: Feb 22, 2019
    * Created time: 2:18:47 PM
    * Description: TODO - controller hand delete exam.
-   * @param examId
+   * @param examId - examId.
    */
   @DeleteMapping(value = "/{examId}")
   public void deleteExam(@PathVariable String examId) {
@@ -269,7 +273,7 @@ public class ExamController {
    * Created date: Feb 22, 2019
    * Created time: 2:21:11 PM
    * Description: TODO - controller handle filter exam.
-   * @param exam
+   * @param exam - exam.
    * @return
    */
   @PostMapping(value = "/filter")
@@ -283,8 +287,8 @@ public class ExamController {
    * Created date: Feb 22, 2019
    * Created time: 2:21:47 PM
    * Description: TODO - controller handle update common.
-   * @param exam
-   * @param examId
+   * @param exam - exam.
+   * @param examId - exam id.
    * @return
    */
   @PutMapping("/update/update-common/{examId}")
@@ -309,7 +313,7 @@ public class ExamController {
    * Created date: Feb 22, 2019
    * Created time: 2:22:29 PM
    * Description: TODO - import excel file.
-   * @param multipartFile
+   * @param multipartFile - multipart file.
    * @return
    */
   @PostMapping("/import-excel-file")
@@ -354,15 +358,16 @@ public class ExamController {
    * Created date: Feb 22, 2019
    * Created time: 2:22:44 PM
    * Description: TODO - check empty question in exam.
-   * @param examId
+   * @param examId - exam id.
    * @return
    */
   @GetMapping(value = Api.Exam.IS_EMPTY_QUESTION)
   public ResponseEntity<String> isEmptyQuestion(@PathVariable String examId) {
     boolean success = examService.isEmptyQuestionOfExam(examId);
     System.out.println(examId);
-    if (success)
+    if (success) {
       return ResponseEntity.ok(Api.Exam.OK);
+    }
     return ResponseEntity.ok(Api.Exam.NOT_OK);
   }
 }

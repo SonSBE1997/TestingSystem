@@ -9,12 +9,12 @@
 
 package com.cmcglobal.utils;
 
+import com.cmcglobal.entity.ExamQuestion;
+import com.cmcglobal.entity.Question;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-import com.cmcglobal.entity.ExamQuestion;
-import com.cmcglobal.entity.Question;
 
 /*
  * @author Sanero.
@@ -28,7 +28,7 @@ public class Helper {
    * Created date: Feb 14, 2019
    * Created time: 9:02:29 AM
    * Description: TODO - random order choice of question.
-   * @param random
+   * @param random - class random.
    * @return
    */
   public static String randomChoiceOrder(Random random, int numberRandom) {
@@ -52,15 +52,19 @@ public class Helper {
    * Created date: Feb 14, 2019
    * Created time: 9:49:58 AM
    * Description: TODO - .
-   * @param random
-   * @param questions
-   * @param numberRandom
+   * @param random - class random.
+   * @param questions - list question.
+   * @param numberRandom - number of random.
    * @return
    */
   public static List<ExamQuestion> randomQuestion(Random random,
       List<Question> questions, int numberRandom, String examId) {
     int countQuestion = questions.size();
     List<ExamQuestion> examQuestions = new ArrayList<>();
+    if (numberRandom > countQuestion) {
+      numberRandom = countQuestion;
+    }
+
     while (numberRandom > 0) {
       numberRandom--;
       int index = random.nextInt(countQuestion);

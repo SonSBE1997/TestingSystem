@@ -1,5 +1,17 @@
 package com.cmcglobal.service.serviceImpl;
 
+import com.cmcglobal.builder.FilterBuilder;
+import com.cmcglobal.entity.Category;
+import com.cmcglobal.entity.Exam;
+import com.cmcglobal.entity.ExamQuestion;
+import com.cmcglobal.entity.Question;
+import com.cmcglobal.entity.User;
+import com.cmcglobal.repository.ExamRepository;
+import com.cmcglobal.service.CategoryService;
+import com.cmcglobal.service.ExamQuestionService;
+import com.cmcglobal.service.ExamService;
+import com.cmcglobal.service.QuestionServices;
+import com.cmcglobal.utils.Helper;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -31,19 +43,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.cmcglobal.builder.FilterBuilder;
-import com.cmcglobal.entity.Category;
-import com.cmcglobal.entity.Exam;
-import com.cmcglobal.entity.ExamQuestion;
-import com.cmcglobal.entity.Question;
-import com.cmcglobal.entity.User;
-import com.cmcglobal.repository.ExamRepository;
-import com.cmcglobal.service.CategoryService;
-import com.cmcglobal.service.ExamQuestionService;
-import com.cmcglobal.service.ExamService;
-import com.cmcglobal.service.QuestionServices;
-import com.cmcglobal.utils.Helper;
 
 /*
  * @author Sanero.
@@ -297,13 +296,17 @@ public class ExamServiceImpl implements ExamService {
    * Author: Sanero. Created date: Feb 13, 2019 Created time: 4:17:07 PM
    */
   @Override
-  public boolean randomQuestion(String examId, int numberRandom) {
+  public boolean randomQuestion(String examId, int categoryId,
+      int numberRandom) {
     try {
-//    Exam exam = examRepository.findById(examId).get();
+      // Exam exam = examRepository.findById(examId).get();
       Random random = new Random();
-      List<Question> questions = questionService.getAllQuestion();
+      List<Question> questions = questionService.findByCategoryId(categoryId);
       List<ExamQuestion> examQuestions = Helper.randomQuestion(random,
           questions, numberRandom, examId);
+      if (examQuestions.size() == 0) {
+        return false;
+      }
       for (ExamQuestion examQuestion : examQuestions) {
         examQuestion.setExamId(examId);
         Question question = questionService
@@ -576,58 +579,58 @@ public class ExamServiceImpl implements ExamService {
           }
           System.out.println(cell.toString());
 
-//		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+          // SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
           int columnIndex = cell.getColumnIndex();
 
           switch (columnIndex) {
-          case COLUMN_INDEX_TITLE:
-            exam.setTitle((String) getCellValue(cell));
-            break;
-          case COLUMN_INDEX_DURATION:
-            float duration = Float.parseFloat(getCellValue(cell).toString());
-            exam.setDuration(duration);
-            break;
-          case COLUMN_INDEX_CATEGORYID:
-            Category category = categoryService
-                .getOne(getCellValue(cell).toString());
-            exam.setCategory(category);
-            break;
-          case COLUMN_INDEX_NOTE:
-            exam.setNote((String) getCellValue(cell));
-            break;
-//					case COLUMN_INDEX_STATUS:
-//						exam.setStatus((String) getCellValue(cell));
-//						break;
-          case COLUMN_INDEX_NUMBEROFQUES:
-            float x = Float.parseFloat(getCellValue(cell).toString());
-            int numberQues = (int) x;
-            exam.setNumberOfQuestion(numberQues);
-            break;
-//					case COLUMN_INDEX_ENABLE:
-//						exam.setEnable(Boolean.parseBoolean(getCellValue(cell).toString()));
-//						break;
-//					case COLUMN_INDEX_CREATE_AT:
-//						try {
-//							exam.setCreateAt(formatter.parse(getCellValue(cell).toString()));
-//						} catch (ParseException e) {
-//							e.printStackTrace();
-//						}
-//						break;
-//					case COLUMN_INDEX_CREATED_BY:
-//
-//						break;
-//					case COLUMN_INDEX_MODIFIED_AT:
-//						try {
-//							exam.setModifiedAt(formatter.parse((String) getCellValue(cell)));
-//						} catch (ParseException e) {
-//							e.printStackTrace();
-//						}
-//						break;
-//					case COLUMN_INDEX_MODIFIED_BY:
-//
-//						break;
-          default:
-            break;
+            case COLUMN_INDEX_TITLE:
+              exam.setTitle((String) getCellValue(cell));
+              break;
+            case COLUMN_INDEX_DURATION:
+              float duration = Float.parseFloat(getCellValue(cell).toString());
+              exam.setDuration(duration);
+              break;
+            case COLUMN_INDEX_CATEGORYID:
+              Category category = categoryService
+                  .getOne(getCellValue(cell).toString());
+              exam.setCategory(category);
+              break;
+            case COLUMN_INDEX_NOTE:
+              exam.setNote((String) getCellValue(cell));
+              break;
+            // case COLUMN_INDEX_STATUS:
+            // exam.setStatus((String) getCellValue(cell));
+            // break;
+            case COLUMN_INDEX_NUMBEROFQUES:
+              float x = Float.parseFloat(getCellValue(cell).toString());
+              int numberQues = (int) x;
+              exam.setNumberOfQuestion(numberQues);
+              break;
+            // case COLUMN_INDEX_ENABLE:
+            // exam.setEnable(Boolean.parseBoolean(getCellValue(cell).toString()));
+            // break;
+            // case COLUMN_INDEX_CREATE_AT:
+            // try {
+            // exam.setCreateAt(formatter.parse(getCellValue(cell).toString()));
+            // } catch (ParseException e) {
+            // e.printStackTrace();
+            // }
+            // break;
+            // case COLUMN_INDEX_CREATED_BY:
+            //
+            // break;
+            // case COLUMN_INDEX_MODIFIED_AT:
+            // try {
+            // exam.setModifiedAt(formatter.parse((String) getCellValue(cell)));
+            // } catch (ParseException e) {
+            // e.printStackTrace();
+            // }
+            // break;
+            // case COLUMN_INDEX_MODIFIED_BY:
+            //
+            // break;
+            default:
+              break;
           }
         }
         listExam.add(exam);
@@ -644,34 +647,34 @@ public class ExamServiceImpl implements ExamService {
    * Created date: Feb 22, 2019
    * Created time: 2:15:16 PM
    * Description: TODO - .
-   * @param cell
+   * @param cell - cell.
    * @return
    */
   private static Object getCellValue(Cell cell) {
     CellType cellType = cell.getCellTypeEnum();
     Object cellValue = null;
     switch (cellType) {
-    case BOOLEAN:
-      cellValue = cell.getBooleanCellValue();
-      break;
-    case FORMULA:
-      Workbook workbook = cell.getSheet().getWorkbook();
-      FormulaEvaluator evaluator = workbook.getCreationHelper()
-          .createFormulaEvaluator();
-      cellValue = evaluator.evaluate(cell).getNumberValue();
-      break;
-    case NUMERIC:
-      cellValue = cell.getNumericCellValue();
-      break;
-    case STRING:
-      cellValue = cell.getStringCellValue();
-      break;
-    case _NONE:
-    case BLANK:
-    case ERROR:
-      break;
-    default:
-      break;
+      case BOOLEAN:
+        cellValue = cell.getBooleanCellValue();
+        break;
+      case FORMULA:
+        Workbook workbook = cell.getSheet().getWorkbook();
+        FormulaEvaluator evaluator = workbook.getCreationHelper()
+            .createFormulaEvaluator();
+        cellValue = evaluator.evaluate(cell).getNumberValue();
+        break;
+      case NUMERIC:
+        cellValue = cell.getNumericCellValue();
+        break;
+      case STRING:
+        cellValue = cell.getStringCellValue();
+        break;
+      case _NONE:
+      case BLANK:
+      case ERROR:
+        break;
+      default:
+        break;
     }
 
     return cellValue;

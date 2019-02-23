@@ -34,6 +34,7 @@ export interface Question {
 export interface Selection {
   id: string;
   checked: boolean;
+  status: boolean;
 }
 
 export interface TabInfo {
