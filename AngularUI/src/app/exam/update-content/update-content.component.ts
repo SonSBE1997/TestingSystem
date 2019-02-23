@@ -105,6 +105,7 @@ export class UpdateContentComponent implements OnInit {
               }
             }
           );
+
         } else {
           this.notifierService.notify('error', 'Remove question failed', '');
           this.clickResetRemoveQuestion();

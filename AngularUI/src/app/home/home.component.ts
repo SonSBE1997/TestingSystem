@@ -8,18 +8,20 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  image = ['../../assets/image/slider1.png', '../../assets/image/slider2.png', '../../assets/image/slider3.png'];
+  image = [
+    '../../assets/image/slider1.png',
+    '../../assets/image/slider2.png',
+    '../../assets/image/slider3.png'
+  ];
   currentSlide = 0;
   tests;
-  semesterExamCode: string = '';
+  semesterExamCode = '';
 
   constructor(private http: HttpClient) {
     this.changeSlide();
   }
 
-  ngOnInit() {
-
-  }
+  ngOnInit() {}
 
   changeSlide() {
     this.currentSlide++;
@@ -30,16 +32,18 @@ export class HomeComponent implements OnInit {
     // console.log(this.currentSlide);
 
     setTimeout(() => {
-      this.changeSlide()
-    }, 800);
+      this.changeSlide();
+    }, 3000);
   }
 
   showSemesterTest() {
     if (this.semesterExamCode !== '') {
-      this.http.get(`http://localhost:8080/semester-code/${this.semesterExamCode}`).subscribe(ob => {
-        console.log(ob);
-        this.tests = ob;
-      })
+      this.http
+        .get(`http://localhost:8080/semester-code/${this.semesterExamCode}`)
+        .subscribe(ob => {
+          console.log(ob);
+          this.tests = ob;
+        });
     }
   }
 
