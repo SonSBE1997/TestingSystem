@@ -31,6 +31,8 @@ export class TabQuestionComponent implements OnInit {
   isSearching = false;
   numberOption = [];
   optionWidth = '';
+  maxOption = 0;
+  reset = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -46,6 +48,14 @@ export class TabQuestionComponent implements OnInit {
     this.tabAllQuestion = { currentPage: 0, entities: 0, sizeOfPage: 10 };
 
     this.loadDataByPage();
+  }
+
+  // reset all info to default.
+  resetInfo() {
+    this.reset = false;
+    this.selection = [];
+    this.isCheckAll = false;
+    this.tabAllQuestion.currentPage = 0;
   }
 
   loadDataByPage() {
@@ -72,19 +82,43 @@ export class TabQuestionComponent implements OnInit {
       });
     }
 
+    if (this.reset) {
+      this.resetInfo();
+    }
+
     observable.subscribe(questions => {
       this.questions = questions;
-      this.selection = [];
+      // this.selection = [];
 
-      let maxOption = 0;
       questions.forEach(question => {
-        maxOption = Math.max(maxOption, question.answers.length);
-        this.selection.push({ id: question.questionId, checked: false });
+        const existedQuestion = this.selection.filter(
+          v => v.id === question.questionId
+        );
+        if (existedQuestion.length === 0) {
+          let select: Selection = {
+            id: question.questionId,
+            checked: false,
+            status: false
+          };
+
+          if (question.category.categoryId === this.categoryId) {
+            select.status = true;
+            if (this.isCheckAll) {
+              select.checked = this.isCheckAll;
+            }
+          } else {
+            select.status = false;
+          }
+
+          this.selection.push(select);
+          this.maxOption = Math.max(this.maxOption, question.answers.length);
+        }
       });
-      this.numberOption = Array(maxOption)
+      this.numberOption = [];
+      this.numberOption = Array(this.maxOption)
         .fill(1)
         .map((v, k) => k);
-      this.optionWidth = 74 / maxOption + '%';
+      this.optionWidth = 74 / this.maxOption + '%';
     });
   }
 
@@ -92,21 +126,26 @@ export class TabQuestionComponent implements OnInit {
   changePageSizeTabAllQuestion(e) {
     this.tabAllQuestion.sizeOfPage = e.value;
     this.tabAllQuestion.currentPage = 0;
-    this.isCheckAll = false;
+    // this.isCheckAll = false;
     this.loadDataByPage();
   }
 
   // click checkbox question
   selectQuestion(questionId) {
-    // console.log(questionId);
+    console.log(questionId);
+
     let count = 0;
     this.selection.forEach(item => {
-      if (item.id === questionId) {
-        item.checked = !item.checked;
-      }
+      if (item.status === true) {
+        if (item.id === questionId) {
+          item.checked = !item.checked;
+        }
 
-      if (item.checked) {
-        count++;
+        if (item.checked) {
+          count++;
+        }
+      } else {
+        item.checked = false;
       }
     });
 
@@ -116,7 +155,9 @@ export class TabQuestionComponent implements OnInit {
       this.isAdd = false;
     }
 
-    if (count === this.selection.length) {
+    const selectAvailable = this.selection.filter(v => v.status === true);
+
+    if (count === selectAvailable.length && count > 0) {
       this.isCheckAll = true;
     } else {
       this.isCheckAll = false;
@@ -129,7 +170,9 @@ export class TabQuestionComponent implements OnInit {
     this.isCheckAll = !this.isCheckAll;
     this.isAdd = this.isCheckAll;
     this.selection.forEach(item => {
-      item.checked = this.isCheckAll;
+      if (item.status === true) {
+        item.checked = this.isCheckAll;
+      }
     });
   }
 
@@ -164,6 +207,8 @@ export class TabQuestionComponent implements OnInit {
       error => {
         console.log(error.error.text);
         this.apply.emit(true);
+        this.isCheckAll = false;
+        this.isAdd = false;
       }
     );
 
@@ -173,22 +218,24 @@ export class TabQuestionComponent implements OnInit {
   previousPage() {
     this.tabAllQuestion.currentPage--;
     this.loadDataByPage();
-    this.isCheckAll = false;
+    // this.isCheckAll = false;
     // console.log(this.tabAllQuestion.currentPage);
   }
   nextPage() {
     this.tabAllQuestion.currentPage++;
     this.loadDataByPage();
-    this.isCheckAll = false;
+    // this.isCheckAll = false;
     // console.log(this.tabAllQuestion.currentPage);
   }
 
   sortTableByContent() {
-    console.log(this.isSort);
+    // console.log(this.isSort);
+    // console.log(this.questions);
+    // console.log(this.backupSort);
     if (this.isSort === 0) {
       this.isSort = 1;
-      this.backupSort = this.questions;
-      this.questions = this.backupSort.sort(function(a, b) {
+      this.backupSort = this.questions.map(v => v);
+      this.questions = this.questions.sort(function(a, b) {
         return a.content > b.content ? 1 : 0;
       });
       return;
@@ -197,6 +244,7 @@ export class TabQuestionComponent implements OnInit {
     if (this.isSort === 1) {
       this.questions = this.questions.reverse();
       this.isSort = 2;
+      // console.log(this.backupSort);
       return;
     }
 
@@ -213,6 +261,7 @@ export class TabQuestionComponent implements OnInit {
     } else {
       this.isSearching = false;
     }
+    this.reset = true;
     this.loadDataByPage();
   }
 

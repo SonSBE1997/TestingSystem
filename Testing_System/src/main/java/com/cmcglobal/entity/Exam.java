@@ -1,5 +1,6 @@
 package com.cmcglobal.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -15,8 +16,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Transient;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 //@SQLDelete(sql = "UPDATE Exam " + "SET is_enable = false " + "WHERE exam_Id = ?")
@@ -55,7 +54,8 @@ public class Exam implements Serializable {
   @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   @JoinColumn(name = "exam_id")
   private Set<ExamQuestion> examQuestions;
-  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "exam", orphanRemoval = true)
+  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "exam",
+      orphanRemoval = true)
   private List<Test> tests;
 
   public String getExamId() {

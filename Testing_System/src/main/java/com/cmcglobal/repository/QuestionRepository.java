@@ -35,5 +35,15 @@ public interface QuestionRepository extends JpaRepository<Question, String> {
   String countSearchQuestionByCategoryId(String content, int categoryId);
 
   @Query("SELECT q FROM Question q where category_id = ?1")
-  List<Question> pageQuestionByCategoryId( int categoryId, Pageable pageable);
+  List<Question> pageQuestionByCategoryId(int categoryId, Pageable pageable);
+
+  
+  // Team01
+  @Query(value = "select q FROM Question q where category_id = ?1")
+  List<Question> findByCategoryId(int categoryId);
+
+  @Query(value = "select count(q.question_id) FROM Question q where category_id = ?1",
+      nativeQuery = true)
+  long countByCategoryId(int categoryId);
+  // End Team01
 }

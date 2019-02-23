@@ -1,10 +1,8 @@
 package com.cmcglobal.service;
 
-import java.util.List;
-
-import org.springframework.data.domain.Sort;
-
 import com.cmcglobal.entity.Exam;
+import java.util.List;
+import org.springframework.data.domain.Sort;
 
 /*
  * @author Sanero.
@@ -26,8 +24,8 @@ public interface ExamService {
    * Created date: Feb 22, 2019
    * Created time: 1:51:45 PM
    * Description: TODO - show list exam.
-   * @param searchContent
-   * @param pageable
+   * @param searchContent - search content.
+   * @param pageable - pageable.
    * @return
    */
   public List<Exam> pageExam(String searchContent, Sort pageable);
@@ -37,7 +35,7 @@ public interface ExamService {
    * Created date: Feb 22, 2019
    * Created time: 1:51:50 PM
    * Description: TODO - sort exam by user created ascending.
-   * @param searchContent
+   * @param searchContent - search content.
    * @return
    */
   public List<Exam> pageExamSortByUserCreatedByAsc(String searchContent);
@@ -47,7 +45,7 @@ public interface ExamService {
    * Created date: Feb 22, 2019
    * Created time: 1:51:54 PM
    * Description: TODO - sort exam by user created descending.
-   * @param searchContent
+   * @param searchContent - search content.
    * @return
    */
   public List<Exam> pageExamSortByUserCreatedByDesc(String searchContent);
@@ -57,7 +55,7 @@ public interface ExamService {
    * Created date: Feb 22, 2019
    * Created time: 1:51:58 PM
    * Description: TODO - Sort exam by category ascending.
-   * @param searchContent
+   * @param searchContent - search content.
    * @return
    */
   public List<Exam> pageExamSortByCategoryAsc(String searchContent);
@@ -67,7 +65,7 @@ public interface ExamService {
    * Created date: Feb 22, 2019
    * Created time: 1:52:03 PM
    * Description: TODO - ort exam by category descendingly .
-   * @param searchContent
+   * @param searchContent - search content.
    * @return
    */
   public List<Exam> pageExamSortByCategoryDesc(String searchContent);
@@ -84,7 +82,7 @@ public interface ExamService {
    * Author: Sanero. Created date: Feb 19, 2019 Created time: 4:01:15 PM
    * Description: TODO - approve exam to public.
    * 
-   * @param examId
+   * @param examId - examId.
    * @return
    */
   public boolean approveExam(String examId);
@@ -97,13 +95,14 @@ public interface ExamService {
    * @param numberRandom - number of random question.
    * @return
    */
-  public boolean randomQuestion(String examId, int numberRandom);
+  public boolean randomQuestion(String examId, int categoryId,
+      int numberRandom);
 
   /**
    * Author: Sanero. Created date: Feb 19, 2019 Created time: 4:00:26 PM
    * Description: TODO - remove question from exam.
    * 
-   * @param exam
+   * @param exam - exam.
    * @return
    */
   public boolean removeQuestion(Exam exam);
@@ -112,7 +111,7 @@ public interface ExamService {
    * Author: Sanero. Created date: Feb 14, 2019 Created time: 8:35:49 AM
    * Description: TODO - add list question to exam.
    * 
-   * @param exam
+   * @param exam - exam.
    */
   public boolean addListQuestion(Exam exam);
 
@@ -120,7 +119,7 @@ public interface ExamService {
    * Author: ptphuong. Created date: Feb 15, 2019 Created time: 5:22:39 AM
    * Description: TODO - create exam.
    * 
-   * @param ex
+   * @param ex - exam.
    */
   public void createExam(Exam ex);
 
@@ -136,7 +135,7 @@ public interface ExamService {
    * Author: ndvan. Created date: Feb 15, 2019 Created time: 5:22:39 AM
    * Description: TODO - delete exam.
    * 
-   * @param ex
+   * @param examId - exam Id.
    */
   public void deleteExam(String examId);
 
@@ -144,6 +143,7 @@ public interface ExamService {
    * Author: ndvan. Created date: Feb 20, 2019 Created time: 12:41:55 PM
    * Description: TODO - filter exam.
    * 
+   * @param exam - exam.
    * @return
    */
   public List<Exam> FilterExam(Exam exam);
@@ -193,7 +193,7 @@ public interface ExamService {
    * Created date: Feb 22, 2019
    * Created time: 11:13:23 AM
    * Description: TODO - check empty question. if true. change status to draft.
-   * @param examId
+   * @param examId - exam Id.
    * @return
    */
   public boolean isEmptyQuestionOfExam(String examId);
