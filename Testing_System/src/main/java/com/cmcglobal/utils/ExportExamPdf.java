@@ -1,13 +1,5 @@
 package com.cmcglobal.utils;
 
-import java.util.Date;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.web.servlet.view.document.AbstractPdfView;
-
 import com.cmcglobal.entity.Exam;
 import com.cmcglobal.entity.ExamQuestion;
 import com.lowagie.text.Chunk;
@@ -24,7 +16,15 @@ import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 
-public class ExportExamPDF extends AbstractPdfView {
+import java.util.Date;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.web.servlet.view.document.AbstractPdfView;
+
+public class ExportExamPdf extends AbstractPdfView {
 
   Font font = new Font(Font.HELVETICA, 12, Font.BOLDITALIC);
   Font bold = new Font(Font.HELVETICA, 12, Font.BOLD);
@@ -37,11 +37,6 @@ public class ExportExamPDF extends AbstractPdfView {
 
     Exam exam = (Exam) model.get("exam");
     String title = exam.getTitle();
-    String number = String.valueOf(exam.getNumberOfQuestion());
-
-    String cate = exam.getCategory().getCategoryName();
-    int duration = Math.round(exam.getDuration());
-
     document.setPageSize(PageSize.A4);
     Date date = new Date();
 
@@ -66,6 +61,10 @@ public class ExportExamPDF extends AbstractPdfView {
     table.setWidths(colWidths1);
 
     // header left
+    String number = String.valueOf(exam.getNumberOfQuestion());
+    String cate = exam.getCategory().getCategoryName();
+    int duration = Math.round(exam.getDuration());
+
     table.addCell(getHeaderLeft(cate, number));
 
     // header right
@@ -90,7 +89,7 @@ public class ExportExamPDF extends AbstractPdfView {
         int j = Integer.valueOf(choiceOrder[k]);
         String s = ex.getQuestion().getAnswers().get(j - 1).getContent()
             .toString();
-        l.add(new ListItem(" "+s));
+        l.add(new ListItem(" " + s));
       }
       l.setIndentationLeft(15);
       i++;
@@ -99,6 +98,15 @@ public class ExportExamPDF extends AbstractPdfView {
 
   }
 
+  /**
+   * Author: nthung.
+   * Created date: Feb 23, 2019
+   * Created time: 5:18:59 PM
+   * Description: TODO - .
+   * @param cate - category.
+   * @param number - number.
+   * @return
+   */
   public PdfPCell getHeaderLeft(String cate, String number) {
     Chunk chunkEmailLabal = new Chunk("\nCategory: ", normal);
     Phrase phEmailLabal = new Phrase(chunkEmailLabal);
@@ -127,6 +135,14 @@ public class ExportExamPDF extends AbstractPdfView {
     return cellLeft;
   }
 
+  /**
+   * Author: nthung.
+   * Created date: Feb 23, 2019
+   * Created time: 5:19:17 PM
+   * Description: TODO - .
+   * @param duration - duration.
+   * @return
+   */
   public PdfPCell getHeaderRight(int duration) {
     Chunk chunkDurationLabal = new Chunk("\nDuration: ", normal);
     Phrase phDurationLabal = new Phrase(chunkDurationLabal);

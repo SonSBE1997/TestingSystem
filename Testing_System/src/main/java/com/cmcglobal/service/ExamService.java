@@ -3,6 +3,8 @@ package com.cmcglobal.service;
 import com.cmcglobal.entity.Exam;
 import java.util.List;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
 
 /*
  * @author Sanero.
@@ -76,7 +78,7 @@ public interface ExamService {
    * 
    * @return
    */
-  public Exam findByID(String id);
+  public Exam findById(String id);
 
   /**
    * Author: Sanero. Created date: Feb 19, 2019 Created time: 4:01:15 PM
@@ -146,15 +148,7 @@ public interface ExamService {
    * @param exam - exam.
    * @return
    */
-  public List<Exam> FilterExam(Exam exam);
-
-  /**
-   * Author: hai95. Created date: Feb 20, 2019 Created time: 12:41:55 PM
-   * Description: TODO - generate id.
-   * 
-   * @return
-   */
-  public String createId1();
+  public List<Exam> filterExam(Exam exam);
 
   /**
    * Author: hai95. Created date: Feb 20, 2019 Created time: 12:41:55 PM
@@ -197,4 +191,27 @@ public interface ExamService {
    * @return
    */
   public boolean isEmptyQuestionOfExam(String examId);
+
+  /**
+   * Author: ntmduyen.
+   * Created date: Feb 23, 2019
+   * Created time: 5:21:58 PM
+   * Description: TODO - .
+   * @param sortOrder - sort order.
+   * @param sortTerm - sort term. 
+   * @param searchContent - search content.
+   * @return
+   */
+  public List<Exam> getListExamByPage(String sortOrder, String sortTerm,
+      String searchContent);
+
+  /**
+   * Author: hai95.
+   * Created date: Feb 23, 2019
+   * Created time: 6:02:34 PM
+   * Description: TODO - .
+   * @param multipartFile - multipart file.
+   * @return
+   */
+  public ResponseEntity<String> readFileExcel(MultipartFile multipartFile);
 }

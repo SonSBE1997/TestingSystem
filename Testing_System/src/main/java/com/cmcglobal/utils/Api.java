@@ -16,6 +16,8 @@ package com.cmcglobal.utils;
  * Description: TODO - API.
  */
 public interface Api {
+  public static final String BASE_URL_CORS = "http://localhost:4200";
+
   /*
    * @author Sanero.
    * Created date: Feb 20, 2019
@@ -34,12 +36,8 @@ public interface Api {
     public static final String ADD_QUESTION = "/add-question";
     public static final String RANDOM_QUESTION = "/random-question";
     public static final String IS_EMPTY_QUESTION = "/is-empty/{examId}";
-
-    // Status
-    public static final String OK = "Ok";
-    public static final String NOT_OK = "Not ok";
-    
-
- 
+    public static final String FILTER = "/filter";
+    public static final String UPDATE_COMMON = "/update/update-common/{examId}";
+    public static final String IMPORT_EXCEL = "/import-excel-file";
   }
 }
