@@ -66,7 +66,7 @@ export class TabQuestionComponent implements OnInit {
 
     setTimeout(() => {
       this.check();
-    }, 2000);
+    }, 1000);
   }
 
   // reset all info to default.
@@ -116,55 +116,67 @@ export class TabQuestionComponent implements OnInit {
           v => v.id === question.questionId
         );
         if (existedQuestion.length === 0) {
-          let select: Selection = {
-            id: question.questionId,
-            checked: false,
-            status: false,
-            categoryId: question.category.categoryId
-          };
-
-          if (question.category.categoryId === this.categoryId) {
-            select.status = true;
-            if (this.isCheckAll) {
-              select.checked = this.isCheckAll;
-            }
-          } else {
-            select.status = false;
-          }
-
-          this.selection.push(select);
-          this.maxOption = Math.max(this.maxOption, question.answers.length);
+          this.addSelection(question);
         }
       });
-
-      // check in exam
-      this.selection.forEach(v => {
-        if (this.questionInExam.length > 0) {
-          const inExam = this.questionInExam.filter(
-            e => e.question.questionId === v.id
-          );
-
-          if (v.categoryId === this.categoryId) {
-            v.status = true;
-          }
-
-          if (inExam.length > 0) {
-            v.status = false;
-          }
-        } else {
-          if (v.categoryId === this.categoryId) {
-            v.status = true;
-          }
-        }
-      });
-
+      this.checkInExam();
       // number option
-      this.numberOption = [];
-      this.numberOption = Array(this.maxOption)
-        .fill(1)
-        .map((v, k) => k);
-      this.optionWidth = 74 / this.maxOption + '%';
+      this.caculateNumberOption();
     });
+  }
+
+  // add selection when load Data
+  addSelection(question) {
+    let select: Selection = {
+      id: question.questionId,
+      checked: false,
+      status: false,
+      categoryId: question.category.categoryId
+    };
+
+    if (question.category.categoryId === this.categoryId) {
+      select.status = true;
+      if (this.isCheckAll) {
+        select.checked = this.isCheckAll;
+      }
+    } else {
+      select.status = false;
+    }
+
+    this.selection.push(select);
+    this.maxOption = Math.max(this.maxOption, question.answers.length);
+  }
+
+  // check in exam
+  checkInExam() {
+    this.selection.forEach(v => {
+      if (this.questionInExam.length > 0) {
+        const inExam = this.questionInExam.filter(
+          e => e.question.questionId === v.id
+        );
+
+        if (v.categoryId === this.categoryId) {
+          v.status = true;
+        }
+
+        if (inExam.length > 0) {
+          v.status = false;
+        }
+      } else {
+        if (v.categoryId === this.categoryId) {
+          v.status = true;
+        }
+      }
+    });
+  }
+
+  // calculate number option
+  caculateNumberOption() {
+    this.numberOption = [];
+    this.numberOption = Array(this.maxOption)
+      .fill(1)
+      .map((v, k) => k);
+    this.optionWidth = 74 / this.maxOption + '%';
   }
 
   // change page size tab one
@@ -285,9 +297,6 @@ export class TabQuestionComponent implements OnInit {
 
   // ====================== SORT BY CONTENT
   sortTableByContent() {
-    // console.log(this.isSort);
-    // console.log(this.questions);
-    // console.log(this.backupSort);
     if (this.isSort === 0) {
       this.isSort = 1;
       this.backupSort = this.questions.map(v => v);
@@ -300,7 +309,6 @@ export class TabQuestionComponent implements OnInit {
     if (this.isSort === 1) {
       this.questions = this.questions.reverse();
       this.isSort = 2;
-      // console.log(this.backupSort);
       return;
     }
 
