@@ -1,7 +1,6 @@
 package com.cmcglobal.service.serviceImpl;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -13,6 +12,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.cmcglobal.service.UploadFileService;
+
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import java.net.MalformedURLException;
 
 @Service
 public class UploadFileImpl implements UploadFileService {
@@ -57,6 +60,20 @@ public class UploadFileImpl implements UploadFileService {
 			return false;
 		}
 		return true;
+	}
+	
+	public Resource loadFile(String filename) {
+		try {
+			Path file = rootLocation.resolve(filename);
+			Resource resource = new UrlResource(file.toUri());
+			if (resource.exists() || resource.isReadable()) {
+				return resource;
+			} else {
+				throw new RuntimeException("FAIL!");
+			}
+		} catch (MalformedURLException e) {
+			throw new RuntimeException("FAIL!");
+		}
 	}
 
 }

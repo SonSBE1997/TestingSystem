@@ -3,7 +3,8 @@ import {
   OnInit,
   AfterViewInit,
   ViewChild,
-  ElementRef
+  ElementRef,
+  Input
 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
@@ -75,6 +76,9 @@ export class ListExamComponent implements OnInit, AfterViewInit {
   isCheckALL = false;
   examFrm: FormGroup;
 
+  showFile = false
+  fileUploads: Observable<string[]>
+
   pageEvent: PageEvent;
   searchTerm: string;
 
@@ -99,6 +103,7 @@ export class ListExamComponent implements OnInit, AfterViewInit {
       categoryName: ['']
     });
     this.getDuration();
+    this.showFiles(false);
   }
 
   ngAfterViewInit() {
@@ -319,5 +324,12 @@ export class ListExamComponent implements OnInit, AfterViewInit {
       }
     )
     //end
+  }
+
+  showFiles(enable: boolean) {
+    this.showFile = enable
+    if (enable) {
+      this.fileUploads = this.uploadService.getFiles();
+    }
   }
 }

@@ -2,6 +2,7 @@ package com.cmcglobal.service;
 
 import java.util.List;
 
+import org.apache.poi.ss.usermodel.Row;
 import org.springframework.data.domain.Sort;
 
 import com.cmcglobal.entity.Exam;
@@ -188,6 +189,8 @@ public interface ExamService {
    * @return
    */
   List<Exam> readExcel(String exelFilePath) throws Exception;
+  
+  boolean checkNotFormatedFile(Row row);
 
   /**
    * Author: Sanero.

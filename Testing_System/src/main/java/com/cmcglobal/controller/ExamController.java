@@ -3,6 +3,8 @@ package com.cmcglobal.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -39,12 +41,14 @@ import com.cmcglobal.utils.MyException;
 @RequestMapping(Api.Exam.BASE_URL)
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 public class ExamController {
-  @Autowired
-  ExamService examService;
-  @Autowired
-  CategoryRepository cate;
-  @Autowired
-  UploadFileService uploadFileService;
+	static final Logger LOGGER = LoggerFactory.getLogger(ExamController.class);
+	
+	@Autowired
+	ExamService examService;
+	@Autowired
+	CategoryRepository cate;
+	@Autowired
+	UploadFileService uploadFileService;
 
   /**
    * Author: ptphuong.
@@ -322,12 +326,10 @@ public class ExamController {
 			listExam = examService.readExcel(pathFile);
 		} catch (MyException e) {
 			System.out.println("Error: " + e.getMessException());
+			LOGGER.info(e.getIdException() + ": " + e.getMessException());
 			return ResponseEntity.status(HttpStatus.OK).body(e.getMessException());
 		} catch (Exception e1) {
-			// TODO: handle exception
-			return ResponseEntity.status(HttpStatus.OK).body("not Ok");
-		}
-		if (listExam.size() == 0) {
+			LOGGER.info(e1.toString());
 			return ResponseEntity.status(HttpStatus.OK).body("not Ok");
 		}
 		for (Exam exam : listExam) {

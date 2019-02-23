@@ -565,19 +565,12 @@ public class ExamServiceImpl implements ExamService {
 
 			Row rowFirst = sheet.getRow(0);
 			if (checkIfRowIsEmpty(rowFirst)) {
-				throw new MyException("this excel file is empty");
+				throw new MyException(1, "this excel file is empty");
 			}
 
-			boolean checkCell0 = Contants.ExcelTemplate.COLUMN_0.equals(rowFirst.getCell(0).toString()) ? true : false;
-			boolean checkCell1 = Contants.ExcelTemplate.COLUMN_1.equals(rowFirst.getCell(1).toString()) ? true : false;
-			boolean checkCell2 = Contants.ExcelTemplate.COLUMN_2.equals(rowFirst.getCell(2).toString()) ? true : false;
-			boolean checkCell3 = Contants.ExcelTemplate.COLUMN_3.equals(rowFirst.getCell(3).toString()) ? true : false;
-			boolean checkCell4 = Contants.ExcelTemplate.COLUMN_4.equals(rowFirst.getCell(4).toString()) ? true : false;
-			if (!(checkCell0 && checkCell1 && checkCell2 && checkCell3 && checkCell4)) {
-				throw new MyException("this excel file is not formatted with one's template");
+			if (!(examService.checkNotFormatedFile(rowFirst))) {
+				throw new MyException(2, "this excel file is not formatted with one's template");
 			}
-			System.out
-					.println("check template: " + (checkCell0 && checkCell1 && checkCell2 && checkCell3 && checkCell4));
 
 			for (int rowNum = 1; rowNum <= sheet.getLastRowNum(); rowNum++) {
 				Exam exam = new Exam();
@@ -595,7 +588,7 @@ public class ExamServiceImpl implements ExamService {
 					}
 					System.out.println(cell.toString());
 
-//		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+//					SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 					int columnIndex = cell.getColumnIndex();
 
 					switch (columnIndex) {
@@ -656,6 +649,7 @@ public class ExamServiceImpl implements ExamService {
 				listExam.add(exam);
 			}
 		} catch (IOException e) {
+			LOGGER.error(e.toString());
 			e.printStackTrace();
 		}
 		return listExam;
@@ -671,6 +665,20 @@ public class ExamServiceImpl implements ExamService {
 			return true;
 		}
 		return false;
+	}
+	
+	
+	@Override
+	public boolean checkNotFormatedFile(Row row) {
+		boolean checkCell0 = Contants.ExcelTemplate.COLUMN_0.equals(row.getCell(0).toString()) ? true : false;
+		boolean checkCell1 = Contants.ExcelTemplate.COLUMN_1.equals(row.getCell(1).toString()) ? true : false;
+		boolean checkCell2 = Contants.ExcelTemplate.COLUMN_2.equals(row.getCell(2).toString()) ? true : false;
+		boolean checkCell3 = Contants.ExcelTemplate.COLUMN_3.equals(row.getCell(3).toString()) ? true : false;
+		boolean checkCell4 = Contants.ExcelTemplate.COLUMN_4.equals(row.getCell(4).toString()) ? true : false;
+		if (!(checkCell0 && checkCell1 && checkCell2 && checkCell3 && checkCell4)) {
+			return false;
+		}
+		return true;
 	}
 
   /**
