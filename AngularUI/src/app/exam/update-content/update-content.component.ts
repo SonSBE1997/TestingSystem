@@ -133,6 +133,7 @@ export class UpdateContentComponent implements OnInit {
     ) {
       const data = {
         examId: this.detailExam.examId,
+        category: this.detailExam.category,
         numberOfQuestion: this.numberOfRandom
       };
       this.examService.randomQuestion(data).subscribe(

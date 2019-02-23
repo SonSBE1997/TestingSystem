@@ -1,5 +1,6 @@
 package com.cmcglobal.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -16,14 +17,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Transient;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 @Entity
 //@SQLDelete(sql = "UPDATE Exam " + "SET is_enable = false " + "WHERE exam_Id = ?")
 //@Where(clause = "is_enable = true")
 public class Exam implements Serializable {
-
 	private static final long serialVersionUID = 1L;
+
 	@Id
 	@Column(name = "exam_Id")
 	private String examId;
@@ -57,21 +56,6 @@ public class Exam implements Serializable {
 	private Set<ExamQuestion> examQuestions;
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "exam", orphanRemoval = true)
 	private List<Test> tests;
-
-	public Exam() {
-	}
-
-	public Exam(String examId, String title, float duration, Category category, String note, String status,
-			int numberOfQuestion) {
-		super();
-		this.examId = examId;
-		this.title = title;
-		this.duration = duration;
-		this.category = category;
-		this.note = note;
-		this.status = status;
-		this.numberOfQuestion = numberOfQuestion;
-	}
 
 	public String getExamId() {
 		return examId;

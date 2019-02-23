@@ -22,8 +22,7 @@
           </label>
         </div>
       </div>
-      <div class="col-sm-4 form-group text-center">
-      </div>
+      <div class="col-sm-4 form-group text-center"></div>
       <div class="col-sm-4 form-group">
         <div class="pull-right">
           <div class="input-group input-group-sm">
@@ -88,23 +87,64 @@
                 ></i>
               </th>
               <ng-template ngFor let-option [ngForOf]="numberOption">
-                <th [ngStyle]="{'width': optionWidth}">Option {{ option + 1 }}</th>
+                <th [ngStyle]="{ width: optionWidth }">
+                  Option {{ option + 1 }}
+                </th>
               </ng-template>
             </tr>
           </thead>
           <tbody *ngFor="let question of questions; index as i">
-            <tr role="row" class="odd">
+            <tr
+              role="row"
+              class="odd"
+              [ngClass]="{
+                warning:
+                  selection[
+                    tabAllQuestion.currentPage * tabAllQuestion.sizeOfPage + i
+                  ]?.status === false
+              }"
+            >
               <td>
-                <span class="custom-checkbox">
-                  <input
-                    [id]="'chk-' + i"
-                    type="checkbox"
-                    class="scale"
-                    [checked]="selection[i]?.checked"
-                    (change)="selectQuestion(question.questionId)"
-                  />
-                  <label [attr.for]="'chk-' + i"></label>
-                </span>
+                <ng-container
+                  *ngIf="
+                    selection[
+                      tabAllQuestion.currentPage * tabAllQuestion.sizeOfPage + i
+                    ]?.status === false
+                  "
+                >
+                  <span class="custom-checkbox-1">
+                    <input
+                      [id]="'chk-' + i"
+                      type="checkbox"
+                      class="scale disabled"
+                    />
+                    <label [attr.for]="'chk-' + i"></label>
+                  </span>
+                </ng-container>
+                <ng-container
+                  *ngIf="
+                    selection[
+                      tabAllQuestion.currentPage * tabAllQuestion.sizeOfPage + i
+                    ]?.status
+                  "
+                >
+                  <span class="custom-checkbox">
+                    <input
+                      [id]="'chk-' + i"
+                      type="checkbox"
+                      class="scale"
+                      [checked]="
+                        selection[
+                          tabAllQuestion.currentPage *
+                            tabAllQuestion.sizeOfPage +
+                            i
+                        ]?.checked
+                      "
+                      (change)="selectQuestion(question.questionId)"
+                    />
+                    <label [attr.for]="'chk-' + i"></label>
+                  </span>
+                </ng-container>
               </td>
               <td>
                 {{

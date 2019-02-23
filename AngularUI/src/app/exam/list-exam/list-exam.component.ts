@@ -103,7 +103,6 @@ export class ListExamComponent implements OnInit, AfterViewInit {
       categoryName: ['']
     });
     this.getDuration();
-    this.showFiles(false);
   }
 
   ngAfterViewInit() {
@@ -298,6 +297,7 @@ export class ListExamComponent implements OnInit, AfterViewInit {
           this.notifierService.notify('error', 'Not matching extension file');
         }else if (error.error.text === 'OK') {
           this.notifierService.notify('success', 'successfully uploaded ' + this.currentFileUpload.name + '!');
+          this.showFiles(false);
           this.uploadService.importToServer(this.currentFileUpload)
             .subscribe(
               success => {

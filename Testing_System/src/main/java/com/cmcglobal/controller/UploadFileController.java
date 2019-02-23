@@ -2,7 +2,9 @@ package com.cmcglobal.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,13 +56,13 @@ public class UploadFileController {
 	}
 	
 	@GetMapping("/getallfiles")
-	public ResponseEntity<List<String>> getListFiles(Model model) {
+	public ResponseEntity<Set<String>> getListFiles(Model model) {
 		List<String> fileNames = files
 				.stream().map(fileName -> MvcUriComponentsBuilder
 						.fromMethodName(UploadFileController.class, "getFile", fileName).build().toString())
 				.collect(Collectors.toList());
-
-		return ResponseEntity.ok().body(fileNames);
+		Set<String> listSet = new HashSet<>(fileNames);
+		return ResponseEntity.ok().body(listSet);
 	}
 	
 	@GetMapping("/files/{filename:.+}")
