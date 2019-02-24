@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { HomeService } from '../service/homeService.service';
 import { HttpClient } from '@angular/common/http';
+import { SharedService } from '../service/sharedService.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -16,8 +18,13 @@ export class HomeComponent implements OnInit {
   currentSlide = 0;
   tests;
   semesterExamCode = '';
+  isAuthentication = false;
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private sharedService: SharedService,
+    private route: Router
+  ) {
     this.changeSlide();
   }
 
@@ -34,6 +41,15 @@ export class HomeComponent implements OnInit {
     setTimeout(() => {
       this.changeSlide();
     }, 3000);
+
+    this.sharedService.isAuthentication.subscribe(
+      isAuthentication => (this.isAuthentication = isAuthentication)
+    );
+
+    const isAuthen = localStorage.getItem('isAuthen');
+    if (isAuthen === 'true') {
+      this.route.navigate(['/exam']);
+    }
   }
 
   showSemesterTest() {
@@ -50,5 +66,14 @@ export class HomeComponent implements OnInit {
   change(e) {
     this.semesterExamCode = e.value;
     console.log(this.semesterExamCode);
+  }
+
+  signIn() {
+    this.sharedService.authentic(true);
+    localStorage.setItem('isAuthen', 'true');
+    this.route.navigate(['/exam']);
+  }
+  signUp() {
+    this.route.navigate(['/user']);
   }
 }

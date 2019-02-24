@@ -150,23 +150,28 @@ export class TabQuestionComponent implements OnInit {
   // check in exam
   checkInExam() {
     this.selection.forEach(v => {
+      if (v.categoryId === this.categoryId) {
+        v.status = true;
+      }
+
       if (this.questionInExam.length > 0) {
         const inExam = this.questionInExam.filter(
           e => e.question.questionId === v.id
         );
 
-        if (v.categoryId === this.categoryId) {
-          v.status = true;
-        }
+        // if (v.categoryId === this.categoryId) {
+        //   v.status = true;
+        // }
 
         if (inExam.length > 0) {
           v.status = false;
         }
-      } else {
-        if (v.categoryId === this.categoryId) {
-          v.status = true;
-        }
       }
+      // else {
+      //   if (v.categoryId === this.categoryId) {
+      //     v.status = true;
+      //   }
+      // }
     });
   }
 
