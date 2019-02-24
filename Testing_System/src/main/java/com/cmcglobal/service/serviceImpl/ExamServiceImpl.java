@@ -1,21 +1,5 @@
 package com.cmcglobal.service.serviceImpl;
 
-import com.cmcglobal.builder.FilterBuilder;
-import com.cmcglobal.entity.Category;
-import com.cmcglobal.entity.Exam;
-import com.cmcglobal.entity.ExamQuestion;
-import com.cmcglobal.entity.Question;
-import com.cmcglobal.entity.User;
-import com.cmcglobal.repository.ExamRepository;
-import com.cmcglobal.service.CategoryService;
-import com.cmcglobal.service.ExamQuestionService;
-import com.cmcglobal.service.ExamService;
-import com.cmcglobal.service.QuestionServices;
-import com.cmcglobal.service.UploadFileService;
-import com.cmcglobal.utils.Constants;
-import com.cmcglobal.utils.Helper;
-import com.cmcglobal.utils.MyException;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -23,7 +7,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -51,6 +34,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.cmcglobal.builder.FilterBuilder;
+import com.cmcglobal.entity.Category;
+import com.cmcglobal.entity.Exam;
+import com.cmcglobal.entity.ExamQuestion;
+import com.cmcglobal.entity.Question;
+import com.cmcglobal.entity.User;
+import com.cmcglobal.repository.ExamRepository;
+import com.cmcglobal.service.CategoryService;
+import com.cmcglobal.service.ExamQuestionService;
+import com.cmcglobal.service.ExamService;
+import com.cmcglobal.service.QuestionServices;
+import com.cmcglobal.service.UploadFileService;
+import com.cmcglobal.utils.Constants;
+import com.cmcglobal.utils.Helper;
+import com.cmcglobal.utils.MyException;
 
 /*
  * @author Sanero.

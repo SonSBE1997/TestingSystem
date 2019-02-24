@@ -47,7 +47,6 @@ public class Exam implements Serializable {
 	private Category category;
 	@ManyToOne
 	@JoinColumn(name = "create_by")
-
 	private User userCreated;
 	@ManyToOne
 	@JoinColumn(name = "modified_by")
@@ -55,7 +54,7 @@ public class Exam implements Serializable {
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "exam_id")
 	private Set<ExamQuestion> examQuestions;
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "exam", orphanRemoval = true)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "exam")
 	private List<Test> tests;
 
 	public String getExamId() {
@@ -169,14 +168,9 @@ public class Exam implements Serializable {
 	public void setCategoryName(String categoryName) {
 		this.categoryName = categoryName;
 	}
-	
-
 	@PrePersist
 	protected void onCreateExam() {
-		this.createAt = new Date(Calendar.getInstance().getTime().getTime());
+		this.createAt = new Date(Calendar.getInstance().getTimeInMillis());
 	}
-    @PreUpdate
-	protected void onEditExam() {
-		this.modifiedAt = new Date(Calendar.getInstance().getTime().getTime());
-	}
+
 }

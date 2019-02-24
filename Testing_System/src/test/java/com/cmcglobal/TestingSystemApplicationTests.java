@@ -22,10 +22,10 @@ public class TestingSystemApplicationTests {
 	@Test
 	public void contextLoads() {
 	}
-
+	
 	@Test
 	public void testDelete() {
-		Exam exam = examRepository.findById("de001").get();
+		Exam exam = examRepository.findById("de01").get();
 		examRepository.delete(exam);
 	}
 
