@@ -32,19 +32,23 @@ public class Helper {
    * @return
    */
   public static String randomChoiceOrder(Random random, int numberRandom) {
-    ArrayList<Integer> arr = new ArrayList<>();
-    for (int i = 0; i < numberRandom; i++) {
-      arr.add(i + 1);
+    try {
+      ArrayList<Integer> arr = new ArrayList<>();
+      for (int i = 0; i < numberRandom; i++) {
+        arr.add(i + 1);
+      }
+      String choiceOrder = "";
+      while (numberRandom > 0) {
+        int index = random.nextInt(numberRandom);
+        int number = arr.get(index);
+        choiceOrder += number + " ";
+        arr.remove(index);
+        numberRandom--;
+      }
+      return choiceOrder.trim();
+    } catch (Exception e) {
+      return "";
     }
-    String choiceOrder = "";
-    while (numberRandom > 0) {
-      int index = random.nextInt(numberRandom);
-      int number = arr.get(index);
-      choiceOrder += number + " ";
-      arr.remove(index);
-      numberRandom--;
-    }
-    return choiceOrder.trim();
   }
 
   /**
@@ -59,24 +63,29 @@ public class Helper {
    */
   public static List<ExamQuestion> randomQuestion(Random random,
       List<Question> questions, int numberRandom, String examId) {
-    int countQuestion = questions.size();
-    List<ExamQuestion> examQuestions = new ArrayList<>();
-    if (numberRandom > countQuestion) {
-      numberRandom = countQuestion;
-    }
+    try {
+      int countQuestion = questions.size();
+      List<ExamQuestion> examQuestions = new ArrayList<>();
+      if (numberRandom > countQuestion) {
+        numberRandom = countQuestion;
+      }
 
-    while (numberRandom > 0) {
-      numberRandom--;
-      int index = random.nextInt(countQuestion);
-      ExamQuestion examQuestion = new ExamQuestion();
-      examQuestion.setExamId(examId);
-      Question question = questions.get(index);
-      examQuestion.setQuestion(question);
-      String choiceOrder = randomChoiceOrder(random,
-          question.getAnswers().size());
-      examQuestion.setChoiceOrder(choiceOrder);
-      examQuestions.add(examQuestion);
+      while (numberRandom > 0) {
+        numberRandom--;
+        int index = random.nextInt(countQuestion);
+        ExamQuestion examQuestion = new ExamQuestion();
+        examQuestion.setExamId(examId);
+        Question question = questions.get(index);
+        examQuestion.setQuestion(question);
+        String choiceOrder = randomChoiceOrder(random,
+            question.getAnswers().size());
+        examQuestion.setChoiceOrder(choiceOrder);
+        examQuestions.add(examQuestion);
+        questions.remove(index);
+      }
+      return examQuestions;
+    } catch (Exception e) {
+      return new ArrayList<>();
     }
-    return examQuestions;
   }
 }

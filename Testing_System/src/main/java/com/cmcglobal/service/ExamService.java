@@ -125,7 +125,7 @@ public interface ExamService {
    * 
    * @param ex - exam.
    */
-  public void createExam(Exam ex);
+  public boolean createExam(Exam ex);
 
   /**
    * Author: ptphuong. Created date: Feb 15, 2019 Created time: 7:55:39 PM
@@ -141,7 +141,7 @@ public interface ExamService {
    * 
    * @param examId - exam Id.
    */
-  public void deleteExam(String examId);
+  public boolean deleteExam(String examId);
 
   /**
    * Author: ndvan. Created date: Feb 20, 2019 Created time: 12:41:55 PM

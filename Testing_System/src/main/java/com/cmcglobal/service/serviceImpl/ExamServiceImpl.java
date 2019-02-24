@@ -88,7 +88,7 @@ public class ExamServiceImpl implements ExamService {
    * Created time: 2:11:47 PM
    */
   @Override
-  public void createExam(Exam ex) {
+  public boolean createExam(Exam ex) {
     try {
       User user = new User();
       user.setUserId(1);
@@ -99,12 +99,15 @@ public class ExamServiceImpl implements ExamService {
       ex.setCreateAt(new Date());
       ex.setEnable(true);
       examRepository.save(ex);
+      return true;
     } catch (PersistenceException exception) {
       LOGGER.error(Constants.Exam.CREATE_FAILED + exception.getClass() + " - "
           + exception.getMessage());
+      return false;
     } catch (Exception e) {
       LOGGER.error(
           Constants.Exam.CREATE_FAILED + e.getClass() + " - " + e.getMessage());
+      return false;
     }
   }
 
@@ -493,12 +496,14 @@ public class ExamServiceImpl implements ExamService {
    * Created time: 2:14:02 PM
    */
   @Override
-  public void deleteExam(String examId) {
+  public boolean deleteExam(String examId) {
     try {
       examRepository.deleteById(examId);
+      return true;
     } catch (Exception e) {
       LOGGER.error(Constants.Exam.DELETE_EXAM_FAILED + e.getClass() + " - "
           + e.getMessage());
+      return false;
     }
   }
 
