@@ -1,11 +1,15 @@
 <div class="navbar navbar-default">
   <div class="container-fluid">
     <div class="navbar-header logo">
-      <a href="#"><img src="../../../assets/image/logo.png" height="35px"></a>
+      <a href="#"><img src="../../../assets/image/logo.png" height="35px"/></a>
     </div>
     <ul class="nav navbar-nav pull-right" style="margin-right: 5%">
       <li><a href="#">Home</a></li>
-      <li><a href="#"><span><i class="fa fa-sign-out"></i></span>Sign out</a></li>
+      <li>
+        <a class="btn" [routerLink]="['/home']"
+          ><span><i class="fa fa-sign-out"></i></span>Sign out</a
+        >
+      </li>
     </ul>
   </div>
 </div>
@@ -29,10 +33,15 @@
           <!-- Profile Image -->
           <div class="box box-primary">
             <div class="box-body box-profile">
-              <img class="profile-user-img img-responsive img-circle" src="../../../assets/image/user3-128x128.jpg"
-                alt="User profile picture">
+              <img
+                class="profile-user-img img-responsive img-circle"
+                src="../../../assets/image/user3-128x128.jpg"
+                alt="User profile picture"
+              />
               <div *ngIf="semester">
-                <h3 class="profile-username text-center">{{ user?.fullName }}</h3>
+                <h3 class="profile-username text-center">
+                  {{ user?.fullName }}
+                </h3>
               </div>
               <ul class="list-group list-group-unbordered text-center">
                 <li class="list-group-item">
@@ -46,7 +55,6 @@
             <!-- /.box-body -->
           </div>
           <!-- /.box -->
-
         </div>
         <!-- /.col -->
         <div class="col-md-9">
@@ -59,15 +67,16 @@
             <!-- /.box-header -->
             <div class="form-test">
               <div class="panel panel-default">
-
                 <div class="panel-body">
                   <div class="content-list">
-                    <br>
+                    <br />
                     <div>
                       <table class="table table-bordered table-hover">
                         <thead>
                           <tr class="info">
-                            <th style="width: 30% !important">Semester Exam Title</th>
+                            <th style="width: 30% !important">
+                              Semester Exam Title
+                            </th>
                             <th style="width: 20%">Description</th>
                             <th style="width: 20%">Date Start</th>
                             <th style="width: 20%">Date Finish</th>
@@ -78,10 +87,23 @@
                           <tr>
                             <td style="width: 30% !important">{{ s.name }}</td>
                             <td style="width: 20%">{{ s.description }}</td>
-                            <td style="width: 20%">{{ s.startTime | date:'dd/MM/yyyy'}}</td>
-                            <td style="width: 20%">{{ s.startTime | date:'dd/MM/yyyy'}}</td>
+                            <td style="width: 20%">
+                              {{ s.startTime | date: 'dd/MM/yyyy' }}
+                            </td>
+                            <td style="width: 20%">
+                              {{ s.startTime | date: 'dd/MM/yyyy' }}
+                            </td>
                             <td style="width: 10%">
-                              <button class="btn btn-info" [routerLink]="['/user/list-semester', s.id, 'list-test']">View Detail</button>
+                              <button
+                                class="btn btn-info"
+                                [routerLink]="[
+                                  '/user/list-semester',
+                                  s.id,
+                                  'list-test'
+                                ]"
+                              >
+                                View Detail
+                              </button>
                             </td>
                           </tr>
                         </tbody>
@@ -101,10 +123,14 @@
     </section>
   </div>
   <script>
-    $(window).scroll(function () {
-      if ($(this).scrollTop() > 50)  /*height in pixels when the navbar becomes non opaque*/ {
-        $('.opaque-navbar').addClass('opaque');
+    $(window).scroll(function() {
+      if ($(this).scrollTop() > 50) {
+        /*height in pixels when the navbar becomes non opaque*/ $(
+          '.opaque-navbar'
+        ).addClass('opaque');
       } else {
         $('.opaque-navbar').removeClass('opaque');
       }
-    });</script>
+    });
+  </script>
+</div>
