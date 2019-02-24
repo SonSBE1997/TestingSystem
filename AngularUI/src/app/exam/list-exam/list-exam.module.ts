@@ -11,6 +11,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { MatNativeDateModule, MatFormFieldModule, MatInputModule } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FileUploadComponent } from './file-upload/file-upload.component';
+import { HighlightPipeModule } from './highlight.pipe.module';
+
 
 
 @NgModule({
@@ -29,6 +31,7 @@ import { FileUploadComponent } from './file-upload/file-upload.component';
     MatFormFieldModule,
     MatInputModule,
     FlexLayoutModule,
+    HighlightPipeModule
   ],
   exports: [
     MatTableModule,
@@ -36,7 +39,8 @@ import { FileUploadComponent } from './file-upload/file-upload.component';
     MatSortModule,
     MatFormFieldModule,
     MatInputModule,
-    FileUploadComponent
+    FileUploadComponent,
+    HighlightPipeModule
   ]
 })
 export class ListExamModule { }

@@ -68,6 +68,7 @@ export class ListExamComponent implements OnInit, AfterViewInit {
   @ViewChild('input') input: ElementRef;
 
   listExam: Exam[] = [];
+
   listId: string[] = [];
   listDuration: number[] = [];
   numberOfQuestions: number[] = [];
@@ -95,6 +96,7 @@ export class ListExamComponent implements OnInit, AfterViewInit {
   }
   ngOnInit() {
     this.findExams('title', 'ASC', '');
+   // this.loadExamsPage();
     this.examFrm = this.fb.group({
       duration: [''],
       numberOfQuestion: [''],
@@ -103,6 +105,7 @@ export class ListExamComponent implements OnInit, AfterViewInit {
       categoryName: ['']
     });
     this.getDuration();
+
   }
 
   ngAfterViewInit() {
@@ -125,6 +128,7 @@ export class ListExamComponent implements OnInit, AfterViewInit {
       .subscribe();
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
+
   }
   public getSearch(e) {
     this.searchTerm = e.target.value;
@@ -161,6 +165,7 @@ export class ListExamComponent implements OnInit, AfterViewInit {
       this.sort.direction,
       this.input.nativeElement.value
     );
+    console.log(this.dataSource.paginator.length);
   }
   public doFilter = (value: string) => {
 
