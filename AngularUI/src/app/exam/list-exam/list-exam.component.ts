@@ -74,6 +74,7 @@ export class ListExamComponent implements OnInit, AfterViewInit {
   statuss: String[] = [];
   caterogyNames: String[] = [];
   isCheckALL = false;
+  disabled=true;
   examFrm: FormGroup;
 
   showFile = false
@@ -84,7 +85,7 @@ export class ListExamComponent implements OnInit, AfterViewInit {
 
   public duration: number;
   public numberOfQuestion: number;
-  public createAt: Date = new Date('dd/mm/yyyy');
+  public create: Date = new Date('dd/mm/yyyy ');
   public status: String;
   public category: Category;
   public categoryName: String;
@@ -99,6 +100,7 @@ export class ListExamComponent implements OnInit, AfterViewInit {
       duration: [''],
       numberOfQuestion: [''],
       createAt: [''],
+
       status: [''],
       categoryName: ['']
     });
@@ -182,8 +184,10 @@ export class ListExamComponent implements OnInit, AfterViewInit {
   onchange(event, examId) {
     const checkId = event.target.checked;
     if (checkId) {
+      this.disabled=false;
       this.listId.push(examId);
     } else {
+      this.disabled=true;
       const x = this.listId.findIndex(x => {
         return x === examId;
       });
@@ -191,17 +195,26 @@ export class ListExamComponent implements OnInit, AfterViewInit {
         this.listId.splice(x, 1);
       }
     }
+    if(this.listId.length>0){
+      this.disabled=false;
+    }else{
+      this.disabled=true;
+    }
+
   }
   onCheckAllId(event) {
     const checkId = event.target.checked;
     if (checkId) {
+      this.disabled=false;
       if (this.listId.length > 0) {
         this.listId = [];
       }
-      this.listExam.forEach(x => {
+      this.dataSource.data.forEach(x => {
         this.listId.push(x.examId);
+
       });
     } else {
+      this.disabled=true;
       this.listId = [];
     }
   }
@@ -221,6 +234,7 @@ export class ListExamComponent implements OnInit, AfterViewInit {
             .subscribe(listExam => {
               this.listExam = listExam;
               this.dataSource.data = listExam;
+              this.isCheckALL = false;
             });
         });
       }

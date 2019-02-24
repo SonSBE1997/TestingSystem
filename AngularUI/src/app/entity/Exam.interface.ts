@@ -17,6 +17,7 @@ export interface Exam {
   modifiedBy: User;
   examQuestions: ExamQuestion[];
   enable: boolean;
+
 }
 
 export interface TabInfo {

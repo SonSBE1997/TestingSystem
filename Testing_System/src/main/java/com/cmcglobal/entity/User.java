@@ -30,7 +30,7 @@ public class User implements Serializable {
 	@OneToMany(mappedBy = "userCreated", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JsonIgnoreProperties("user")
 	private List<Exam> exams;
-
+	
 //	@ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
 //    @JoinTable(name = "candidate", joinColumns = { @JoinColumn(name = "user_id") },inverseJoinColumns = { @JoinColumn(name = "semester_exam_id") })
 //	private List<Semester> semester= new ArrayList<Semester>();
@@ -82,4 +82,7 @@ public class User implements Serializable {
 	public void setStatus(int status) {
 		this.status = status;
 	}
+
+	
+	
 }
