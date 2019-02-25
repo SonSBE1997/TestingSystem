@@ -40,12 +40,12 @@ public class FilterCustormImpl implements FilterCustorm {
       FilterBuilder filterBuilder) {
     Field[] fields = FilterBuilder.class.getDeclaredFields();
     for (Field field : fields) {
-      if (!field.getName().equals("categoryName")) {
+      if (!"categoryName".equals(field.getName())) {
 
         // get Type
         String fieldType = field.getType().getName();
 
-        if (fieldType.equals("java.lang.String")) {
+        if ("java.lang.String".equals(fieldType)) {
 
           String value = getValueFiled(field, filterBuilder, String.class);
 
@@ -54,20 +54,20 @@ public class FilterCustormImpl implements FilterCustorm {
                 + value.toLowerCase() + "%'");
           }
 
-        } else if (fieldType.equals("java.lang.Integer")) {
+        } else if ("java.lang.Integer".equals(fieldType)) {
           Integer value = getValueFiled(field, filterBuilder, Integer.class);
           if (value != 0) {
             sql.append(" AND ex." + field.getName() + " = " + value + "");
           }
-        } else if (fieldType.equals("java.lang.Float")) {
+        } else if ("java.lang.Float".equals(fieldType)) {
           Float value = getValueFiled(field, filterBuilder, Float.class);
           if (value != 0) {
             sql.append(" AND ex." + field.getName() + " = " + value + "");
           }
-        } else if (fieldType.equals("java.util.Date")) {
+        } else if ("java.sql.Date".equals(fieldType)) {
           Date value = getValueFiled(field, filterBuilder, Date.class);
           if (value != null) {
-            sql.append("AND Date(ex." + field.getName() + ") = " + value + "");
+            sql.append("AND date(ex." + field.getName() + ") = '" + value + "'");
           }
         }
       }

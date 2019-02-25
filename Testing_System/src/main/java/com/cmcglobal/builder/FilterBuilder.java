@@ -1,6 +1,6 @@
 package com.cmcglobal.builder;
 
-import java.util.Date;
+import java.sql.Date;
 
 public class FilterBuilder {
   private String categoryName;
@@ -30,7 +30,7 @@ public class FilterBuilder {
     return roleName;
   }
 
-  public Date getDateExam() {
+  public Date getCreateAt() {
     return createAt;
   }
 
@@ -85,7 +85,7 @@ public class FilterBuilder {
       return this;
     }
 
-    public Builder setDateExam(Date createAt) {
+    public Builder setCreateAt(Date createAt) {
       this.createAt = createAt;
       return this;
     }

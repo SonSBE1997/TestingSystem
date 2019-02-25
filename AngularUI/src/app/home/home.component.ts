@@ -47,9 +47,9 @@ export class HomeComponent implements OnInit {
     );
 
     const isAuthen = localStorage.getItem('isAuthen');
-    if (isAuthen === 'true') {
-      this.route.navigate(['/exam']);
-    }
+    // if (isAuthen === 'true') {
+    //   this.route.navigate(['/exam']);
+    // }
   }
 
   showSemesterTest() {
