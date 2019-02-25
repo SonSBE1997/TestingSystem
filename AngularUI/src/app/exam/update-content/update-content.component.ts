@@ -42,6 +42,10 @@ export class UpdateContentComponent implements OnInit {
   removeQuestion(event, id) {
     this.isRemove = true;
     this.tabListQuestionInExam.entities--;
+    this.tabListQuestionInExam.maxPage = Math.ceil(
+      (1.0 * this.tabListQuestionInExam.entities) /
+        this.tabListQuestionInExam.sizeOfPage
+    );
     event.preventDefault();
     this.detailExam.examQuestions = this.detailExam.examQuestions.filter(
       v => v.id !== id
@@ -52,6 +56,10 @@ export class UpdateContentComponent implements OnInit {
     this.detailExam.examQuestions = this.backupExamQuestions;
     this.isRemove = false;
     this.tabListQuestionInExam.entities = this.backupExamQuestions.length;
+    this.tabListQuestionInExam.maxPage = Math.ceil(
+      (1.0 * this.tabListQuestionInExam.entities) /
+        this.tabListQuestionInExam.sizeOfPage
+    );
   }
 
   // click button submit
@@ -77,6 +85,10 @@ export class UpdateContentComponent implements OnInit {
             v => !data.includes(v)
           );
           const entities = this.backupExamQuestions.length;
+          this.tabListQuestionInExam.maxPage = Math.ceil(
+            (1.0 * this.tabListQuestionInExam.entities) /
+              this.tabListQuestionInExam.sizeOfPage
+          );
           this.tabListQuestionInExam.entities = entities;
           if (
             this.tabListQuestionInExam.currentPage *
@@ -105,7 +117,6 @@ export class UpdateContentComponent implements OnInit {
               }
             }
           );
-
         } else {
           this.notifierService.notify('error', 'Remove question failed', '');
           this.clickResetRemoveQuestion();
@@ -175,11 +186,24 @@ export class UpdateContentComponent implements OnInit {
   }
 
   previousPageTabOne() {
+    if (this.tabListQuestionInExam.currentPage === 0) {
+      return;
+    }
     this.tabListQuestionInExam.currentPage--;
   }
 
   nextPageTabOne() {
+    if (
+      this.tabListQuestionInExam.currentPage ===
+      this.tabListQuestionInExam.maxPage - 1
+    ) {
+      return;
+    }
     this.tabListQuestionInExam.currentPage++;
+  }
+
+  changePage(page: number) {
+    this.tabListQuestionInExam.currentPage = page;
   }
 
   loadData(sizeOfPage: number) {
@@ -204,7 +228,8 @@ export class UpdateContentComponent implements OnInit {
       this.tabListQuestionInExam = {
         currentPage: 0,
         sizeOfPage: sizeOfPage,
-        entities: detailExam.examQuestions.length
+        entities: detailExam.examQuestions.length,
+        maxPage: Math.ceil((1.0 * detailExam.examQuestions.length) / sizeOfPage)
       };
     });
   }

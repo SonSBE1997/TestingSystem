@@ -52,7 +52,12 @@ export class TabQuestionComponent implements OnInit {
       this.examId = pm.get('id');
     });
 
-    this.tabAllQuestion = { currentPage: 0, entities: 0, sizeOfPage: 10 };
+    this.tabAllQuestion = {
+      currentPage: 0,
+      entities: 0,
+      sizeOfPage: 10,
+      maxPage: 0
+    };
     this.loadDataByPage();
   }
 
@@ -89,7 +94,11 @@ export class TabQuestionComponent implements OnInit {
       // console.log(this.searchStr);
 
       this.examService.countSearchQuestion(this.searchStr).subscribe(h => {
-        this.tabAllQuestion.entities = +h.headers.get('CountSearchQuestion');
+        const count = +h.headers.get('CountSearchQuestion');
+        this.tabAllQuestion.entities = count;
+        this.tabAllQuestion.maxPage = Math.ceil(
+          (1.0 * count) / this.tabAllQuestion.sizeOfPage
+        );
       });
     } else {
       observable = this.examService.getQuestions(
@@ -98,7 +107,11 @@ export class TabQuestionComponent implements OnInit {
       );
 
       this.examService.getQuestionSum().subscribe(sum => {
-        this.tabAllQuestion.entities = +sum.headers.get('SumQuestion');
+        const count = +sum.headers.get('SumQuestion');
+        this.tabAllQuestion.entities = count;
+        this.tabAllQuestion.maxPage = Math.ceil(
+          (1.0 * count) / this.tabAllQuestion.sizeOfPage
+        );
       });
     }
 
@@ -286,6 +299,9 @@ export class TabQuestionComponent implements OnInit {
 
   // ====================== CLICK PREVIOUS
   previousPage() {
+    if (this.tabAllQuestion.currentPage === 0) {
+      return;
+    }
     this.tabAllQuestion.currentPage--;
     this.loadDataByPage();
     // this.isCheckAll = false;
@@ -294,10 +310,26 @@ export class TabQuestionComponent implements OnInit {
 
   // ====================== CLICK NEXT
   nextPage() {
+    if (this.tabAllQuestion.currentPage === this.tabAllQuestion.maxPage - 1) {
+      return;
+    }
     this.tabAllQuestion.currentPage++;
     this.loadDataByPage();
     // this.isCheckAll = false;
     // console.log(this.tabAllQuestion.currentPage);
+  }
+
+  changePage(page: number) {
+    this.tabAllQuestion.currentPage = page;
+    if (
+      page === this.tabAllQuestion.maxPage - 1 &&
+      this.selection.length < this.tabAllQuestion.entities
+    ) {
+      for (let i = 0; i < this.tabAllQuestion.maxPage; i++) {
+        this.tabAllQuestion.currentPage = i;
+        this.loadDataByPage();
+      }
+    }
   }
 
   // ====================== SORT BY CONTENT

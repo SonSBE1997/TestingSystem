@@ -4,24 +4,7 @@
     class="dataTables_wrapper form-inline dt-bootstrap"
   >
     <div class="row">
-      <div class="col-sm-4 pull-left">
-        <div class="dataTables_length" id="example1_length">
-          <label
-            >Show
-            <select
-              class="form-control br-5 input-sm"
-              (change)="changePageSizeTabAllQuestion($event.target)"
-            >
-              <option value="10">10</option>
-              <option value="15">15</option>
-              <option value="20">20</option>
-              <option value="30">30</option>
-              <option value="50">50</option>
-            </select>
-            entries
-          </label>
-        </div>
-      </div>
+      <div class="col-sm-4 pull-left"></div>
       <div class="col-sm-4 form-group text-center"></div>
       <div class="col-sm-4 form-group">
         <div class="pull-right">
@@ -181,89 +164,72 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-sm-5">
-        <div
-          class="dataTables_info mt-3"
-          id="example1_info"
-          role="status"
-          aria-live="polite"
-        >
-          Showing
+      <div class="col-sm-8"></div>
+      <div class="col-sm-4">
+        <span
+          >Items per page:
+          <select
+            class="form-control input-sm"
+            (change)="changePageSizeTabAllQuestion($event.target)"
+          >
+            <option value="10">10</option>
+            <option value="15">15</option>
+            <option value="20">20</option>
+            <option value="30">30</option>
+            <option value="50">50</option>
+          </select>
+        </span>
+        <span class="show-entry">
           {{ tabAllQuestion?.currentPage * tabAllQuestion?.sizeOfPage + 1 }}
-          to
+          -
           {{
             (tabAllQuestion?.currentPage + 1) * tabAllQuestion?.sizeOfPage <
             tabAllQuestion?.entities
               ? (tabAllQuestion?.currentPage + 1) * tabAllQuestion?.sizeOfPage
               : tabAllQuestion?.entities
           }}
-          of {{ tabAllQuestion?.entities }} entries
-        </div>
-      </div>
-      <div class="col-sm-7">
-        <div
-          class="dataTables_paginate paging_simple_numbers"
-          id="example1_paginate"
-        >
-          <ul class="pagination">
-            <li
-              class="paginate_button previous"
-              id="example1_previous"
-              [ngClass]="{
-                disabled: tabAllQuestion?.currentPage === 0
-              }"
-            >
-              <ng-template
-                [ngIf]="
-                  tabAllQuestion?.currentPage > 0 &&
-                  tabAllQuestion?.entities > 0
-                "
-              >
-                <a (click)="previousPage()">Previous</a>
-              </ng-template>
-              <ng-template
-                [ngIf]="
-                  tabAllQuestion?.currentPage === 0 &&
-                  tabAllQuestion?.entities > 0
-                "
-              >
-                <a>Previous</a>
-              </ng-template>
-            </li>
-            <li class="paginate_button active">
-              <a href="#">{{ tabAllQuestion?.currentPage + 1 }}</a>
-            </li>
-            <li
-              class="paginate_button next"
-              id="example1_next"
-              [ngClass]="{
-                disabled:
-                  (tabAllQuestion?.currentPage + 1) *
-                    tabAllQuestion?.sizeOfPage >=
-                  tabAllQuestion?.entities
-              }"
-            >
-              <ng-template
-                [ngIf]="
-                  (tabAllQuestion?.currentPage + 1) *
-                    tabAllQuestion?.sizeOfPage >=
-                  tabAllQuestion?.entities
-                "
-              >
-                <a>Next</a>
-              </ng-template>
-              <ng-template
-                [ngIf]="
-                  (tabAllQuestion?.currentPage + 1) *
-                    tabAllQuestion?.sizeOfPage <
-                  tabAllQuestion?.entities
-                "
-              >
-                <a (click)="nextPage()">Next</a>
-              </ng-template>
-            </li>
-          </ul>
-        </div>
+          of {{ tabAllQuestion?.entities }}
+        </span>
+        <ul class="pagination">
+          <li
+            class="page-item"
+            [ngClass]="{ disabled: tabAllQuestion.currentPage === 0 }"
+          >
+            <a (click)="changePage(0)"
+              ><i class="glyphicon glyphicon-step-backward"></i
+            ></a>
+          </li>
+          <li
+            class="page-item"
+            [ngClass]="{ disabled: tabAllQuestion.currentPage === 0 }"
+          >
+            <a (click)="previousPage()"
+              ><i class="glyphicon glyphicon-menu-left"></i
+            ></a>
+          </li>
+          <li
+            class="page-item"
+            [ngClass]="{
+              disabled:
+                tabAllQuestion.currentPage === tabAllQuestion.maxPage - 1
+            }"
+          >
+            <a (click)="nextPage()"
+              ><i class="glyphicon glyphicon-menu-right"></i
+            ></a>
+          </li>
+          <li
+            class="page-item"
+            [ngClass]="{
+              disabled:
+                tabAllQuestion.currentPage === tabAllQuestion.maxPage - 1
+            }"
+          >
+            <a (click)="changePage(tabAllQuestion.maxPage - 1)"
+              ><i class="glyphicon glyphicon-step-forward"></i
+            ></a>
+          </li>
+        </ul>
       </div>
       <div class="row text-center">
         <button

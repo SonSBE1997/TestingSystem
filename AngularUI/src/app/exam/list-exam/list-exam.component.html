@@ -87,7 +87,7 @@
                         </div>
                         <div class="modal-footer">
                           <button
-                            style="margin-right: 28px;"
+                            style="margin-right: 25px;"
                             type="button"
                             class="btn uk-button-small"
                             *ngIf="!showFile"
@@ -96,7 +96,7 @@
                             Manage File
                           </button>
                           <button
-                            style="margin-right: 28px;"
+                            style="margin-right: 25px;"
                             type="button"
                             class="btn uk-button-small"
                             *ngIf="showFile"
@@ -387,7 +387,7 @@
                 of {{ tabListExam?.entities }} entries
               </div>
             </div> -->
-              <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 15, 25]">
+              <mat-paginator showFirstLastButtons [pageSize]="5" [pageSizeOptions]="[5, 10, 15, 25]">
               </mat-paginator>
             </div>
 

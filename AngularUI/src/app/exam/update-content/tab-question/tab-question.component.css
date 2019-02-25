@@ -3,6 +3,10 @@
   border-radius: 5% !important;
 }
 
+.show-entry{
+  margin-left: 5% !important;
+}
+
 .font-search {
   /* font-family: Arial, Helvetica, sans-serif !important; */
   font-family: 'Roboto', sans-serif !important;

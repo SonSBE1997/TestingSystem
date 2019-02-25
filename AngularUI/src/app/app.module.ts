@@ -40,8 +40,7 @@ import { HighlightPipeModule } from './exam/list-exam/highlight.pipe.module';
     HttpModule,
     UserModule,
     HomeModule,
-    ErrorsModule,
-    
+    ErrorsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

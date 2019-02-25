@@ -97,23 +97,7 @@
                     class="dataTables_wrapper form-inline dt-bootstrap"
                   >
                     <div class="row">
-                      <div class="col-sm-4">
-                        <div class="dataTables_length" id="example1_length">
-                          <label
-                            >Show
-                            <select
-                              class="form-control input-sm"
-                              (change)="changePageSizeTabOne($event.target)"
-                            >
-                              <option value="5">5</option>
-                              <option value="10">10</option>
-                              <option value="15">15</option>
-                              <option value="30">30</option>
-                            </select>
-                            entries
-                          </label>
-                        </div>
-                      </div>
+                      <div class="col-sm-4"></div>
                       <div class="col-sm-8 mb-3 ">
                         <button
                           class="btn btn-success btn-random pull-right"
@@ -299,20 +283,27 @@
                       </div>
                     </div>
                     <div class="row">
-                      <div class="col-sm-5">
-                        <div
-                          class="dataTables_info mt-3"
-                          id="example1_info"
-                          role="status"
-                          aria-live="polite"
-                        >
-                          Showing
+                      <div class="col-sm-8"></div>
+                      <div class="col-sm-4">
+                        <span
+                          >Items per page:
+                          <select
+                            class="form-control input-sm"
+                            (change)="changePageSizeTabOne($event.target)"
+                          >
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="15">15</option>
+                            <option value="30">30</option>
+                          </select>
+                        </span>
+                        <span class="show-entry">
                           {{
                             tabListQuestionInExam?.currentPage *
                               tabListQuestionInExam?.sizeOfPage +
                               1
                           }}
-                          to
+                          -
                           {{
                             (tabListQuestionInExam?.currentPage + 1) *
                               tabListQuestionInExam?.sizeOfPage <
@@ -321,76 +312,57 @@
                                 tabListQuestionInExam?.sizeOfPage
                               : tabListQuestionInExam?.entities
                           }}
-                          of {{ tabListQuestionInExam?.entities }} entries
-                        </div>
-                      </div>
-                      <div class="col-sm-7">
-                        <div
-                          class="dataTables_paginate paging_simple_numbers"
-                          id="example1_paginate"
-                        >
-                          <ul class="pagination">
-                            <li
-                              class="paginate_button previous"
-                              id="example1_previous"
-                              [ngClass]="{
-                                disabled:
-                                  tabListQuestionInExam?.currentPage === 0
-                              }"
-                            >
-                              <ng-template
-                                [ngIf]="
-                                  tabListQuestionInExam?.currentPage > 0 &&
-                                  tabListQuestionInExam?.entities > 0
-                                "
-                              >
-                                <a (click)="previousPageTabOne()">Previous</a>
-                              </ng-template>
-                              <ng-template
-                                [ngIf]="
-                                  tabListQuestionInExam?.currentPage === 0 &&
-                                  tabListQuestionInExam?.entities > 0
-                                "
-                              >
-                                <a>Previous</a>
-                              </ng-template>
-                            </li>
-                            <li class="paginate_button active">
-                              <a href="#">{{
-                                tabListQuestionInExam?.currentPage + 1
-                              }}</a>
-                            </li>
-                            <li
-                              class="paginate_button next"
-                              id="example1_next"
-                              [ngClass]="{
-                                disabled:
-                                  (tabListQuestionInExam?.currentPage + 1) *
-                                    tabListQuestionInExam?.sizeOfPage >=
-                                  tabListQuestionInExam?.entities
-                              }"
-                            >
-                              <ng-template
-                                [ngIf]="
-                                  (tabListQuestionInExam?.currentPage + 1) *
-                                    tabListQuestionInExam?.sizeOfPage >=
-                                  tabListQuestionInExam?.entities
-                                "
-                              >
-                                <a>Next</a>
-                              </ng-template>
-                              <ng-template
-                                [ngIf]="
-                                  (tabListQuestionInExam?.currentPage + 1) *
-                                    tabListQuestionInExam?.sizeOfPage <
-                                  tabListQuestionInExam?.entities
-                                "
-                              >
-                                <a (click)="nextPageTabOne()">Next</a>
-                              </ng-template>
-                            </li>
-                          </ul>
-                        </div>
+                          of {{ tabListQuestionInExam?.entities }}
+                        </span>
+                        <ul class="pagination pull-right">
+                          <li
+                            class="page-item"
+                            [ngClass]="{
+                              disabled: tabListQuestionInExam?.currentPage === 0
+                            }"
+                          >
+                            <a (click)="changePage(0)"
+                              ><i class="glyphicon glyphicon-step-backward"></i
+                            ></a>
+                          </li>
+                          <li
+                            class="page-item"
+                            [ngClass]="{
+                              disabled: tabListQuestionInExam?.currentPage === 0
+                            }"
+                          >
+                            <a (click)="previousPageTabOne()"
+                              ><i class="glyphicon glyphicon-menu-left"></i
+                            ></a>
+                          </li>
+                          <li
+                            class="page-item"
+                            [ngClass]="{
+                              disabled:
+                                tabListQuestionInExam?.currentPage ===
+                                tabListQuestionInExam?.maxPage - 1
+                            }"
+                          >
+                            <a (click)="nextPageTabOne()"
+                              ><i class="glyphicon glyphicon-menu-right"></i
+                            ></a>
+                          </li>
+                          <li
+                            class="page-item"
+                            [ngClass]="{
+                              disabled:
+                                tabListQuestionInExam?.currentPage ===
+                                tabListQuestionInExam?.maxPage - 1
+                            }"
+                          >
+                            <a
+                              (click)="
+                                changePage(tabListQuestionInExam.maxPage - 1)
+                              "
+                              ><i class="glyphicon glyphicon-step-forward"></i
+                            ></a>
+                          </li>
+                        </ul>
                       </div>
                     </div>
                     <ng-template [ngIf]="isRemove === true">

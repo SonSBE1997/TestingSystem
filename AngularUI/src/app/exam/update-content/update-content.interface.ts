@@ -42,4 +42,5 @@ export interface TabInfo {
   currentPage: number;
   entities: number;
   sizeOfPage: number;
+  maxPage: number;
 }
