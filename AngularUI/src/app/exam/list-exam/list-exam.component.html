@@ -137,9 +137,13 @@
                       <div class="col col-lg-11 col-sm-11">
                         <mat-form-field class="filter">
                           <mat-select
-                            placeholder="Category Name"
                             formControlName="categoryName"
                           >
+                          <mat-option
+                              value=""
+                            >
+                            Category Name
+                            </mat-option>
                             <mat-option
                               *ngFor="let categoryName of caterogyNames"
                               value="{{ categoryName }}"
@@ -150,10 +154,15 @@
                         </mat-form-field>
 
                         <mat-form-field class="filter">
-                          <mat-select
-                            placeholder="Duration"
-                            formControlName="duration"
+                          <mat-select formControlName="duration"
+
+
                           >
+                          <mat-option
+                              value=""
+                            >
+                            Duration
+                            </mat-option>
                             <mat-option
                               *ngFor="let duration of listDuration"
                               value="{{ duration }}"
@@ -164,9 +173,14 @@
 
                         <mat-form-field class="filter">
                           <mat-select
-                            placeholder="Number of Question"
+
                             formControlName="numberOfQuestion"
                           >
+                          <mat-option
+                              value=""
+                            >
+                            Number of Question
+                            </mat-option>
                             <mat-option
                               *ngFor="let numberOfQuestion of numberOfQuestions"
                               value="{{ numberOfQuestion }}"
@@ -184,9 +198,14 @@
 
                         <mat-form-field class="filter">
                           <mat-select
-                            placeholder="Status"
+                            placeholder=""
                             formControlName="status"
                           >
+                          <mat-option
+                              value=""
+                            >
+                            Status
+                            </mat-option>
                             <mat-option
                               *ngFor="let status of statuss"
                               value="{{ status }}"
@@ -197,8 +216,8 @@
                         <mat-form-field class="filter">
                           <input
                             matInput
-                            type="date"
-                            value="createAt"
+                            type="date"  [(ngModel)]="create"
+                            value="create"
                             formControlName="createAt"
                           />
                         </mat-form-field>
@@ -425,7 +444,7 @@
               type="Delete"
               class="btn btn-danger"
               data-toggle="modal"
-              data-target="#exampleModalCenter"
+              data-target="#exampleModalCenter" [disabled]= "disabled"
             >
               Delete
             </button>

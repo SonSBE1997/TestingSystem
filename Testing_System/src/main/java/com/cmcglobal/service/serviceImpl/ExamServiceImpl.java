@@ -96,7 +96,7 @@ public class ExamServiceImpl implements ExamService {
       ex.setTitle(ex.getTitle().trim());
       ex.setNote(ex.getNote().substring(3, ex.getNote().length() - 4));
       ex.setUserCreated(user);
-      ex.setCreateAt(new Date());
+      // ex.setCreateAt(new Date());
       ex.setEnable(true);
       examRepository.save(ex);
       return true;
@@ -536,8 +536,8 @@ public class ExamServiceImpl implements ExamService {
   public FilterBuilder getFilterBuilder(Exam exam) {
     return new FilterBuilder.Builder()
         .setNumberOfQuestion(exam.getNumberOfQuestion())
-        .setDuration(exam.getDuration()).setDateExam(exam.getCreateAt())
-        .setStatus(exam.getStatus()).setCaterogyName(exam.getCategoryName())
+        .setDuration(exam.getDuration()).setStatus(exam.getStatus())
+        .setCaterogyName(exam.getCategoryName()).setCreateAt(exam.getCreateAt())
         .builder();
   }
 
@@ -703,7 +703,7 @@ public class ExamServiceImpl implements ExamService {
         user.setUserId(1);
         exam.setUserCreated(user);
         exam.setStatus("Draft");
-        exam.setCreateAt(new Date());
+        // exam.setCreateAt(new Date());
         listExam.add(exam);
       }
     } catch (IOException e) {

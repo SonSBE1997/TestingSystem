@@ -2,7 +2,8 @@ package com.cmcglobal.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Date;
+import java.time.Instant;
 import java.util.List;
 import java.util.Set;
 
@@ -15,6 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Transient;
 
 @Entity
@@ -29,8 +31,7 @@ public class Exam implements Serializable {
 	private String title;
 	private float duration;
 	private String note;
-	private String status;
-	@Transient
+	private String status;	@Transient
 	private String categoryName;
 	@Column(name = "is_enable")
 	private boolean isEnable;
@@ -171,6 +172,10 @@ public class Exam implements Serializable {
 
 	@PrePersist
 	protected void onCreate() {
-		this.createAt = new Date();
+		this.createAt = new Date(Instant.now().toEpochMilli());
+	}
+	@PreUpdate
+	protected void onUpdate() {
+	  this.modifiedAt=new Date(Instant.now().toEpochMilli());
 	}
 }
